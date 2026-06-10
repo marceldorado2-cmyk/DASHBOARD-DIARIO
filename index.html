@@ -1,830 +1,773 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>DARK IN Dashboard</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-      :root {
-        --bg: #050711;
-        --line: rgba(255, 255, 255, 0.1);
-        --txt: #eef6ff;
-        --mut: #91a2c7;
-        --blue: #00c2ff;
-        --purple: #8b5cf6;
-        --green: #16f09a;
-        --gold: #ffc857;
-        --red: #ff4f78;
-        --shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        font-family: Inter, Arial, system-ui, sans-serif;
-        background: radial-gradient(circle at 0 0, rgba(0, 194, 255, 0.18), transparent 30%),
-          radial-gradient(circle at 100% 0, rgba(139, 92, 246, 0.22), transparent 32%),
-          linear-gradient(180deg, #040714, #08111f 48%, #050711);
-        color: var(--txt);
-      }
-
-      .app {
-        display: grid;
-        grid-template-columns: 270px 1fr;
-        min-height: 100vh;
-      }
-
-      .side {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow: auto;
-        padding: 22px;
-        background: linear-gradient(180deg, rgba(8, 13, 27, 0.98), rgba(5, 7, 17, 0.99));
-        border-right: 1px solid var(--line);
-      }
-
-      .logoRow {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 22px;
-      }
-
-      .logo {
-        width: 52px;
-        height: 52px;
-        border-radius: 18px;
-        display: grid;
-        place-items: center;
-        background: linear-gradient(135deg, var(--blue), var(--purple));
-        color: #04101e;
-        font-weight: 1000;
-        box-shadow: 0 0 35px rgba(0, 194, 255, 0.3);
-      }
-
-      h1,
-      h2,
-      h3,
-      h4 {
-        margin: 0;
-      }
-
-      .brandTitle {
-        font-size: 25px;
-        font-weight: 1000;
-        letter-spacing: 1px;
-      }
-
-      .brandSub {
-        font-size: 12px;
-        color: var(--mut);
-        margin-top: 3px;
-      }
-
-      .nav {
-        display: grid;
-        gap: 8px;
-      }
-
-      .nav button,
-      .pill {
-        border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.04);
-        color: var(--txt);
-        border-radius: 15px;
-        padding: 12px 13px;
-        text-align: left;
-        font-weight: 800;
-        cursor: pointer;
-        transition: 0.18s;
-      }
-
-      .nav button:hover,
-      .nav button.active,
-      .pill.active {
-        background: linear-gradient(135deg, rgba(0, 194, 255, 0.18), rgba(139, 92, 246, 0.15));
-        border-color: rgba(0, 194, 255, 0.48);
-      }
-
-      .main {
-        padding: 24px;
-        width: 100%;
-        overflow: hidden;
-      }
-
-      .top {
-        display: flex;
-        justify-content: space-between;
-        gap: 18px;
-        align-items: flex-start;
-        margin-bottom: 18px;
-      }
-
-      .title h2 {
-        font-size: 34px;
-        letter-spacing: -0.8px;
-      }
-
-      .title p {
-        color: var(--mut);
-        margin: 8px 0 0;
-      }
-
-      .filters {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-      }
-
-      select,
-      input {
-        background: rgba(255, 255, 255, 0.055);
-        border: 1px solid var(--line);
-        color: var(--txt);
-        border-radius: 14px;
-        padding: 12px 13px;
-        font-weight: 800;
-        outline: none;
-      }
-
-      option {
-        color: #0b1020;
-      }
-
-      #search {
-        min-width: 260px;
-      }
-
-      .section {
-        display: none;
-      }
-
-      .section.active {
-        display: block;
-      }
-
-      .grid {
-        display: grid;
-        gap: 16px;
-      }
-
-      .kpis {
-        grid-template-columns: repeat(6, minmax(128px, 1fr));
-        margin-bottom: 16px;
-      }
-
-      .card,
-      .panel {
-        background: linear-gradient(180deg, rgba(17, 26, 49, 0.95), rgba(9, 14, 29, 0.96));
-        border: 1px solid var(--line);
-        border-radius: 22px;
-        box-shadow: var(--shadow);
-        padding: 18px;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .card:before,
-      .panel:before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at 100% 0, rgba(0, 194, 255, 0.1), transparent 38%);
-        pointer-events: none;
-      }
-
-      .card small {
-        display: block;
-        color: var(--mut);
-        font-weight: 900;
-        text-transform: uppercase;
-        font-size: 10px;
-        letter-spacing: 0.6px;
-      }
-
-      .num {
-        font-size: 26px;
-        font-weight: 1000;
-        margin-top: 7px;
-        letter-spacing: -0.5px;
-      }
-
-      .delta {
-        font-size: 12px;
-        color: var(--mut);
-        margin-top: 7px;
-      }
-
-      .split {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
-
-      .twoOne {
-        display: grid;
-        grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-        gap: 16px;
-      }
-
-      .panelHead {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 13px;
-        flex-wrap: wrap;
-      }
-
-      .tabs {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .pill {
-        padding: 9px 12px;
-        text-align: center;
-        font-size: 13px;
-      }
-
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        border-radius: 999px;
-        border: 1px solid var(--line);
-        padding: 5px 9px;
-        font-size: 11px;
-        font-weight: 950;
-      }
-
-      .park {
-        background: rgba(0, 194, 255, 0.12);
-        color: #79dcff;
-      }
-
-      .externa {
-        background: rgba(139, 92, 246, 0.14);
-        color: #c7b5ff;
-      }
-
-      .mut {
-        color: var(--mut);
-      }
-
-      .bar {
-        height: 10px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        overflow: hidden;
-        margin-top: 9px;
-      }
-
-      .bar span {
-        display: block;
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, var(--blue), var(--green));
-        width: 0;
-      }
-
-      .bar.gold span {
-        background: linear-gradient(90deg, var(--gold), var(--green));
-      }
-
-      .tableWrap {
-        width: 100%;
-        overflow: auto;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-      }
-
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        min-width: 1120px;
-      }
-
-      th,
-      td {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        padding: 12px;
-        font-size: 13px;
-        white-space: nowrap;
-      }
-
-      th {
-        background: #0b1428;
-        color: #b7c7e8;
-        text-align: left;
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        cursor: pointer;
-      }
-
-      tr:hover td {
-        background: rgba(0, 194, 255, 0.055);
-      }
-
-      td.nameCell {
-        font-weight: 950;
-        cursor: pointer;
-      }
-
-      .podiumGrid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-      }
-
-      .podium {
-        background: rgba(255, 255, 255, 0.035);
-        border: 1px solid var(--line);
-        border-radius: 19px;
-        padding: 15px;
-      }
-
-      .podium h4 {
-        margin-bottom: 12px;
-      }
-
-      .medal {
-        display: grid;
-        grid-template-columns: 40px 1fr auto;
-        gap: 10px;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-      }
-
-      .medal:last-child {
-        border-bottom: 0;
-      }
-
-      .medal .m {
-        font-size: 24px;
-        text-align: center;
-      }
-
-      .medal b {
-        display: block;
-      }
-
-      .medal small {
-        color: var(--mut);
-      }
-
-      .calendar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
-      }
-
-      .day {
-        min-height: 116px;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.04);
-      }
-
-      .day b {
-        font-size: 15px;
-      }
-
-      .day strong {
-        display: block;
-        margin: 8px 0;
-        font-size: 20px;
-      }
-
-      .day small {
-        color: var(--mut);
-        line-height: 1.45;
-      }
-
-      .heatGrid {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        gap: 10px;
-      }
-
-      .heatCell {
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        padding: 13px;
-        background: rgba(255, 255, 255, 0.04);
-        min-height: 112px;
-      }
-
-      .heatCell strong {
-        display: block;
-        font-size: 24px;
-        margin: 5px 0;
-      }
-
-      .hbar {
-        height: 13px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        overflow: hidden;
-        margin: 8px 0;
-      }
-
-      .hbar span {
-        display: block;
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, var(--purple), var(--blue), var(--green));
-      }
-
-      .chartBox {
-        height: 360px;
-        position: relative;
-      }
-
-      .avatar {
-        width: 98px;
-        height: 98px;
-        border-radius: 32px;
-        background: linear-gradient(135deg, var(--blue), var(--purple));
-        color: #03101e;
-        display: grid;
-        place-items: center;
-        font-size: 34px;
-        font-weight: 1000;
-        margin-bottom: 14px;
-      }
-
-      .miniKpis {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-      }
-
-      .miniCard {
-        padding: 13px;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid var(--line);
-      }
-
-      .miniCard small {
-        color: var(--mut);
-        font-size: 10px;
-        font-weight: 900;
-        text-transform: uppercase;
-      }
-
-      .miniCard b {
-        display: block;
-        margin-top: 5px;
-        font-size: 18px;
-      }
-
-      .teamBig {
-        cursor: pointer;
-      }
-
-      .teamBig:hover {
-        border-color: rgba(0, 194, 255, 0.5);
-      }
-
-      @media (max-width: 1200px) {
-        .app {
-          grid-template-columns: 1fr;
-        }
-
-        .side {
-          position: relative;
-          height: auto;
-        }
-
-        .nav {
-          grid-template-columns: repeat(3, 1fr);
-        }
-
-        .kpis {
-          grid-template-columns: repeat(3, 1fr);
-        }
-
-        .split,
-        .twoOne {
-          grid-template-columns: 1fr;
-        }
-
-        .podiumGrid {
-          grid-template-columns: 1fr;
-        }
-
-        .heatGrid {
-          grid-template-columns: repeat(4, 1fr);
-        }
-      }
-
-      @media (max-width: 720px) {
-        .main {
-          padding: 14px;
-        }
-
-        .top {
-          flex-direction: column;
-        }
-
-        .title h2 {
-          font-size: 27px;
-        }
-
-        .nav {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .kpis,
-        .miniKpis {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .calendar {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .heatGrid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        #search {
-          min-width: 100%;
-          width: 100%;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="app">
-      <aside class="side">
-        <div class="logoRow">
-          <div class="logo">DI</div>
-
-          <div>
-            <div class="brandTitle">DARK IN</div>
-            <div class="brandSub">Business Intelligence • Captação</div>
-          </div>
-        </div>
-
-        <nav class="nav" id="nav">
-          <button class="active" data-tab="geral">⚡ Geral</button>
-          <button data-tab="maio">📁 Maio</button>
-          <button data-tab="junho">📁 Junho</button>
-          <button data-tab="equipes">👥 Equipes</button>
-          <button data-tab="ranking">🏆 Rankings</button>
-          <button data-tab="top3">🥇 Top 3 Funções</button>
-          <button data-tab="calendario">📅 Calendário</button>
-          <button data-tab="horarios">🔥 Horários</button>
-          <button data-tab="profissional">👤 Individual</button>
-          <button data-tab="metas">🎯 Metas</button>
-        </nav>
-      </aside>
-
-      <main class="main">
-        <div class="top">
-          <div class="title">
-            <h2 id="pageTitle">Dashboard Geral</h2>
-            <p id="pageSub">Dados reais: Maio 438 casais • Junho até dia 09 com 169 casais.</p>
-          </div>
-
-          <div class="filters">
-            <select id="mes">
-              <option>Junho</option>
-              <option>Maio</option>
-              <option>Geral</option>
-            </select>
-
-            <select id="equipe">
-              <option value="GERAL">Todas equipes</option>
-              <option value="PARK">PARK</option>
-              <option value="EXTERNA">EXTERNA</option>
-            </select>
-
-            <input id="search" placeholder="Buscar nome, equipe ou função" />
-          </div>
-        </div>
-
-        <section id="geral" class="section active">
-          <div class="grid kpis" id="kpiGeral"></div>
-          <div class="grid split" id="teamCards"></div>
-
-          <div class="twoOne" style="margin-top: 16px">
-            <div class="panel">
-              <div class="panelHead">
-                <h3>Ranking Geral - clique para ordenar</h3>
-                <div class="tabs" id="sortBtns"></div>
-              </div>
-
-              <div class="tableWrap">
-                <table id="mainTable"></table>
-              </div>
-            </div>
-
-            <div class="panel">
-              <h3>Insights DARK IN</h3>
-              <div id="insights"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="maio" class="section">
-          <div class="grid kpis" id="kpiMaio"></div>
-
-          <div class="split">
-            <div class="panel">
-              <h3>Maio • PARK</h3>
-              <div id="maioPark"></div>
-            </div>
-
-            <div class="panel">
-              <h3>Maio • EXTERNA</h3>
-              <div id="maioExt"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="junho" class="section">
-          <div class="grid kpis" id="kpiJunho"></div>
-
-          <div class="split">
-            <div class="panel">
-              <h3>Junho • PARK</h3>
-              <div id="junhoPark"></div>
-            </div>
-
-            <div class="panel">
-              <h3>Junho • EXTERNA</h3>
-              <div id="junhoExt"></div>
-            </div>
-          </div>
-        </section>
-
-        <section id="equipes" class="section">
-          <div class="tabs" style="margin-bottom: 14px">
-            <button class="pill active" data-team="PARK">Abrir PARK</button>
-            <button class="pill" data-team="EXTERNA">Abrir EXTERNA</button>
-          </div>
-
-          <div id="teamView"></div>
-        </section>
-
-        <section id="ranking" class="section">
-          <div class="panel">
-            <div class="panelHead">
-              <h3>Ranking Completo</h3>
-              <div class="tabs" id="sortBtns2"></div>
-            </div>
-
-            <div class="tableWrap">
-              <table id="rankTable"></table>
-            </div>
-          </div>
-        </section>
-
-        <section id="top3" class="section">
-          <div class="podiumGrid" id="top3Grid"></div>
-        </section>
-
-        <section id="calendario" class="section">
-          <div class="panel">
-            <div class="panelHead">
-              <h3>Calendário Diário Visual</h3>
-              <div class="tabs">
-                <button class="pill active" data-cal="Junho">Junho</button>
-                <button class="pill" data-cal="Maio">Maio</button>
-              </div>
-            </div>
-
-            <div class="calendar" id="calendar"></div>
-          </div>
-        </section>
-
-        <section id="horarios" class="section">
-          <div class="panel">
-            <div class="panelHead">
-              <h3>Mapa de Calor por Horário</h3>
-              <span class="mut">Melhores e piores horários por casais, vendas, VGV e eficiência</span>
-            </div>
-
-            <div class="heatGrid" id="heat"></div>
-          </div>
-
-          <div class="split" style="margin-top: 16px">
-            <div class="panel">
-              <h3>Gráfico maior: Casais por Horário</h3>
-              <div class="chartBox">
-                <canvas id="hourChart1"></canvas>
-              </div>
-            </div>
-
-            <div class="panel">
-              <h3>Gráfico maior: Vendas x Eficiência</h3>
-              <div class="chartBox">
-                <canvas id="hourChart2"></canvas>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="profissional" class="section">
-          <div class="split">
-            <div class="panel">
-              <h3>Escolha o profissional</h3>
-              <input
-                id="personSearch"
-                placeholder="Buscar profissional"
-                style="width: 100%; margin: 10px 0"
-              />
-
-              <div class="tableWrap">
-                <table id="personTable"></table>
-              </div>
-            </div>
-
-            <div id="profile"></div>
-          </div>
-        </section>
-
-        <section id="metas" class="section">
-          <div class="split">
-            <div class="panel">
-              <h3>Meta da Operação</h3>
-              <div class="grid kpis" style="grid-template-columns: 1fr 1fr" id="metaOp"></div>
-            </div>
-
-            <div class="panel">
-              <h3>Super Meta da Operação</h3>
-              <div
-                class="grid kpis"
-                style="grid-template-columns: 1fr 1fr"
-                id="metaSuper"
-              ></div>
-            </div>
-          </div>
-        </section>
-      </main>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard • Controle de Sala</title>
+
+  <!-- SheetJS (obrigatório) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script>
+
+  <!-- Chart.js para gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0b1220; --panel:#101a33; --panel2:#0f1830;
+      --txt:#eaf0ff; --muted:#a9b6d3; --line:#223055;
+      --accent:#6aa6ff; --good:#3ddc97; --bad:#ff6b6b; --warn:#ffd166;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:var(--sans);
+      background: radial-gradient(1200px 600px at 20% 0%, #14234a 0%, var(--bg) 60%);
+      color:var(--txt);
+    }
+    a{color:inherit}
+    .app{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      min-height:100vh;
+    }
+    aside{
+      padding:18px;
+      border-right:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(16,26,51,.9), rgba(11,18,32,.92));
+      position:sticky; top:0; height:100vh; overflow:auto;
+    }
+    main{padding:22px 22px 40px}
+    .brand{
+      display:flex; gap:12px; align-items:center; padding:10px 10px 16px;
+      border-bottom:1px solid var(--line); margin-bottom:14px;
+    }
+    .logo{
+      width:42px;height:42px;border-radius:12px;
+      background: linear-gradient(135deg, var(--accent), #8b5cff);
+      box-shadow: var(--shadow);
+    }
+    .brand h1{font-size:16px;margin:0}
+    .brand .sub{font-size:12px;color:var(--muted); margin-top:2px}
+    .card{
+      background: rgba(16,26,51,.75);
+      border:1px solid rgba(34,48,85,.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .sectionTitle{
+      font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--muted);
+      margin:16px 6px 10px;
+    }
+    .controls{display:flex; flex-direction:column; gap:10px; padding:12px}
+    label{font-size:12px;color:var(--muted)}
+    input[type="file"], select, input[type="search"]{
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background: rgba(7,12,26,.55);
+      color: var(--txt);
+      outline:none;
+    }
+    input[type="search"]{padding-left:36px}
+    .searchWrap{position:relative}
+    .searchWrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.7}
+    .pillRow{display:flex; flex-wrap:wrap; gap:8px}
+    .pill{
+      font-size:12px; padding:6px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background: rgba(7,12,26,.4);
+      color: var(--muted);
+    }
+    .pill strong{color:var(--txt); font-weight:600}
+
+    .topbar{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:14px;
+      margin-bottom:14px;
+    }
+    .topbar h2{margin:0; font-size:20px}
+    .topbar .note{color:var(--muted); font-size:12px}
+    .gridKpi{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(170px, 1fr));
+      gap:12px;
+      margin: 12px 0 16px;
+    }
+    .kpi{padding:14px 14px 12px}
+    .kpi .label{font-size:12px;color:var(--muted)}
+    .kpi .value{font-size:22px; font-weight:700; margin-top:8px}
+    .kpi .hint{font-size:12px;color:var(--muted); margin-top:6px}
+    .kpi .delta{font-family:var(--mono); font-size:12px; margin-top:8px}
+    .delta.good{color:var(--good)} .delta.bad{color:var(--bad)} .delta.warn{color:var(--warn)}
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:12px;
+      align-items:stretch;
+    }
+    .panel{padding:14px}
+    .panel h3{margin:0 0 10px; font-size:14px}
+    .tableWrap{overflow:auto; border-radius:14px; border:1px solid var(--line)}
+    table{width:100%; border-collapse:collapse; min-width:720px; background: rgba(7,12,26,.35)}
+    thead th{
+      position:sticky; top:0;
+      background: rgba(16,26,51,.9);
+      color: var(--muted);
+      font-weight:600; font-size:12px; text-align:left;
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(34,48,85,.55);
+      font-size:13px;
+      white-space:nowrap;
+    }
+    tbody tr:hover{background: rgba(106,166,255,.08)}
+    .badge{
+      font-size:11px; padding:4px 8px; border-radius:999px;
+      border:1px solid rgba(34,48,85,.9);
+      background: rgba(7,12,26,.35);
+      color:var(--muted);
+    }
+    .badge.good{border-color: rgba(61,220,151,.45); color: var(--good)}
+    .badge.bad{border-color: rgba(255,107,107,.45); color: var(--bad)}
+    .badge.warn{border-color: rgba(255,209,102,.45); color: var(--warn)}
+
+    .miniGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+    .insight{
+      padding:12px;
+      background: rgba(7,12,26,.35);
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+    .insight .t{font-size:12px;color:var(--muted);margin:0 0 6px}
+    .insight .v{font-size:16px;font-weight:700;margin:0}
+    .muted{color:var(--muted)}
+    .foot{margin-top:14px; font-size:12px; color:var(--muted)}
+    canvas{width:100% !important; height:300px !important}
+
+    @media (max-width: 1100px){
+      .app{grid-template-columns: 1fr}
+      aside{position:relative;height:auto}
+      .gridKpi{grid-template-columns: repeat(2, minmax(170px, 1fr))}
+      .grid2{grid-template-columns:1fr}
+      table{min-width: 860px}
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>Controle de Sala</h1>
+        <div class="sub">Dashboard dinâmico via XLSX</div>
+      </div>
     </div>
 
-    <script>
-      const DATA = {
-        "metrics": {
-          "Geral": {
-            "casais": 607,
-            "vendas": 159,
-            "ativos": 137,
-            "cancelados": 22,
-            "vgv": 13973894.0,
-            "brindes": 89572.09999999999,
-            "notour": 28,
-            "eficiencia": 26.194398682042834,
-            "custoCasal": 147.5652388797364,
-            "vgvCasal": 23021.242174629326,
-            "mediaCaptador": 20.93103448275862,
-            "captadores": 29,
-            "casaisProj": 563,
-            "vgvProj": 12449433.333333334,
-            "vendasProj": 140
-          },
-          "Maio": {
-            "casais": 438,
-            "vendas": 117,
-            "ativos": 95,
-            "cancelados": 22,
-            "vgv": 10239064.0,
-            "brindes": 63904.399999999994,
-            "notour": 24,
-            "eficiencia": 26.71232876712329,
-            "custoCasal": 145.90045662100457,
-            "vgvCasal": 23376.858447488583,
-            "mediaCaptador": 17.52,
-            "captadores": 25,
-            "casaisProj": 424,
-            "vgvProj": 9908771.612903226,
-            "vendasProj": 113
+    <div class="card controls">
+      <div>
+        <label for="fileInput"><strong>Carregar Excel (local)</strong></label>
+        <input type="file" id="fileInput" accept=".xlsx,.xls" />
+        <div class="foot">O arquivo é processado no navegador (SheetJS).</div>
+      </div>
+
+      <div>
+        <label for="monthFilter">Período (mês)</label>
+        <select id="monthFilter"></select>
+      </div>
+
+      <div>
+        <label for="teamFilter">Local de captação</label>
+        <select id="teamFilter"></select>
+      </div>
+
+      <div class="searchWrap">
+        <label for="searchInput">Busca (casal / closer / liner / promotor / cidade)</label>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 21l-4.3-4.3m1.8-5.2a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input id="searchInput" type="search" placeholder="Ex.: Renata • Parque Dreams • São Paulo" />
+      </div>
+
+      <div class="pillRow" id="metaPills"></div>
+    </div>
+
+    <div class="sectionTitle">Regras (base nesta planilha)</div>
+    <div class="card controls">
+      <div class="muted" style="font-size:12px; line-height:1.5">
+        <ul style="margin:0; padding-left:18px">
+          <li><strong>Casal</strong> = uma linha da planilha.</li>
+          <li><strong>Venda</strong> quando <span style="font-family:var(--mono)">Valor vendido &gt; 0</span>.</li>
+          <li><strong>Status contrato</strong> normalizado por texto: contém <strong>ATIVO</strong> ou <strong>CANCELADO</strong>.</li>
+          <li><strong>Eficiência</strong> = $$\frac{\text{vendas}}{\text{casais}}$$.</li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h2>Visão Geral</h2>
+        <div class="note" id="subtitle">Carregue um XLSX para iniciar.</div>
+      </div>
+      <div class="note" id="lastUpdated"></div>
+    </div>
+
+    <div class="gridKpi">
+      <div class="card kpi">
+        <div class="label">Casais (linhas)</div>
+        <div class="value" id="kpiCasais">—</div>
+        <div class="hint">Total no filtro atual</div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">Vendas</div>
+        <div class="value" id="kpiVendas">—</div>
+        <div class="hint">Linhas com Valor vendido &gt; 0</div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">Bruto (R$)</div>
+        <div class="value" id="kpiBruto">—</div>
+        <div class="hint">Soma de Valor vendido</div>
+      </div>
+
+      <div class="card kpi">
+        <div class="label">Eficiência</div>
+        <div class="value" id="kpiEficiencia">—</div>
+        <div class="hint">Vendas / Casais</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card panel">
+        <h3>Ranking (por Closer)</h3>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-sort="name">Closer</th>
+                <th data-sort="casais">Casais</th>
+                <th data-sort="vendas">Vendas</th>
+                <th data-sort="ef">Eficiência</th>
+                <th data-sort="bruto">Bruto</th>
+                <th data-sort="ativos">Ativos</th>
+                <th data-sort="cancelados">Cancelados</th>
+              </tr>
+            </thead>
+            <tbody id="rankBody"></tbody>
+          </table>
+        </div>
+        <div class="foot muted">Clique nos títulos para ordenar.</div>
+      </div>
+
+      <div class="miniGrid">
+        <div class="card panel">
+          <h3>Gráfico • Bruto por Mês</h3>
+          <canvas id="chartMonth"></canvas>
+        </div>
+
+        <div class="card panel">
+          <h3>Insights rápidos</h3>
+          <div class="insight">
+            <p class="t">Melhor closer (bruto)</p>
+            <p class="v" id="bestCloser">—</p>
+          </div>
+          <div class="insight">
+            <p class="t">Local de captação com mais casais</p>
+            <p class="v" id="bestCap">—</p>
+          </div>
+          <div class="insight">
+            <p class="t">Taxa de cancelamento (sobre vendas)</p>
+            <p class="v" id="cancelRate">—</p>
+          </div>
+          <div class="insight">
+            <p class="t">Participação de ATIVOS (sobre vendas)</p>
+            <p class="v" id="activeRate">—</p>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <h3>Gráfico • Status do Contrato (vendas)</h3>
+          <canvas id="chartContract"></canvas>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // =========================
+  // Estado
+  // =========================
+  const DATA = { rows: [] };
+
+  const STATE = {
+    monthFilter: "Geral",
+    teamFilter: "GERAL",
+    search: "",
+    sortKey: "bruto",
+    sortDir: "desc",
+  };
+
+  // =========================
+  // Helpers
+  // =========================
+  const fmtBRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+  const fmtInt = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 });
+  const fmtPct = new Intl.NumberFormat("pt-BR", { style: "percent", minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  function toStr(v){ return (v ?? "").toString().trim(); }
+
+  function normalizeUpper(v){
+    return toStr(v).toUpperCase().replace(/\s+/g, " ").trim();
+  }
+
+  // Datas no arquivo parecem vir como "M/D/YY" (ex.: 1/7/26).
+  // Vamos parsear de forma robusta assumindo MM/DD/YY (padrão Excel US)
+  // e, se falhar, tentar Date() normal.
+  function parseExcelDateMaybe(v){
+    if (v instanceof Date && !isNaN(v)) return v;
+    const s = toStr(v);
+    if (!s) return null;
+
+    const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+    if (m){
+      let mm = Number(m[1]), dd = Number(m[2]), yy = Number(m[3]);
+      if (yy < 100) yy = 2000 + yy;
+      const d = new Date(yy, mm - 1, dd);
+      return isNaN(d) ? null : d;
+    }
+
+    const d2 = new Date(s);
+    return isNaN(d2) ? null : d2;
+  }
+
+  function monthKeyFromDate(d){
+    if (!d) return "Sem data";
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    return `${y}-${m}`;
+  }
+
+  function monthLabel(key){
+    if (key === "Geral") return "Geral";
+    if (key === "Sem data") return "Sem data";
+    const [y,m] = key.split("-");
+    const mm = Number(m);
+    const nomes = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    return `${nomes[mm-1]}/${y}`;
+  }
+
+  function parseMoney(v){
+    if (typeof v === "number") return isFinite(v) ? v : 0;
+    const s = toStr(v);
+    if (!s) return 0;
+    // remove "R$", espaços e separadores pt-BR
+    // Ex.: "R$ 20,000.00" vem como padrão misto. Vamos limpar para float.
+    const cleaned = s
+      .replace(/R\$\s*/gi, "")
+      .replace(/\./g, "")         // remove milhares pt-BR
+      .replace(/,/g, "");         // remove milhares se vier com vírgula (como no trecho)
+    const n = Number(cleaned);
+    if (isFinite(n)) return n;
+
+    // fallback: mantém ponto decimal e remove milhares com vírgula
+    const cleaned2 = s.replace(/[^0-9.,-]/g, "");
+    const n2 = Number(cleaned2.replace(/,/g, ""));
+    return isFinite(n2) ? n2 : 0;
+  }
+
+  function isVenda(row){
+    const v = parseMoney(row["Valor vendido"]);
+    return v > 0;
+  }
+
+  function contractStatus(row){
+    const raw = normalizeUpper(row["Status do contrato"]);
+    if (!raw) return "SEM_STATUS";
+    if (raw.includes("CANCELADO")) return "CANCELADO";
+    if (raw.includes("ATIVO")) return "ATIVO";
+    return "OUTRO";
+  }
+
+  function matchSearch(row, q){
+    if (!q) return true;
+    const hay = [
+      row["Nome 1"], row["Nome 2"],
+      row["Closer"], row["Liner"],
+      row["Promotor de marketing"],
+      row["Cidade"], row["UF"],
+      row["Local Captação"],
+      row["Status atendimento"],
+      row["Status do contrato"],
+    ].map(toStr).join(" | ").toLowerCase();
+    return hay.includes(q.toLowerCase());
+  }
+
+  function groupBy(rows, keyFn){
+    const m = new Map();
+    for (const r of rows){
+      const k = keyFn(r);
+      if (!m.has(k)) m.set(k, []);
+      m.get(k).push(r);
+    }
+    return m;
+  }
+
+  function uniqSorted(arr){
+    return [...new Set(arr)].filter(Boolean).sort((a,b)=> a.localeCompare(b, "pt-BR"));
+  }
+
+  // =========================
+  // Carregamento XLSX
+  // =========================
+  async function loadFromFile(file){
+    const buf = await file.arrayBuffer();
+    const wb = XLSX.read(buf, { type: "array" });
+    const sheetName = wb.SheetNames[0];
+    const sheet = wb.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: true });
+
+    DATA.rows = rows;
+    bootstrapFilters();
+    render();
+  }
+
+  // =========================
+  // Filtros
+  // =========================
+  function getFilteredRows(){
+    const q = STATE.search.trim();
+    const rows = DATA.rows;
+
+    const filtered = rows.filter(r => {
+      // mês
+      const d = parseExcelDateMaybe(r["Data de atendimento"]);
+      const mk = monthKeyFromDate(d);
+      if (STATE.monthFilter !== "Geral" && mk !== STATE.monthFilter) return false;
+
+      // local captação
+      const cap = toStr(r["Local Captação"]) || "SEM_LOCAL";
+      if (STATE.teamFilter !== "GERAL" && cap !== STATE.teamFilter) return false;
+
+      // search
+      if (!matchSearch(r, q)) return false;
+
+      return true;
+    });
+
+    return filtered;
+  }
+
+  function bootstrapFilters(){
+    // Month filter
+    const monthSel = document.getElementById("monthFilter");
+    const months = uniqSorted(DATA.rows.map(r => monthKeyFromDate(parseExcelDateMaybe(r["Data de atendimento"]))));
+    monthSel.innerHTML = [
+      `<option value="Geral">Geral</option>`,
+      ...months.map(m => `<option value="${m}">${monthLabel(m)}</option>`)
+    ].join("");
+    monthSel.value = STATE.monthFilter = "Geral";
+
+    // Local captação filter
+    const teamSel = document.getElementById("teamFilter");
+    const caps = uniqSorted(DATA.rows.map(r => toStr(r["Local Captação"]) || "SEM_LOCAL"));
+    teamSel.innerHTML = [
+      `<option value="GERAL">GERAL</option>`,
+      ...caps.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`)
+    ].join("");
+    teamSel.value = STATE.teamFilter = "GERAL";
+
+    // meta pills
+    updateMetaPills();
+  }
+
+  function updateMetaPills(extra = {}){
+    const total = DATA.rows.length;
+    const cols = DATA.rows[0] ? Object.keys(DATA.rows[0]).length : 0;
+    const fileHint = extra.fileName ? ` • <strong>Arquivo</strong>: ${escapeHtml(extra.fileName)}` : "";
+    document.getElementById("metaPills").innerHTML = `
+      <span class="pill"><strong>Linhas</strong>: ${fmtInt.format(total)}</span>
+      <span class="pill"><strong>Colunas</strong>: ${fmtInt.format(cols)}</span>
+      <span class="pill"><strong>Aba</strong>: Sheet</span>
+      ${fileHint ? `<span class="pill">${fileHint}</span>` : ""}
+    `;
+  }
+
+  function escapeHtml(s){
+    return toStr(s).replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+  }
+
+  // =========================
+  // KPIs / Métricas
+  // =========================
+  function computeKPIs(rows){
+    const casais = rows.length;
+    const vendasRows = rows.filter(isVenda);
+    const vendas = vendasRows.length;
+    const bruto = vendasRows.reduce((acc,r)=> acc + parseMoney(r["Valor vendido"]), 0);
+
+    const ativos = vendasRows.filter(r => contractStatus(r) === "ATIVO").length;
+    const cancelados = vendasRows.filter(r => contractStatus(r) === "CANCELADO").length;
+    const outros = vendasRows.filter(r => {
+      const st = contractStatus(r);
+      return st !== "ATIVO" && st !== "CANCELADO";
+    }).length;
+
+    const eficiencia = casais ? (vendas / casais) : 0;
+
+    return { casais, vendas, bruto, eficiencia, ativos, cancelados, outros };
+  }
+
+  function closerRanking(rows){
+    const byCloser = groupBy(rows, r => toStr(r["Closer"]) || "SEM_CLOSER");
+    const out = [];
+    for (const [closer, list] of byCloser.entries()){
+      const k = computeKPIs(list);
+      out.push({
+        name: closer,
+        casais: k.casais,
+        vendas: k.vendas,
+        ef: k.eficiencia,
+        bruto: k.bruto,
+        ativos: k.ativos,
+        cancelados: k.cancelados,
+      });
+    }
+    return out;
+  }
+
+  // =========================
+  // Gráficos
+  // =========================
+  let chartMonth = null;
+  let chartContract = null;
+
+  function renderCharts(allRowsFiltered){
+    // Bruto por mês (do filtro atual respeitando team/search, mas não monthFilter)
+    // Para o gráfico ser útil, vamos ignorar o filtro de mês e mostrar por mês dentro do recorte de captação/busca.
+    const baseRows = DATA.rows.filter(r => {
+      const cap = toStr(r["Local Captação"]) || "SEM_LOCAL";
+      if (STATE.teamFilter !== "GERAL" && cap !== STATE.teamFilter) return false;
+      if (!matchSearch(r, STATE.search.trim())) return false;
+      return true;
+    });
+
+    const sales = baseRows.filter(isVenda);
+    const byMonth = groupBy(sales, r => monthKeyFromDate(parseExcelDateMaybe(r["Data de atendimento"])));
+    const months = uniqSorted([...byMonth.keys()].filter(k => k !== "Sem data"));
+    if (byMonth.has("Sem data")) months.push("Sem data");
+
+    const labels = months.map(monthLabel);
+    const values = months.map(m => byMonth.get(m).reduce((acc,r)=> acc + parseMoney(r["Valor vendido"]), 0));
+
+    if (chartMonth) chartMonth.destroy();
+    chartMonth = new Chart(document.getElementById("chartMonth"), {
+      type: "bar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Bruto (R$)",
+          data: values,
+          backgroundColor: "rgba(106,166,255,.35)",
+          borderColor: "rgba(106,166,255,.9)",
+          borderWidth: 1,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => fmtBRL.format(ctx.raw || 0)
+            }
           }
-
-          /* ... continua igual ao seu conteúdo ... */
+        },
+        scales: {
+          y: {
+            ticks: { color: "rgba(233,240,255,.8)", callback: (v)=> (v>=1000? (v/1000)+"k": v) },
+            grid: { color: "rgba(34,48,85,.55)" }
+          },
+          x: {
+            ticks: { color: "rgba(233,240,255,.8)" },
+            grid: { display:false }
+          }
         }
+      }
+    });
 
-        /* ... continua igual ao seu conteúdo ... */
-      };
-    </script>
-  </body>
+    // Status do contrato (vendas no filtro atual)
+    const vendasRows = allRowsFiltered.filter(isVenda);
+    const counts = { ATIVO:0, CANCELADO:0, OUTRO:0, SEM_STATUS:0 };
+    for (const r of vendasRows){
+      const st = contractStatus(r);
+      counts[st] = (counts[st] || 0) + 1;
+    }
+
+    if (chartContract) chartContract.destroy();
+    chartContract = new Chart(document.getElementById("chartContract"), {
+      type: "doughnut",
+      data: {
+        labels: ["ATIVO","CANCELADO","OUTRO","SEM_STATUS"],
+        datasets: [{
+          data: [counts.ATIVO, counts.CANCELADO, counts.OUTRO, counts.SEM_STATUS],
+          backgroundColor: [
+            "rgba(61,220,151,.5)",
+            "rgba(255,107,107,.55)",
+            "rgba(255,209,102,.55)",
+            "rgba(169,182,211,.35)"
+          ],
+          borderColor: [
+            "rgba(61,220,151,.95)",
+            "rgba(255,107,107,.95)",
+            "rgba(255,209,102,.95)",
+            "rgba(169,182,211,.75)"
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { labels: { color: "rgba(233,240,255,.85)" } },
+          tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw}` } }
+        },
+      }
+    });
+  }
+
+  // =========================
+  // Render
+  // =========================
+  function render(){
+    const rows = getFilteredRows();
+    const k = computeKPIs(rows);
+
+    document.getElementById("kpiCasais").textContent = fmtInt.format(k.casais);
+    document.getElementById("kpiVendas").textContent = fmtInt.format(k.vendas);
+    document.getElementById("kpiBruto").textContent = fmtBRL.format(k.bruto);
+    document.getElementById("kpiEficiencia").textContent = fmtPct.format(k.eficiencia);
+
+    // subtitle
+    const monthTxt = (STATE.monthFilter === "Geral") ? "Todos os meses" : monthLabel(STATE.monthFilter);
+    const teamTxt = (STATE.teamFilter === "GERAL") ? "Todos os locais" : STATE.teamFilter;
+    const q = STATE.search.trim();
+    document.getElementById("subtitle").textContent =
+      `${monthTxt} • ${teamTxt}${q ? " • Busca: " + q : ""}`;
+
+    document.getElementById("lastUpdated").textContent =
+      DATA.rows.length ? `Atualizado: ${new Date().toLocaleString("pt-BR")}` : "";
+
+    // ranking
+    const rank = closerRanking(rows);
+    rank.sort((a,b)=> {
+      const dir = STATE.sortDir === "asc" ? 1 : -1;
+      const key = STATE.sortKey;
+      if (key === "name") return dir * a.name.localeCompare(b.name, "pt-BR");
+      return dir * ((a[key] ?? 0) - (b[key] ?? 0));
+    });
+
+    const tb = document.getElementById("rankBody");
+    tb.innerHTML = rank.map(r => {
+      const efBadge = r.ef >= 0.2 ? "good" : (r.ef >= 0.1 ? "warn" : "bad");
+      return `
+        <tr>
+          <td><strong>${escapeHtml(r.name)}</strong></td>
+          <td>${fmtInt.format(r.casais)}</td>
+          <td>${fmtInt.format(r.vendas)}</td>
+          <td><span class="badge ${efBadge}">${fmtPct.format(r.ef)}</span></td>
+          <td>${fmtBRL.format(r.bruto)}</td>
+          <td><span class="badge good">${fmtInt.format(r.ativos)}</span></td>
+          <td><span class="badge bad">${fmtInt.format(r.cancelados)}</span></td>
+        </tr>
+      `;
+    }).join("");
+
+    // insights
+    const best = [...rank].sort((a,b)=> b.bruto - a.bruto)[0];
+    document.getElementById("bestCloser").textContent =
+      best ? `${best.name} • ${fmtBRL.format(best.bruto)}` : "—";
+
+    const byCap = groupBy(rows, r => toStr(r["Local Captação"]) || "SEM_LOCAL");
+    let bestCap = null;
+    for (const [cap, list] of byCap.entries()){
+      const c = { cap, casais: list.length };
+      if (!bestCap || c.casais > bestCap.casais) bestCap = c;
+    }
+    document.getElementById("bestCap").textContent =
+      bestCap ? `${bestCap.cap} • ${fmtInt.format(bestCap.casais)} casais` : "—";
+
+    const cancelRate = k.vendas ? (k.cancelados / k.vendas) : 0;
+    const activeRate = k.vendas ? (k.ativos / k.vendas) : 0;
+    document.getElementById("cancelRate").textContent = fmtPct.format(cancelRate);
+    document.getElementById("activeRate").textContent = fmtPct.format(activeRate);
+
+    renderCharts(rows);
+  }
+
+  // =========================
+  // Eventos
+  // =========================
+  document.getElementById("fileInput").addEventListener("change", async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    await loadFromFile(file);
+    updateMetaPills({ fileName: file.name });
+  });
+
+  document.getElementById("monthFilter").addEventListener("change", (e)=>{
+    STATE.monthFilter = e.target.value;
+    render();
+  });
+
+  document.getElementById("teamFilter").addEventListener("change", (e)=>{
+    STATE.teamFilter = e.target.value;
+    render();
+  });
+
+  document.getElementById("searchInput").addEventListener("input", (e)=>{
+    STATE.search = e.target.value || "";
+    render();
+  });
+
+  // sort headers
+  document.querySelectorAll("thead th[data-sort]").forEach(th=>{
+    th.addEventListener("click", ()=>{
+      const k = th.getAttribute("data-sort");
+      if (STATE.sortKey === k){
+        STATE.sortDir = (STATE.sortDir === "asc") ? "desc" : "asc";
+      } else {
+        STATE.sortKey = k;
+        STATE.sortDir = (k === "name") ? "asc" : "desc";
+      }
+      render();
+    });
+  });
+
+  // =========================
+  // Inicialização
+  // =========================
+  // Sem arquivo: dashboard fica aguardando.
+</script>
+</body>
 </html>
