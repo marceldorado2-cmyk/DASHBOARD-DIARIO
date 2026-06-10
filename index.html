@@ -1,23 +1,198 @@
-<div class="upload-panel">
-    <h3>Atualização Diária - Dashboard Junho 2026</h3>
-    
-    <form id="daily-upload" enctype="multipart/form-data">
-        <div class="form-group">
-            <label>Data:</label>
-            <input type="date" name="date" required>
-        </div>
-        
-        <div class="form-group">
-            <label>Arquivo de Dados:</label>
-            <input type="file" name="dataFile" accept=".xlsx,.csv" required>
-            <small>Formatos aceitos: Excel (.xlsx) ou CSV</small>
-        </div>
-        
-        <button type="submit" class="btn-update">Atualizar Dashboard</button>
-    </form>
-    
-    <div class="status-panel">
-        <h4>Status da Atualização:</h4>
-        <div id="update-status"></div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>Resultados</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#home" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        Início
+                    </a>
+                    <a href="#resultados" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Resultados
+                    </a>
+                    <a href="#estatisticas" class="nav-link">
+                        <i class="fas fa-chart-bar"></i>
+                        Estatísticas
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="main">
+            <!-- HERO SECTION -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Bem-vindo ao Dashboard de Resultados</h2>
+                    <p>Acompanhe os resultados mais recentes em tempo real</p>
+                    <button class="cta-button">
+                        <i class="fas fa-search"></i>
+                        Ver Últimos Resultados
+                    </button>
+                </div>
+            </section>
+
+            <!-- STATS CARDS -->
+            <section class="stats">
+                <div class="stats-grid">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Total de Resultados</h3>
+                            <span class="card-number">1,245</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Último Resultado</h3>
+                            <span class="card-number">Hoje</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Usuários Ativos</h3>
+                            <span class="card-number">523</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Avaliação</h3>
+                            <span class="card-number">4.8★</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RESULTS TABLE -->
+            <section class="results">
+                <div class="section-header">
+                    <h2>Resultados Recentes</h2>
+                    <button class="filter-btn">
+                        <i class="fas fa-filter"></i>
+                        Filtrar
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Resultado</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10/06/2026</td>
+                                <td><span class="badge type-a">Tipo A</span></td>
+                                <td class="result-numbers">
+                                    <span class="number">15</span>
+                                    <span class="number">23</span>
+                                    <span class="number">31</span>
+                                    <span class="number">45</span>
+                                    <span class="number">52</span>
+                                </td>
+                                <td><span class="status active">Ativo</span></td>
+                                <td>
+                                    <button class="action-btn view">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>09/06/2026</td>
+                                <td><span class="badge type-b">Tipo B</span></td>
+                                <td class="result-numbers">
+                                    <span class="number">07</span>
+                                    <span class="number">14</span>
+                                    <span class="number">28</span>
+                                    <span class="number">35</span>
+                                    <span class="number">42</span>
+                                </td>
+                                <td><span class="status active">Ativo</span></td>
+                                <td>
+                                    <button class="action-btn view">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>08/06/2026</td>
+                                <td><span class="badge type-c">Tipo C</span></td>
+                                <td class="result-numbers">
+                                    <span class="number">03</span>
+                                    <span class="number">18</span>
+                                    <span class="number">26</span>
+                                    <span class="number">39</span>
+                                    <span class="number">47</span>
+                                </td>
+                                <td><span class="status pending">Pendente</span></td>
+                                <td>
+                                    <button class="action-btn view">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2026 Resultados Dashboard. Todos os direitos reservados.</p>
+                <div class="footer-links">
+                    <a href="#contato">Contato</a>
+                    <a href="#privacidade">Privacidade</a>
+                    <a href="#termos">Termos</a>
+                </div>
+            </div>
+        </footer>
     </div>
-</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
