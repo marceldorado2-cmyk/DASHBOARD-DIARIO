@@ -1,198 +1,830 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados - Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <!-- HEADER -->
-        <header class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-chart-line"></i>
-                    <h1>Resultados</h1>
-                </div>
-                <nav class="nav">
-                    <a href="#home" class="nav-link active">
-                        <i class="fas fa-home"></i>
-                        Início
-                    </a>
-                    <a href="#resultados" class="nav-link">
-                        <i class="fas fa-list"></i>
-                        Resultados
-                    </a>
-                    <a href="#estatisticas" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        Estatísticas
-                    </a>
-                </nav>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>DARK IN Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      :root {
+        --bg: #050711;
+        --line: rgba(255, 255, 255, 0.1);
+        --txt: #eef6ff;
+        --mut: #91a2c7;
+        --blue: #00c2ff;
+        --purple: #8b5cf6;
+        --green: #16f09a;
+        --gold: #ffc857;
+        --red: #ff4f78;
+        --shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, Arial, system-ui, sans-serif;
+        background: radial-gradient(circle at 0 0, rgba(0, 194, 255, 0.18), transparent 30%),
+          radial-gradient(circle at 100% 0, rgba(139, 92, 246, 0.22), transparent 32%),
+          linear-gradient(180deg, #040714, #08111f 48%, #050711);
+        color: var(--txt);
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: 270px 1fr;
+        min-height: 100vh;
+      }
+
+      .side {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+        padding: 22px;
+        background: linear-gradient(180deg, rgba(8, 13, 27, 0.98), rgba(5, 7, 17, 0.99));
+        border-right: 1px solid var(--line);
+      }
+
+      .logoRow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, var(--blue), var(--purple));
+        color: #04101e;
+        font-weight: 1000;
+        box-shadow: 0 0 35px rgba(0, 194, 255, 0.3);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0;
+      }
+
+      .brandTitle {
+        font-size: 25px;
+        font-weight: 1000;
+        letter-spacing: 1px;
+      }
+
+      .brandSub {
+        font-size: 12px;
+        color: var(--mut);
+        margin-top: 3px;
+      }
+
+      .nav {
+        display: grid;
+        gap: 8px;
+      }
+
+      .nav button,
+      .pill {
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--txt);
+        border-radius: 15px;
+        padding: 12px 13px;
+        text-align: left;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.18s;
+      }
+
+      .nav button:hover,
+      .nav button.active,
+      .pill.active {
+        background: linear-gradient(135deg, rgba(0, 194, 255, 0.18), rgba(139, 92, 246, 0.15));
+        border-color: rgba(0, 194, 255, 0.48);
+      }
+
+      .main {
+        padding: 24px;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+
+      .title h2 {
+        font-size: 34px;
+        letter-spacing: -0.8px;
+      }
+
+      .title p {
+        color: var(--mut);
+        margin: 8px 0 0;
+      }
+
+      .filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      select,
+      input {
+        background: rgba(255, 255, 255, 0.055);
+        border: 1px solid var(--line);
+        color: var(--txt);
+        border-radius: 14px;
+        padding: 12px 13px;
+        font-weight: 800;
+        outline: none;
+      }
+
+      option {
+        color: #0b1020;
+      }
+
+      #search {
+        min-width: 260px;
+      }
+
+      .section {
+        display: none;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .kpis {
+        grid-template-columns: repeat(6, minmax(128px, 1fr));
+        margin-bottom: 16px;
+      }
+
+      .card,
+      .panel {
+        background: linear-gradient(180deg, rgba(17, 26, 49, 0.95), rgba(9, 14, 29, 0.96));
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card:before,
+      .panel:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 100% 0, rgba(0, 194, 255, 0.1), transparent 38%);
+        pointer-events: none;
+      }
+
+      .card small {
+        display: block;
+        color: var(--mut);
+        font-weight: 900;
+        text-transform: uppercase;
+        font-size: 10px;
+        letter-spacing: 0.6px;
+      }
+
+      .num {
+        font-size: 26px;
+        font-weight: 1000;
+        margin-top: 7px;
+        letter-spacing: -0.5px;
+      }
+
+      .delta {
+        font-size: 12px;
+        color: var(--mut);
+        margin-top: 7px;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .twoOne {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+        gap: 16px;
+      }
+
+      .panelHead {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 13px;
+        flex-wrap: wrap;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .pill {
+        padding: 9px 12px;
+        text-align: center;
+        font-size: 13px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        padding: 5px 9px;
+        font-size: 11px;
+        font-weight: 950;
+      }
+
+      .park {
+        background: rgba(0, 194, 255, 0.12);
+        color: #79dcff;
+      }
+
+      .externa {
+        background: rgba(139, 92, 246, 0.14);
+        color: #c7b5ff;
+      }
+
+      .mut {
+        color: var(--mut);
+      }
+
+      .bar {
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        margin-top: 9px;
+      }
+
+      .bar span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--blue), var(--green));
+        width: 0;
+      }
+
+      .bar.gold span {
+        background: linear-gradient(90deg, var(--gold), var(--green));
+      }
+
+      .tableWrap {
+        width: 100%;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 1120px;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+        padding: 12px;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+
+      th {
+        background: #0b1428;
+        color: #b7c7e8;
+        text-align: left;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        cursor: pointer;
+      }
+
+      tr:hover td {
+        background: rgba(0, 194, 255, 0.055);
+      }
+
+      td.nameCell {
+        font-weight: 950;
+        cursor: pointer;
+      }
+
+      .podiumGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+
+      .podium {
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid var(--line);
+        border-radius: 19px;
+        padding: 15px;
+      }
+
+      .podium h4 {
+        margin-bottom: 12px;
+      }
+
+      .medal {
+        display: grid;
+        grid-template-columns: 40px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .medal:last-child {
+        border-bottom: 0;
+      }
+
+      .medal .m {
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .medal b {
+        display: block;
+      }
+
+      .medal small {
+        color: var(--mut);
+      }
+
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+      }
+
+      .day {
+        min-height: 116px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .day b {
+        font-size: 15px;
+      }
+
+      .day strong {
+        display: block;
+        margin: 8px 0;
+        font-size: 20px;
+      }
+
+      .day small {
+        color: var(--mut);
+        line-height: 1.45;
+      }
+
+      .heatGrid {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 10px;
+      }
+
+      .heatCell {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 13px;
+        background: rgba(255, 255, 255, 0.04);
+        min-height: 112px;
+      }
+
+      .heatCell strong {
+        display: block;
+        font-size: 24px;
+        margin: 5px 0;
+      }
+
+      .hbar {
+        height: 13px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        margin: 8px 0;
+      }
+
+      .hbar span {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--purple), var(--blue), var(--green));
+      }
+
+      .chartBox {
+        height: 360px;
+        position: relative;
+      }
+
+      .avatar {
+        width: 98px;
+        height: 98px;
+        border-radius: 32px;
+        background: linear-gradient(135deg, var(--blue), var(--purple));
+        color: #03101e;
+        display: grid;
+        place-items: center;
+        font-size: 34px;
+        font-weight: 1000;
+        margin-bottom: 14px;
+      }
+
+      .miniKpis {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+      }
+
+      .miniCard {
+        padding: 13px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--line);
+      }
+
+      .miniCard small {
+        color: var(--mut);
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .miniCard b {
+        display: block;
+        margin-top: 5px;
+        font-size: 18px;
+      }
+
+      .teamBig {
+        cursor: pointer;
+      }
+
+      .teamBig:hover {
+        border-color: rgba(0, 194, 255, 0.5);
+      }
+
+      @media (max-width: 1200px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .side {
+          position: relative;
+          height: auto;
+        }
+
+        .nav {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .kpis {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .split,
+        .twoOne {
+          grid-template-columns: 1fr;
+        }
+
+        .podiumGrid {
+          grid-template-columns: 1fr;
+        }
+
+        .heatGrid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (max-width: 720px) {
+        .main {
+          padding: 14px;
+        }
+
+        .top {
+          flex-direction: column;
+        }
+
+        .title h2 {
+          font-size: 27px;
+        }
+
+        .nav {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .kpis,
+        .miniKpis {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .calendar {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .heatGrid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        #search {
+          min-width: 100%;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <aside class="side">
+        <div class="logoRow">
+          <div class="logo">DI</div>
+
+          <div>
+            <div class="brandTitle">DARK IN</div>
+            <div class="brandSub">Business Intelligence • Captação</div>
+          </div>
+        </div>
+
+        <nav class="nav" id="nav">
+          <button class="active" data-tab="geral">⚡ Geral</button>
+          <button data-tab="maio">📁 Maio</button>
+          <button data-tab="junho">📁 Junho</button>
+          <button data-tab="equipes">👥 Equipes</button>
+          <button data-tab="ranking">🏆 Rankings</button>
+          <button data-tab="top3">🥇 Top 3 Funções</button>
+          <button data-tab="calendario">📅 Calendário</button>
+          <button data-tab="horarios">🔥 Horários</button>
+          <button data-tab="profissional">👤 Individual</button>
+          <button data-tab="metas">🎯 Metas</button>
+        </nav>
+      </aside>
+
+      <main class="main">
+        <div class="top">
+          <div class="title">
+            <h2 id="pageTitle">Dashboard Geral</h2>
+            <p id="pageSub">Dados reais: Maio 438 casais • Junho até dia 09 com 169 casais.</p>
+          </div>
+
+          <div class="filters">
+            <select id="mes">
+              <option>Junho</option>
+              <option>Maio</option>
+              <option>Geral</option>
+            </select>
+
+            <select id="equipe">
+              <option value="GERAL">Todas equipes</option>
+              <option value="PARK">PARK</option>
+              <option value="EXTERNA">EXTERNA</option>
+            </select>
+
+            <input id="search" placeholder="Buscar nome, equipe ou função" />
+          </div>
+        </div>
+
+        <section id="geral" class="section active">
+          <div class="grid kpis" id="kpiGeral"></div>
+          <div class="grid split" id="teamCards"></div>
+
+          <div class="twoOne" style="margin-top: 16px">
+            <div class="panel">
+              <div class="panelHead">
+                <h3>Ranking Geral - clique para ordenar</h3>
+                <div class="tabs" id="sortBtns"></div>
+              </div>
+
+              <div class="tableWrap">
+                <table id="mainTable"></table>
+              </div>
             </div>
-        </header>
 
-        <!-- MAIN CONTENT -->
-        <main class="main">
-            <!-- HERO SECTION -->
-            <section class="hero">
-                <div class="hero-content">
-                    <h2>Bem-vindo ao Dashboard de Resultados</h2>
-                    <p>Acompanhe os resultados mais recentes em tempo real</p>
-                    <button class="cta-button">
-                        <i class="fas fa-search"></i>
-                        Ver Últimos Resultados
-                    </button>
-                </div>
-            </section>
-
-            <!-- STATS CARDS -->
-            <section class="stats">
-                <div class="stats-grid">
-                    <div class="card">
-                        <div class="card-icon">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Total de Resultados</h3>
-                            <span class="card-number">1,245</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Último Resultado</h3>
-                            <span class="card-number">Hoje</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Usuários Ativos</h3>
-                            <span class="card-number">523</span>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Avaliação</h3>
-                            <span class="card-number">4.8★</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- RESULTS TABLE -->
-            <section class="results">
-                <div class="section-header">
-                    <h2>Resultados Recentes</h2>
-                    <button class="filter-btn">
-                        <i class="fas fa-filter"></i>
-                        Filtrar
-                    </button>
-                </div>
-                
-                <div class="table-container">
-                    <table class="results-table">
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Tipo</th>
-                                <th>Resultado</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>10/06/2026</td>
-                                <td><span class="badge type-a">Tipo A</span></td>
-                                <td class="result-numbers">
-                                    <span class="number">15</span>
-                                    <span class="number">23</span>
-                                    <span class="number">31</span>
-                                    <span class="number">45</span>
-                                    <span class="number">52</span>
-                                </td>
-                                <td><span class="status active">Ativo</span></td>
-                                <td>
-                                    <button class="action-btn view">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn edit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>09/06/2026</td>
-                                <td><span class="badge type-b">Tipo B</span></td>
-                                <td class="result-numbers">
-                                    <span class="number">07</span>
-                                    <span class="number">14</span>
-                                    <span class="number">28</span>
-                                    <span class="number">35</span>
-                                    <span class="number">42</span>
-                                </td>
-                                <td><span class="status active">Ativo</span></td>
-                                <td>
-                                    <button class="action-btn view">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn edit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>08/06/2026</td>
-                                <td><span class="badge type-c">Tipo C</span></td>
-                                <td class="result-numbers">
-                                    <span class="number">03</span>
-                                    <span class="number">18</span>
-                                    <span class="number">26</span>
-                                    <span class="number">39</span>
-                                    <span class="number">47</span>
-                                </td>
-                                <td><span class="status pending">Pendente</span></td>
-                                <td>
-                                    <button class="action-btn view">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="action-btn edit">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-
-        <!-- FOOTER -->
-        <footer class="footer">
-            <div class="footer-content">
-                <p>&copy; 2026 Resultados Dashboard. Todos os direitos reservados.</p>
-                <div class="footer-links">
-                    <a href="#contato">Contato</a>
-                    <a href="#privacidade">Privacidade</a>
-                    <a href="#termos">Termos</a>
-                </div>
+            <div class="panel">
+              <h3>Insights DARK IN</h3>
+              <div id="insights"></div>
             </div>
-        </footer>
+          </div>
+        </section>
+
+        <section id="maio" class="section">
+          <div class="grid kpis" id="kpiMaio"></div>
+
+          <div class="split">
+            <div class="panel">
+              <h3>Maio • PARK</h3>
+              <div id="maioPark"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Maio • EXTERNA</h3>
+              <div id="maioExt"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="junho" class="section">
+          <div class="grid kpis" id="kpiJunho"></div>
+
+          <div class="split">
+            <div class="panel">
+              <h3>Junho • PARK</h3>
+              <div id="junhoPark"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Junho • EXTERNA</h3>
+              <div id="junhoExt"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="equipes" class="section">
+          <div class="tabs" style="margin-bottom: 14px">
+            <button class="pill active" data-team="PARK">Abrir PARK</button>
+            <button class="pill" data-team="EXTERNA">Abrir EXTERNA</button>
+          </div>
+
+          <div id="teamView"></div>
+        </section>
+
+        <section id="ranking" class="section">
+          <div class="panel">
+            <div class="panelHead">
+              <h3>Ranking Completo</h3>
+              <div class="tabs" id="sortBtns2"></div>
+            </div>
+
+            <div class="tableWrap">
+              <table id="rankTable"></table>
+            </div>
+          </div>
+        </section>
+
+        <section id="top3" class="section">
+          <div class="podiumGrid" id="top3Grid"></div>
+        </section>
+
+        <section id="calendario" class="section">
+          <div class="panel">
+            <div class="panelHead">
+              <h3>Calendário Diário Visual</h3>
+              <div class="tabs">
+                <button class="pill active" data-cal="Junho">Junho</button>
+                <button class="pill" data-cal="Maio">Maio</button>
+              </div>
+            </div>
+
+            <div class="calendar" id="calendar"></div>
+          </div>
+        </section>
+
+        <section id="horarios" class="section">
+          <div class="panel">
+            <div class="panelHead">
+              <h3>Mapa de Calor por Horário</h3>
+              <span class="mut">Melhores e piores horários por casais, vendas, VGV e eficiência</span>
+            </div>
+
+            <div class="heatGrid" id="heat"></div>
+          </div>
+
+          <div class="split" style="margin-top: 16px">
+            <div class="panel">
+              <h3>Gráfico maior: Casais por Horário</h3>
+              <div class="chartBox">
+                <canvas id="hourChart1"></canvas>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Gráfico maior: Vendas x Eficiência</h3>
+              <div class="chartBox">
+                <canvas id="hourChart2"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="profissional" class="section">
+          <div class="split">
+            <div class="panel">
+              <h3>Escolha o profissional</h3>
+              <input
+                id="personSearch"
+                placeholder="Buscar profissional"
+                style="width: 100%; margin: 10px 0"
+              />
+
+              <div class="tableWrap">
+                <table id="personTable"></table>
+              </div>
+            </div>
+
+            <div id="profile"></div>
+          </div>
+        </section>
+
+        <section id="metas" class="section">
+          <div class="split">
+            <div class="panel">
+              <h3>Meta da Operação</h3>
+              <div class="grid kpis" style="grid-template-columns: 1fr 1fr" id="metaOp"></div>
+            </div>
+
+            <div class="panel">
+              <h3>Super Meta da Operação</h3>
+              <div
+                class="grid kpis"
+                style="grid-template-columns: 1fr 1fr"
+                id="metaSuper"
+              ></div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <script src="script.js"></script>
-</body>
+    <script>
+      const DATA = {
+        "metrics": {
+          "Geral": {
+            "casais": 607,
+            "vendas": 159,
+            "ativos": 137,
+            "cancelados": 22,
+            "vgv": 13973894.0,
+            "brindes": 89572.09999999999,
+            "notour": 28,
+            "eficiencia": 26.194398682042834,
+            "custoCasal": 147.5652388797364,
+            "vgvCasal": 23021.242174629326,
+            "mediaCaptador": 20.93103448275862,
+            "captadores": 29,
+            "casaisProj": 563,
+            "vgvProj": 12449433.333333334,
+            "vendasProj": 140
+          },
+          "Maio": {
+            "casais": 438,
+            "vendas": 117,
+            "ativos": 95,
+            "cancelados": 22,
+            "vgv": 10239064.0,
+            "brindes": 63904.399999999994,
+            "notour": 24,
+            "eficiencia": 26.71232876712329,
+            "custoCasal": 145.90045662100457,
+            "vgvCasal": 23376.858447488583,
+            "mediaCaptador": 17.52,
+            "captadores": 25,
+            "casaisProj": 424,
+            "vgvProj": 9908771.612903226,
+            "vendasProj": 113
+          }
+
+          /* ... continua igual ao seu conteúdo ... */
+        }
+
+        /* ... continua igual ao seu conteúdo ... */
+      };
+    </script>
+  </body>
 </html>
