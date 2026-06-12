@@ -66,7 +66,7 @@
     .btn:active{transform:translateY(0px); box-shadow:none;}
     .btn.primary{ background:rgba(124,92,255,.18); border-color:rgba(124,92,255,.35); }
 
-    /* ===== Tabs (NOVO LAYOUT: sem cortar texto) ===== */
+    /* ===== Tabs ===== */
     .tabs-wrap{
       margin:16px 0 12px;
       background:rgba(255,255,255,0.03);
@@ -99,7 +99,6 @@
       transition:all 0.2s ease;
       user-select:none;
 
-      /* IMPORTANTE: não cortar texto */
       white-space:normal;
       overflow:visible;
       text-overflow:clip;
@@ -315,7 +314,7 @@
       </div>
     </div>
 
-    <!-- abas (novo layout) -->
+    <!-- abas -->
     <div class="tabs-wrap">
       <div class="tabs">
         <div class="tab active" data-tab="resumo">📊 Resumo</div>
@@ -343,7 +342,8 @@
           • Cotas ativas/canceladas = contagem de tokens na coluna "Status do contrato".<br>
           • <strong>VGV total = $$\sum(\text{coluna G})$$</strong> (soma simples).<br>
           • VGV ativo/cancelado: rateio proporcional pela quantidade de tokens ATIVO/CANCELADO na linha (quando houver mistura).<br>
-          • Eficiência = vendas (cotas totais) ÷ casais (em %).
+          • Eficiência = vendas (cotas totais) ÷ casais (em %).<br>
+          • <strong>Média de casais (período)</strong> = total de casais ÷ quantidade de dias do período (inclusivo).
         </div>
       </div>
 
@@ -370,7 +370,7 @@
         <div class="chart-card">
           <div class="chart-head">
             <div class="chart-title">Performance por dia da semana</div>
-            <div class="chart-sub">Vendas, VGV, Casais e Aproveitamento (Eficiência)</div>
+            <div class="chart-sub">Vendas, VGV, Casais e Aproveitamento (Eficiência) + Média de casais (período)</div>
           </div>
           <div class="chart-wrap small">
             <canvas id="chartSemana"></canvas>
@@ -407,7 +407,6 @@
           • A associação fica salva no seu navegador (localStorage).
         </div>
 
-        <!-- cards no topo (como pedido) -->
         <h3 style="margin: 10px 0 6px;">Equipe Parque</h3>
         <div class="stats" id="stats-equipe-parque"></div>
 
@@ -420,7 +419,6 @@
         <h3 style="margin: 10px 0 6px;">Sem equipe</h3>
         <div class="stats" id="stats-equipe-sem"></div>
 
-        <!-- configurar promotores no final -->
         <div class="note" style="margin-top:18px">
           <strong>Configurar promotores</strong><br>
           Se o nome do promotor mudar no CSV (abreviação), ele será visto como um novo promotor para marcação.
@@ -669,7 +667,7 @@
     m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/);
     if (m) {
       const y=+m[1], mo=+m[2], d=+m[3];
-      const hh=m[4]?+m[[4]]:0;
+      const hh=m[4]?+m[4]:0;
       return new Date(y, mo-1, d, hh, m[5]?+m[5]:0, m[6]?+m[6]:0);
     }
     return null;
@@ -798,6 +796,43 @@
     return sum / rows.length;
   }
 
+  // ====== NOVO: média de casais por dia no período (dias inclusivos) ======
+  function daysInSelectedPeriodInclusive(){
+    const d1 = parseDateOnlyInput(el("dateStart").value);
+    const d2 = parseDateOnlyInput(el("dateEnd").value);
+
+    // Se o usuário não estipular período completo, usamos a quantidade de dias presentes nos dados filtrados (datas distintas)
+    if (!d1 || !d2) return null;
+
+    const start = new Date(d1.getFullYear(), d1.getMonth(), d1.getDate());
+    const end = new Date(d2.getFullYear(), d2.getMonth(), d2.getDate());
+    const diff = end.getTime() - start.getTime();
+    if (diff < 0) return 0;
+    return Math.floor(diff / (24*60*60*1000)) + 1;
+  }
+
+  function distinctDaysCountFromRows(rows){
+    const set = new Set();
+    rows.forEach(r => {
+      if (!r._dt) return;
+      set.add(`${r._dt.getFullYear()}-${r._dt.getMonth()}-${r._dt.getDate()}`);
+    });
+    return set.size;
+  }
+
+  function avgCasaisPeriodo(rows){
+    const casaisTotal = rows.length;
+    const days = daysInSelectedPeriodInclusive();
+    const denom = (days !== null) ? days : distinctDaysCountFromRows(rows);
+    if (!denom) return 0;
+    return casaisTotal / denom;
+  }
+
+  function fmtNumberBR(v, min=1, max=1){
+    return new Intl.NumberFormat("pt-BR", { minimumFractionDigits:min, maximumFractionDigits:max }).format(v || 0);
+  }
+  // ====== fim NOVO ======
+
   function statsFor(rows) {
     const casais = rows.length;
     const q = sumQuotas(rows);
@@ -816,14 +851,25 @@
       eficiencia,
       pctCancel,
       ticketMedio,
-      rendaMed: avgRenda(rows)
+      rendaMed: avgRenda(rows),
+      mediaCasaisPeriodo: avgCasaisPeriodo(rows) // NOVO
     };
   }
 
   function renderStatsCards(containerId, rows){
     const s = statsFor(rows);
+
+    // NOVO CARD: média de casais no período
+    const mediaCard = `
+      <div class="stat-card">
+        <div class="stat-value">${fmtNumberBR(s.mediaCasaisPeriodo, 1, 1)}</div>
+        <div class="stat-label">Média de casais (por dia no período)</div>
+      </div>
+    `;
+
     el(containerId).innerHTML = `
       <div class="stat-card"><div class="stat-value">${s.casais}</div><div class="stat-label">Casais</div></div>
+      ${mediaCard}
       <div class="stat-card"><div class="stat-value">${s.vendas}</div><div class="stat-label">Cotas (vendas totais)</div></div>
       <div class="stat-card"><div class="stat-value">${s.cotasCanceladas}</div><div class="stat-label">Cotas canceladas</div></div>
       <div class="stat-card"><div class="stat-value">${fmtMoney(s.vgvTotal)}</div><div class="stat-label">VGV total (Σ col G)</div></div>
@@ -1003,9 +1049,8 @@
   }
   function weekdayIndexPtBR(dt){ return dt.getDay(); } // 0=Dom..6=Sáb
 
-  // >>>>> MUDANÇA PEDIDA: começar em Segunda e terminar em Domingo <<<<<
   const WEEK_LABELS_MON_FIRST = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
-  const WEEK_INDEX_ORDER_MON_FIRST = [1,2,3,4,5,6,0]; // getDay() order
+  const WEEK_INDEX_ORDER_MON_FIRST = [1,2,3,4,5,6,0];
 
   function dailySeries(rows){
     const map = new Map();
@@ -1046,7 +1091,6 @@
       eficiencia: eff
     };
   }
-  // >>>>> fim mudança <<<<<
 
   function destroyChartSafely(ch){ try { ch?.destroy?.(); } catch(e) {} }
 
@@ -1089,7 +1133,11 @@
       }
     });
 
-    const w = weekdayAggMonFirst(rows); // <<< usa versão segunda->domingo
+    const w = weekdayAggMonFirst(rows);
+
+    // NOVO: média de casais no período (para linha no gráfico)
+    const media = avgCasaisPeriodo(rows);
+    const mediaArr = w.labels.map(() => media);
 
     destroyChartSafely(charts.semana);
     charts.semana = new Chart(el("chartSemana").getContext("2d"), {
@@ -1099,7 +1147,20 @@
           { type:"bar", label:"Casais", data:w.casais, backgroundColor:"rgba(124,92,255,.25)", borderColor:"rgba(124,92,255,.65)", borderWidth:1, yAxisID:"yCount" },
           { type:"bar", label:"Vendas (cotas)", data:w.vendas, backgroundColor:"rgba(92,255,176,.18)", borderColor:"rgba(92,255,176,.65)", borderWidth:1, yAxisID:"yCount" },
           { type:"line", label:"VGV", data:w.vgv, borderColor:"rgba(34,211,238,1)", backgroundColor:"rgba(34,211,238,.10)", tension:0.25, pointRadius:2.2, yAxisID:"yMoney" },
-          { type:"line", label:"Aproveitamento (Eficiência)", data:w.eficiencia.map(x => x * 100), borderColor:"rgba(255,176,32,1)", backgroundColor:"rgba(255,176,32,.10)", tension:0.25, pointRadius:2.2, yAxisID:"yPct" }
+          { type:"line", label:"Aproveitamento (Eficiência)", data:w.eficiencia.map(x => x * 100), borderColor:"rgba(255,176,32,1)", backgroundColor:"rgba(255,176,32,.10)", tension:0.25, pointRadius:2.2, yAxisID:"yPct" },
+
+          // NOVO dataset (linha): média de casais no período
+          {
+            type:"line",
+            label:"Média de casais (período)",
+            data: mediaArr,
+            borderColor:"rgba(234,240,255,.75)",
+            backgroundColor:"rgba(234,240,255,.08)",
+            borderDash:[6,6],
+            tension:0,
+            pointRadius:0,
+            yAxisID:"yCount"
+          }
         ]
       },
       options: {
@@ -1113,6 +1174,7 @@
               const v = ctx.parsed.y ?? 0;
               if (ds.includes("VGV")) return `${ds}: ${fmtMoney(v)}`;
               if (ds.includes("Aproveitamento")) return `${ds}: ${new Intl.NumberFormat("pt-BR",{maximumFractionDigits:1}).format(v)}%`;
+              if (ds.includes("Média de casais")) return `${ds}: ${fmtNumberBR(v, 1, 1)}`;
               return `${ds}: ${v}`;
             }
           } }
@@ -1372,6 +1434,7 @@
     box.innerHTML = `
       <div class="stat-card"><div class="stat-value">${nome}</div><div class="stat-label">Profissional selecionado</div></div>
       <div class="stat-card"><div class="stat-value">${s.casais}</div><div class="stat-label">Casais</div></div>
+      <div class="stat-card"><div class="stat-value">${fmtNumberBR(s.mediaCasaisPeriodo, 1, 1)}</div><div class="stat-label">Média de casais (período)</div></div>
       <div class="stat-card"><div class="stat-value">${s.vendas}</div><div class="stat-label">Cotas</div></div>
       <div class="stat-card"><div class="stat-value">${s.cotasCanceladas}</div><div class="stat-label">Cotas canceladas</div></div>
       <div class="stat-card"><div class="stat-value">${fmtMoney(s.vgvTotal)}</div><div class="stat-label">VGV (Σ col G)</div></div>
