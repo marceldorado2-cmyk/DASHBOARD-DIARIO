@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Painel de Atendimentos</title>
   <style>
-    /* SEU CSS NORMAL */
     body {
       background: #181a25;
       color: #fff;
@@ -15,13 +14,18 @@
     }
     .container {
       padding: 32px;
+      max-width: 800px;
+      margin: auto;
     }
-    .range-row {
+    .filters-row {
       display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
-    .range-row input[type="date"] {
+    .filters-row label { margin-right: 6px; }
+    .range-row input[type="date"], .filters-row select {
       background: #272848;
       color: #fff;
       border: 1.5px solid #3d4586;
@@ -29,10 +33,9 @@
       padding: 10px 15px;
       font-size: 1rem;
       outline: none;
-      margin-right: 8px;
-      min-width: 160px;
+      min-width: 150px;
     }
-    .range-row .btn {
+    .range-row .btn, .filters-row .btn {
       background: #3d4586;
       color: #fff;
       border: none;
@@ -43,21 +46,21 @@
       cursor: pointer;
       transition: 0.15s;
     }
-    .range-row .btn:hover {
+    .range-row .btn:hover, .filters-row .btn:hover {
       background: #5963c7;
     }
     .range-row .sep {
       margin: 0 6px 0 0;
     }
-    label { margin-right: 12px; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Painel de Atendimentos</h1>
     <p>Fonte: <strong>dados.csv</strong></p>
-    <!-- ALTERAÇÃO: Inputs de data do período -->
-    <div class="range-row">
+
+    <!-- Período -->
+    <div class="range-row filters-row">
       <label for="dateStart">PERÍODO</label>
       <input id="dateStart" type="date" />
       <span class="sep">a</span>
@@ -66,11 +69,32 @@
       <button class="btn" id="btn30" type="button">30 dias</button>
       <button class="btn" id="btnLimparPeriodo" type="button">Limpar</button>
     </div>
-    <!-- O RESTANTE DO PAINEL FICA AQUI -->
+
+    <!-- Filtros extras (exemplo: STATUS e UF) -->
+    <div class="filters-row">
+      <label for="statusSel">Status</label>
+      <select id="statusSel">
+        <option value="">Todos</option>
+        <option value="aberto">Aberto</option>
+        <option value="fechado">Fechado</option>
+        <option value="andamento">Em andamento</option>
+      </select>
+
+      <label for="ufSel">UF</label>
+      <select id="ufSel">
+        <option value="">Todos</option>
+        <option value="SP">SP</option>
+        <option value="RJ">RJ</option>
+        <option value="MG">MG</option>
+        <!-- Adapte conforme seus estados -->
+      </select>
+
+      <button class="btn" id="btnResetFiltros" type="button">Resetar tudo</button>
+    </div>
+
     <div id="app"></div>
   </div>
   <script>
-    // UTILITÁRIOS
     function el(id) { return document.getElementById(id); }
     function fmtISODateLocal(d) {
       const y = d.getFullYear();
@@ -78,39 +102,32 @@
       const day = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${day}`;
     }
-
-    // Função para normalizar datas de inputs
     function parseDateOnlyInput(str) {
       if (!str) return null;
-      // yyyy-mm-dd (html date input)
       if (str.match(/^\d{4}-\d{2}-\d{2}$/)) {
         const [y, m, d] = str.split("-");
         return new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
       }
-      // dd/mm/yyyy
-      if (str.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-        const [d, m, y] = str.split("/");
-        return new Date(parseInt(y), parseInt(m) - 1, parseInt(d));
-      }
+      // Adapte se você usar outro formato
       return null;
     }
 
+    // SOBRE O ESTADO DOS FILTROS
+    function getFiltros() {
+      return {
+        periodStart: parseDateOnlyInput(el("dateStart").value),
+        periodEnd: parseDateOnlyInput(el("dateEnd").value),
+        status: el("statusSel").value,
+        uf: el("ufSel").value
+      };
+    }
 
-    // >>> INÍCIO DA SUA LÓGICA APP <<<
-
-    let state = {
-      periodStart: null,
-      periodEnd: null,
-      // outros filtros, ex: status, UF, etc
-    };
-
-    // HANDLERS DE FILTRO DE PERÍODO
+    // Handlers dos botões do período
     el("btnLimparPeriodo").addEventListener("click", () => {
       el("dateStart").value = "";
       el("dateEnd").value = "";
       updateAll();
     });
-
     el("btnHoje").addEventListener("click", () => {
       const now = new Date();
       const s = fmtISODateLocal(now);
@@ -118,7 +135,6 @@
       el("dateEnd").value = s;
       updateAll();
     });
-
     el("btn30").addEventListener("click", () => {
       const now = new Date();
       const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -129,39 +145,48 @@
       updateAll();
     });
 
-    el("dateStart").addEventListener("change", () => {
-      updateAll();
-    });
-    el("dateEnd").addEventListener("change", () => {
+    // Mudança dos filtros de período chama updateAll
+    el("dateStart").addEventListener("change", () => updateAll());
+    el("dateEnd").addEventListener("change", () => updateAll());
+    // Mudança dos selects chama updateAll
+    el("statusSel").addEventListener("change", () => updateAll());
+    el("ufSel").addEventListener("change", () => updateAll());
+
+    // Botão de reset geral dos filtros
+    el("btnResetFiltros").addEventListener("click", () => {
+      el("dateStart").value = "";
+      el("dateEnd").value = "";
+      el("statusSel").value = "";
+      el("ufSel").value = "";
       updateAll();
     });
 
-    // Função para pegar o período filtrado
-    function getPeriod() {
-      // Retorna como objetos Date, se definidos
-      return {
-        start: parseDateOnlyInput(el("dateStart").value),
-        end: parseDateOnlyInput(el("dateEnd").value),
-      };
-    }
-
-    // Exemplo de updateAll que usaria o período
+    // SUA FUNÇÃO CENTRAL DE ATUALIZAÇÃO
     function updateAll() {
-      const period = getPeriod();
-      // Atualize o restante do app usando period.start e period.end
-      // Resto da sua lógica aqui...
-      el("app").textContent = 
-        'Período selecionado: ' +
-        (period.start ? period.start.toLocaleDateString() : 'nenhum') +
-        ' a ' + 
-        (period.end ? period.end.toLocaleDateString() : 'nenhum');
+      const filtros = getFiltros();
+      // Aqui você faz:
+      // - Carregamento/Filtragem do CSV (ou pode ser só filtragem se já carregou antes)
+      // - Atualização de resultados/panéis/gráficos
+
+      // Aqui vai só um exemplo visual:
+      el("app").innerHTML = `
+        <p>
+          Período: 
+          <strong>${filtros.periodStart ? filtros.periodStart.toLocaleDateString() : 'não definido'}</strong>
+          a
+          <strong>${filtros.periodEnd ? filtros.periodEnd.toLocaleDateString() : 'não definido'}</strong><br>
+          Status: <strong>${filtros.status || 'qualquer'}</strong> <br>
+          UF: <strong>${filtros.uf || 'qualquer'}</strong>
+        </p>
+        <hr>
+        <p>
+          Aqui você mostra/filtra seus cards, tabelas ou gráficos usando os filtros acima 😉
+        </p>
+      `;
     }
 
-    // Inicializa o painel com datas vazias
+    // Inicializa vazio ou como preferir
     updateAll();
-
-    // >>> SUA LÓGICA DE CSV, GRÁFICOS E ETC FICARÁ ABAIXO NORMALMENTE <<<
-
   </script>
 </body>
 </html>
