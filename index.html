@@ -332,13 +332,13 @@
         <div class="stats" id="stats"></div>
         <div class="note">
           <strong>Critérios</strong><br>
-          • Clientes = linhas (com ajuste: Total - NoTour).<br>
+          • Casais = linhas (com ajuste: Total - NoTour).<br>
           • NoTour = contagem de linhas com <strong>Status atendimento</strong> = "NoTour" (3ª coluna).<br>
           • Cotas ativas/canceladas = contagem de tokens na coluna "Status do contrato".<br>
           • <strong>VGV total = $$\sum(\text{coluna G})$$</strong> (soma simples).<br>
           • VGV ativo/cancelado: rateio proporcional pela quantidade de tokens ATIVO/CANCELADO na linha (quando houver mistura).<br>
-          • <strong>Eficiência = (Clientes (Total - NoTour) ÷ Vendas (cotas)) × 100</strong>.<br>
-          • <strong>Média de clientes (período)</strong> = total de linhas ÷ quantidade de dias do período (inclusivo, quando as duas datas estão preenchidas).
+          • <strong>Eficiência = (Casais ÷ Vendas (cotas)) × 100</strong>.<br>
+          • <strong>Média de Casais por dia</strong> = total de linhas ÷ quantidade de dias do período (inclusivo, quando as duas datas estão preenchidas).
         </div>
       </div>
 
@@ -348,13 +348,13 @@
 
         <div class="note">
           Esta aba respeita os mesmos filtros (período, status, profissional, UF).<br>
-          • <strong>Clientes por dia</strong> = quantidade de linhas no dia.<br>
+          • <strong>Casais por dia</strong> = quantidade de linhas no dia.<br>
           • <strong>Vendas por dia</strong> = soma de cotas (tokens) no dia.
         </div>
 
         <div class="chart-card">
           <div class="chart-head">
-            <div class="chart-title">Curva diária (Clientes x Vendas)</div>
+            <div class="chart-title">Curva diária (Casais x Vendas)</div>
             <div class="chart-sub" id="curva-meta">—</div>
           </div>
           <div class="chart-wrap">
@@ -365,7 +365,7 @@
         <div class="chart-card">
           <div class="chart-head">
             <div class="chart-title">Performance por dia da semana</div>
-            <div class="chart-sub">Vendas, VGV, Clientes e Aproveitamento (Eficiência) + Média de clientes (por dia da semana)</div>
+            <div class="chart-sub">Vendas, VGV, Casais e Aproveitamento (Eficiência) + Média de Casais por dia da semana</div>
           </div>
           <div class="chart-wrap small">
             <canvas id="chartSemana"></canvas>
@@ -477,7 +477,7 @@
 
       <div id="tab-profissionais" class="tab-content">
         <div class="note">
-          Selecione um profissional (abaixo) para ver o detalhe individual e a lista de clientes no período.
+          Selecione um profissional (abaixo) para ver o detalhe individual e a lista de Casais no período.
         </div>
 
         <div class="controls" style="margin-top:10px">
@@ -520,7 +520,7 @@
   const KEY = {
     dataAtendimento: norm("data de atendimento"),
     statusContrato: norm("status do contrato"),
-    statusAtendimento: norm("status atendimento"), // (3ª coluna no CSV, mas aqui buscamos pelo cabeçalho)
+    statusAtendimento: norm("status atendimento"),
     renda: norm("renda"),
     uf: norm("uf"),
     promotor: norm("promotor de marketing"),
@@ -733,7 +733,7 @@
       out._bucket = contractBucket(out[KEY.statusContrato]);
       out._clientNameKey = clientNameKey;
       out._clientName = clientNameKey ? (out[clientNameKey] ?? "").toString().trim() : "";
-      out._statusAtendimento = norm(out[KEY.statusAtendimento] ?? ""); // NOVO
+      out._statusAtendimento = norm(out[KEY.statusAtendimento] ?? "");
       return out;
     });
   }
@@ -796,7 +796,6 @@
     return sum / rows.length;
   }
 
-  // ===== Média do período (para o CARD) =====
   function daysInSelectedPeriodInclusive(){
     const d1 = parseDateOnlyInput(el("dateStart").value);
     const d2 = parseDateOnlyInput(el("dateEnd").value);
@@ -823,7 +822,6 @@
     return casaisTotal / denom;
   }
 
-  // ===== NOVO: contagem NoTour e clientes líquidos =====
   function countNoTour(rows){
     let n = 0;
     rows.forEach(r => { if ((r._statusAtendimento || "") === "notour") n++; });
@@ -839,8 +837,6 @@
     const noTour = countNoTour(rows);
     const clientesLiquidos = Math.max(0, totalClientes - noTour);
 
-    // Eficiência NOVA (percentual): (clientes líquidos ÷ vendas) × 100
-    // Em formato de "frac" para reusar fmtPctBR (que multiplica por 100).
     const eficiencia = q.total ? (clientesLiquidos / q.total) : 0;
 
     const pctCancel = q.total ? (q.cancelado / q.total) : 0;
@@ -873,13 +869,12 @@
     const mediaCard = `
       <div class="stat-card">
         <div class="stat-value">${fmtNumberBR(s.mediaCasaisPeriodo, 1, 1)}</div>
-        <div class="stat-label">Média de clientes (por dia no período)</div>
+        <div class="stat-label">Média de Casais por dia</div>
       </div>
     `;
 
     el(containerId).innerHTML = `
-      <div class="stat-card"><div class="stat-value">${s.noTour}</div><div class="stat-label">NoTour (Status atendimento)</div></div>
-      <div class="stat-card"><div class="stat-value">${s.clientesLiquidos}</div><div class="stat-label">Clientes (Total - NoTour)</div></div>
+      <div class="stat-card"><div class="stat-value">${s.clientesLiquidos}</div><div class="stat-label">Casais</div></div>
       ${mediaCard}
       <div class="stat-card"><div class="stat-value">${s.vendas}</div><div class="stat-label">Cotas (vendas totais)</div></div>
       <div class="stat-card"><div class="stat-value">${s.cotasCanceladas}</div><div class="stat-label">Cotas canceladas</div></div>
@@ -887,6 +882,7 @@
       <div class="stat-card"><div class="stat-value">${fmtPctBR(s.eficiencia)}</div><div class="stat-label">Eficiência</div></div>
       <div class="stat-card"><div class="stat-value">${fmtMoney(s.rendaMed)}</div><div class="stat-label">Renda média</div></div>
       <div class="stat-card"><div class="stat-value">${fmtMoney(s.ticketMedio)}</div><div class="stat-label">Ticket médio (por cota)</div></div>
+      <div class="stat-card"><div class="stat-value">${s.noTour}</div><div class="stat-label">NoTour</div></div>
     `;
   }
 
@@ -918,7 +914,7 @@
       const s = statsFor(list);
       return {
         name,
-        casais: s.clientesLiquidos,          // usa "clientes líquidos" como contagem principal no ranking
+        casais: s.clientesLiquidos,
         vendas: s.vendas,
         cotasCanceladas: s.cotasCanceladas,
         vgvTotal: s.vgvTotal,
@@ -948,7 +944,7 @@
                 Profissional ${titleBadge ? `<span class="badge">${titleBadge}</span>` : ""}
                 ${sortIndicator(containerId, "name")}
               </th>
-              <th class="num sortable" data-sort="casais">Clientes ${sortIndicator(containerId, "casais")}</th>
+              <th class="num sortable" data-sort="casais">Casais ${sortIndicator(containerId, "casais")}</th>
               <th class="num sortable" data-sort="vendas">Cotas ${sortIndicator(containerId, "vendas")}</th>
               <th class="num sortable" data-sort="cotasCanceladas">Canceladas ${sortIndicator(containerId, "cotasCanceladas")}</th>
               <th class="num sortable" data-sort="vgvTotal">VGV ${sortIndicator(containerId, "vgvTotal")}</th>
@@ -1037,7 +1033,7 @@
           <thead>
             <tr>
               <th class="sortable" data-sort="faixa">Faixa ${sortIndicator(containerId, "faixa")}</th>
-              <th class="num sortable" data-sort="casais">Clientes ${sortIndicator(containerId, "casais")}</th>
+              <th class="num sortable" data-sort="casais">Casais ${sortIndicator(containerId, "casais")}</th>
               <th class="num sortable" data-sort="vendas">Cotas ${sortIndicator(containerId, "vendas")}</th>
               <th class="num sortable" data-sort="cotasCanceladas">Canceladas ${sortIndicator(containerId, "cotasCanceladas")}</th>
               <th class="num sortable" data-sort="vgvTotal">VGV ${sortIndicator(containerId, "vgvTotal")}</th>
@@ -1075,7 +1071,6 @@
     });
   }
 
-  // ===== Curva helpers =====
   function toISODateLocal(dt){
     return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
   }
@@ -1084,7 +1079,7 @@
     if (!m) return iso;
     return `${m[3]}/${m[2]}/${m[1]}`;
   }
-  function weekdayIndexPtBR(dt){ return dt.getDay(); } // 0=Dom..6=Sáb
+  function weekdayIndexPtBR(dt){ return dt.getDay(); }
 
   const WEEK_LABELS_MON_FIRST = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
   const WEEK_INDEX_ORDER_MON_FIRST = [1,2,3,4,5,6,0];
@@ -1174,7 +1169,7 @@
       data: {
         labels: labelsBR,
         datasets: [
-          { label: "Clientes (linhas)", data: s.clientes, borderColor: "rgba(34,211,238,1)", backgroundColor: "rgba(34,211,238,.15)", tension: 0.25, pointRadius: 2.5, yAxisID: "yClientes" },
+          { label: "Casais (linhas)", data: s.clientes, borderColor: "rgba(34,211,238,1)", backgroundColor: "rgba(34,211,238,.15)", tension: 0.25, pointRadius: 2.5, yAxisID: "yClientes" },
           { label: "Vendas (cotas)", data: s.vendas, borderColor: "rgba(92,255,176,1)", backgroundColor: "rgba(92,255,176,.12)", tension: 0.25, pointRadius: 2.5, yAxisID: "yVendas" }
         ]
       },
@@ -1184,7 +1179,7 @@
         plugins:{ legend:{ labels:{ color:"rgba(234,240,255,.85)" } } },
         scales:{
           x:{ ticks:{ color:"rgba(234,240,255,.7)", maxRotation:0, autoSkip:true }, grid:{ color:"rgba(255,255,255,.05)" } },
-          yClientes:{ position:"left", ticks:{ color:"rgba(234,240,255,.7)" }, grid:{ color:"rgba(255,255,255,.05)" }, title:{ display:true, text:"Clientes", color:"rgba(234,240,255,.7)" } },
+          yClientes:{ position:"left", ticks:{ color:"rgba(234,240,255,.7)" }, grid:{ color:"rgba(255,255,255,.05)" }, title:{ display:true, text:"Casais", color:"rgba(234,240,255,.7)" } },
           yVendas:{ position:"right", ticks:{ color:"rgba(234,240,255,.7)" }, grid:{ drawOnChartArea:false }, title:{ display:true, text:"Vendas (cotas)", color:"rgba(234,240,255,.7)" } }
         }
       }
@@ -1198,13 +1193,13 @@
       data: {
         labels: w.labels,
         datasets: [
-          { type:"bar", label:"Clientes", data:w.clientes, backgroundColor:"rgba(124,92,255,.25)", borderColor:"rgba(124,92,255,.65)", borderWidth:1, yAxisID:"yCount" },
+          { type:"bar", label:"Casais", data:w.clientes, backgroundColor:"rgba(124,92,255,.25)", borderColor:"rgba(124,92,255,.65)", borderWidth:1, yAxisID:"yCount" },
           { type:"bar", label:"Vendas (cotas)", data:w.vendas, backgroundColor:"rgba(92,255,176,.18)", borderColor:"rgba(92,255,176,.65)", borderWidth:1, yAxisID:"yCount" },
           { type:"line", label:"VGV", data:w.vgv, borderColor:"rgba(34,211,238,1)", backgroundColor:"rgba(34,211,238,.10)", tension:0.25, pointRadius:2.2, yAxisID:"yMoney" },
           { type:"line", label:"Aproveitamento (Eficiência)", data:w.eficiencia.map(x => x * 100), borderColor:"rgba(255,176,32,1)", backgroundColor:"rgba(255,176,32,.10)", tension:0.25, pointRadius:2.2, yAxisID:"yPct" },
           {
             type:"line",
-            label:"Média de clientes (dia da semana)",
+            label:"Média de Casais (dia da semana)",
             data: wMean.meanClientes,
             borderColor:"rgba(234,240,255,.75)",
             backgroundColor:"rgba(234,240,255,.08)",
@@ -1226,7 +1221,7 @@
               const v = ctx.parsed.y ?? 0;
               if (ds.includes("VGV")) return `${ds}: ${fmtMoney(v)}`;
               if (ds.includes("Aproveitamento")) return `${ds}: ${new Intl.NumberFormat("pt-BR",{maximumFractionDigits:1}).format(v)}%`;
-              if (ds.includes("Média de clientes")) return `${ds}: ${fmtNumberBR(v, 1, 1)}`;
+              if (ds.includes("Média de Casais")) return `${ds}: ${fmtNumberBR(v, 1, 1)}`;
               return `${ds}: ${v}`;
             }
           } }
@@ -1253,7 +1248,6 @@
     });
   }
 
-  // ===== Cancelamento (inalterado) =====
   function avgRendaFromAgg(sum, count){ return count > 0 ? (sum / count) : 0; }
 
   function cancelamentoPorQtdCotas(rows) {
@@ -1328,7 +1322,7 @@
               const item = analysis[ctx.dataIndex];
               return [
                 `% Cancelamento: ${new Intl.NumberFormat("pt-BR", {maximumFractionDigits:1}).format(ctx.parsed.y)}%`,
-                `Clientes: ${item.casais}`,
+                `Casais: ${item.casais}`,
                 `Cotas canceladas: ${item.cotasCanceladas}`,
                 `Renda média: ${fmtMoney(item.rendaMed)}`,
                 `Cotas totais: ${item.cotasTotal}`
@@ -1350,7 +1344,7 @@
           <thead>
             <tr>
               <th class="num sortable" data-sort="cotasVendidas">Cotas vendidas ${sortIndicator("cancelamento-table", "cotasVendidas")}</th>
-              <th class="num sortable" data-sort="casais">Clientes ${sortIndicator("cancelamento-table", "casais")}</th>
+              <th class="num sortable" data-sort="casais">Casais ${sortIndicator("cancelamento-table", "casais")}</th>
               <th class="num sortable" data-sort="cotasTotal">Cotas totais ${sortIndicator("cancelamento-table", "cotasTotal")}</th>
               <th class="num sortable" data-sort="cotasCanceladas">Cotas canceladas ${sortIndicator("cancelamento-table", "cotasCanceladas")}</th>
               <th class="num sortable" data-sort="rendaMed">Renda média ${sortIndicator("cancelamento-table", "rendaMed")}</th>
@@ -1381,7 +1375,6 @@
     });
   }
 
-  // ===== Equipes / filtros / single =====
   function listPromotoresFromAllRows(){
     const set = new Set();
     state.rows.forEach(r => {
@@ -1485,15 +1478,15 @@
 
     box.innerHTML = `
       <div class="stat-card"><div class="stat-value">${nome}</div><div class="stat-label">Profissional selecionado</div></div>
-      <div class="stat-card"><div class="stat-value">${s.noTour}</div><div class="stat-label">NoTour</div></div>
-      <div class="stat-card"><div class="stat-value">${s.clientesLiquidos}</div><div class="stat-label">Clientes (Total - NoTour)</div></div>
-      <div class="stat-card"><div class="stat-value">${fmtNumberBR(s.mediaCasaisPeriodo, 1, 1)}</div><div class="stat-label">Média de clientes (período)</div></div>
+      <div class="stat-card"><div class="stat-value">${s.clientesLiquidos}</div><div class="stat-label">Casais</div></div>
+      <div class="stat-card"><div class="stat-value">${fmtNumberBR(s.mediaCasaisPeriodo, 1, 1)}</div><div class="stat-label">Média de Casais por dia</div></div>
       <div class="stat-card"><div class="stat-value">${s.vendas}</div><div class="stat-label">Cotas</div></div>
       <div class="stat-card"><div class="stat-value">${s.cotasCanceladas}</div><div class="stat-label">Cotas canceladas</div></div>
       <div class="stat-card"><div class="stat-value">${fmtMoney(s.vgvTotal)}</div><div class="stat-label">VGV (Σ col G)</div></div>
       <div class="stat-card"><div class="stat-value">${fmtPctBR(s.eficiencia)}</div><div class="stat-label">Eficiência</div></div>
       <div class="stat-card"><div class="stat-value">${fmtPctBR(s.pctCancel)}</div><div class="stat-label">% Cancelamento</div></div>
       <div class="stat-card"><div class="stat-value">${fmtMoney(s.ticketMedio)}</div><div class="stat-label">Ticket médio</div></div>
+      <div class="stat-card"><div class="stat-value">${s.noTour}</div><div class="stat-label">NoTour</div></div>
     `;
   }
 
@@ -1551,7 +1544,6 @@
     el("profTipoSingle").addEventListener("change", () => { updateProfFilters("profTipoSingle","profNomeSingle"); renderSingleProfessionalStats(); });
     el("profNomeSingle").addEventListener("change", () => { renderSingleProfessionalStats(); });
 
-    // Equipes
     el("btnSalvarEquipe").addEventListener("click", () => {
       const prom = el("teamPromotorSelect").value;
       const team = el("teamEquipeSelect").value;
