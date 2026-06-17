@@ -1,621 +1,535 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Painel - Cadastro/Login com Aprovações</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Cadastro</title>
   <style>
-    :root{
-      --bg:#0b1020;
-      --card:#111a33;
-      --muted:#94a3b8;
-      --text:#e5e7eb;
-      --line:#223055;
-      --ok:#22c55e;
-      --warn:#f59e0b;
-      --bad:#ef4444;
-      --accent:#60a5fa;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
+
+    /* ── TELA DE LOGIN ── */
+    #loginScreen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; background: linear-gradient(135deg, #1a73e8, #0d47a1);
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-      background: radial-gradient(1200px 600px at 20% 0%, #15245a 0%, var(--bg) 60%);
-      color:var(--text);
+    .login-box {
+      background: #fff; border-radius: 12px; padding: 40px 36px;
+      width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,.2);
+      text-align: center;
     }
-    header{
-      padding:20px 16px;
-      border-bottom:1px solid var(--line);
-      background: rgba(17,26,51,.65);
-      position: sticky; top:0; backdrop-filter: blur(8px);
+    .login-box h2 { margin-bottom: 6px; color: #1a73e8; font-size: 1.6rem; }
+    .login-box p.subtitle { color: #777; font-size: .9rem; margin-bottom: 24px; }
+    .login-box input {
+      width: 100%; padding: 12px 14px; margin-bottom: 14px;
+      border: 1.5px solid #ddd; border-radius: 8px; font-size: 1rem;
+      transition: border .2s;
     }
-    .wrap{max-width:1100px; margin:0 auto; padding:0 12px;}
-    h1{font-size:18px; margin:0 0 4px}
-    .sub{color:var(--muted); font-size:13px}
-    .grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:16px;
-      padding:16px 0 28px;
+    .login-box input:focus { outline: none; border-color: #1a73e8; }
+    .login-box button {
+      width: 100%; padding: 13px; background: #1a73e8; color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;
+      transition: background .2s;
     }
-    @media (max-width: 920px){ .grid{grid-template-columns: 1fr;} }
-    .card{
-      background: rgba(17,26,51,.8);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    .login-box button:hover { background: #1558b0; }
+    .login-box .msg { margin-top: 12px; font-size: .9rem; color: #e53935; min-height: 20px; }
+    .login-box .register-link {
+      margin-top: 18px; font-size: .88rem; color: #555;
     }
-    .tabs{
-      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;
+    .login-box .register-link a { color: #1a73e8; cursor: pointer; text-decoration: underline; }
+
+    /* ── TELA DE CADASTRO ── */
+    #registerScreen {
+      display: none; align-items: center; justify-content: center;
+      min-height: 100vh; background: linear-gradient(135deg, #1a73e8, #0d47a1);
     }
-    .tab{
-      border:1px solid var(--line);
-      background: transparent;
-      color: var(--text);
-      padding:8px 10px;
-      border-radius:10px;
-      cursor:pointer;
-      font-size:13px;
+    .register-box {
+      background: #fff; border-radius: 12px; padding: 40px 36px;
+      width: 100%; max-width: 420px; box-shadow: 0 8px 32px rgba(0,0,0,.2);
+      text-align: center;
     }
-    .tab.active{ border-color: var(--accent); background: rgba(96,165,250,.12); }
-    .row{display:flex; gap:10px; flex-wrap:wrap}
-    label{display:block; font-size:12px; color:var(--muted); margin:10px 0 6px}
-    input{
-      width:100%;
-      padding:10px 10px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      background: rgba(10,16,32,.55);
-      color: var(--text);
-      outline:none;
+    .register-box h2 { margin-bottom: 6px; color: #1a73e8; font-size: 1.5rem; }
+    .register-box p.subtitle { color: #777; font-size: .9rem; margin-bottom: 22px; }
+    .register-box input {
+      width: 100%; padding: 12px 14px; margin-bottom: 12px;
+      border: 1.5px solid #ddd; border-radius: 8px; font-size: .97rem;
+      transition: border .2s;
     }
-    input:focus{border-color: rgba(96,165,250,.7)}
-    .btn{
-      padding:10px 12px;
-      border-radius:10px;
-      border:1px solid var(--line);
-      cursor:pointer;
-      background: rgba(96,165,250,.12);
-      color: var(--text);
-      font-weight:600;
-      font-size:13px;
+    .register-box input:focus { outline: none; border-color: #1a73e8; }
+    .register-box button.btn-primary {
+      width: 100%; padding: 13px; background: #1a73e8; color: #fff;
+      border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;
+      transition: background .2s;
     }
-    .btn:hover{border-color: rgba(96,165,250,.7)}
-    .btn.ok{background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.35)}
-    .btn.bad{background: rgba(239,68,68,.12); border-color: rgba(239,68,68,.35)}
-    .btn.warn{background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.35)}
-    .btn.ghost{background: transparent}
-    .hint{color:var(--muted); font-size:12px; line-height:1.35}
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:6px 10px; border-radius:999px;
-      border:1px solid var(--line); font-size:12px;
-      background: rgba(10,16,32,.45);
-      margin-right:8px;
+    .register-box button.btn-primary:hover { background: #1558b0; }
+    .register-box .msg { margin-top: 12px; font-size: .9rem; min-height: 20px; }
+    .register-box .back-link {
+      margin-top: 16px; font-size: .88rem; color: #555;
     }
-    .dot{width:8px;height:8px;border-radius:99px;background:var(--muted)}
-    .dot.ok{background:var(--ok)}
-    .dot.warn{background:var(--warn)}
-    .dot.bad{background:var(--bad)}
-    .list{margin-top:10px; display:flex; flex-direction:column; gap:10px}
-    .item{
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px;
-      background: rgba(10,16,32,.35);
-      display:flex; justify-content:space-between; gap:10px; align-items:center;
+    .register-box .back-link a { color: #1a73e8; cursor: pointer; text-decoration: underline; }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; min-height: 100vh; flex-direction: column; }
+
+    header {
+      background: #1a73e8; color: #fff; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px; box-shadow: 0 2px 8px rgba(0,0,0,.15);
     }
-    .item .meta{font-size:12px; color:var(--muted)}
-    .item .title{font-weight:700; font-size:13px}
-    .right{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
-    .sep{height:1px;background:var(--line); margin:12px 0}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
-    .small{font-size:12px;color:var(--muted)}
-    .toast{
-      position: fixed; right: 14px; bottom: 14px;
-      background: rgba(17,26,51,.95);
-      border:1px solid var(--line);
-      padding:10px 12px;
-      border-radius: 12px;
-      max-width: 340px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
-      display:none;
+    header .brand { font-size: 1.2rem; font-weight: 700; letter-spacing: .5px; }
+    header .user-info { font-size: .88rem; display: flex; align-items: center; gap: 14px; }
+    header .user-info span { opacity: .9; }
+    header .user-info button {
+      background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4);
+      color: #fff; padding: 6px 14px; border-radius: 6px; cursor: pointer;
+      font-size: .85rem; transition: background .2s;
+    }
+    header .user-info button:hover { background: rgba(255,255,255,.3); }
+
+    nav.tabs {
+      background: #fff; border-bottom: 2px solid #e0e0e0;
+      display: flex; padding: 0 24px; gap: 4px;
+    }
+    nav.tabs button {
+      padding: 14px 22px; border: none; background: none; cursor: pointer;
+      font-size: .95rem; color: #666; border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: color .2s, border-color .2s;
+    }
+    nav.tabs button.active { color: #1a73e8; border-bottom-color: #1a73e8; font-weight: 600; }
+    nav.tabs button:hover:not(.active) { color: #333; }
+
+    .tab-content { display: none; padding: 28px 28px; flex: 1; }
+    .tab-content.active { display: block; }
+
+    .card {
+      background: #fff; border-radius: 10px; padding: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07); margin-bottom: 20px;
+    }
+    .card h3 { margin-bottom: 16px; color: #1a73e8; font-size: 1.1rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+    th { background: #f5f7fa; color: #555; font-weight: 600;
+         padding: 11px 14px; text-align: left; border-bottom: 2px solid #e0e0e0; }
+    td { padding: 11px 14px; border-bottom: 1px solid #f0f0f0; color: #444; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafbff; }
+
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 12px;
+      font-size: .78rem; font-weight: 600;
+    }
+    .badge-pending  { background: #fff3cd; color: #856404; }
+    .badge-approved { background: #d1e7dd; color: #155724; }
+
+    .btn-approve {
+      background: #198754; color: #fff; border: none;
+      padding: 5px 14px; border-radius: 6px; cursor: pointer;
+      font-size: .83rem; transition: background .2s;
+    }
+    .btn-approve:hover { background: #146c43; }
+    .btn-del {
+      background: #e53935; color: #fff; border: none;
+      padding: 5px 12px; border-radius: 6px; cursor: pointer;
+      font-size: .83rem; margin-left: 6px; transition: background .2s;
+    }
+    .btn-del:hover { background: #b71c1c; }
+
+    .empty-state {
+      text-align: center; color: #aaa; padding: 40px 0; font-size: .95rem;
+    }
+
+    /* ── PERFIL ── */
+    .profile-form input {
+      width: 100%; padding: 11px 13px; margin-bottom: 13px;
+      border: 1.5px solid #ddd; border-radius: 8px; font-size: .97rem;
+    }
+    .profile-form input:focus { outline: none; border-color: #1a73e8; }
+    .profile-form button {
+      padding: 11px 28px; background: #1a73e8; color: #fff;
+      border: none; border-radius: 8px; font-size: .97rem; cursor: pointer;
+    }
+    .profile-form button:hover { background: #1558b0; }
+    .profile-msg { margin-top: 10px; font-size: .9rem; color: #198754; }
+
+    /* ── RESPONSIVO ── */
+    @media (max-width: 600px) {
+      .tab-content { padding: 16px; }
+      nav.tabs button { padding: 12px 13px; font-size: .85rem; }
+      header { padding: 0 14px; }
     }
   </style>
 </head>
 <body>
+
+<!-- ════════════════════════════════
+     TELA DE LOGIN
+════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>🔐 Bem-vindo</h2>
+    <p class="subtitle">Acesse o sistema com seu e-mail</p>
+    <input type="email" id="loginEmail" placeholder="Seu e-mail" />
+    <input type="password" id="loginPassword" placeholder="Senha" />
+    <button onclick="doLogin()">Entrar</button>
+    <div class="msg" id="loginMsg"></div>
+    <div class="register-link">
+      Não tem conta? <a onclick="showRegister()">Cadastre-se</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     TELA DE CADASTRO
+════════════════════════════════ -->
+<div id="registerScreen">
+  <div class="register-box">
+    <h2>📝 Criar Conta</h2>
+    <p class="subtitle">Preencha os dados abaixo</p>
+    <input type="text"  id="regName"     placeholder="Nome completo" />
+    <input type="email" id="regEmail"    placeholder="E-mail" />
+    <input type="password" id="regPass"  placeholder="Senha" />
+    <input type="password" id="regPass2" placeholder="Confirmar senha" />
+    <button class="btn-primary" onclick="doRegister()">Cadastrar</button>
+    <div class="msg" id="registerMsg"></div>
+    <div class="back-link">
+      Já tem conta? <a onclick="showLogin()">Voltar ao login</a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     DASHBOARD
+════════════════════════════════ -->
+<div id="dashboard">
   <header>
-    <div class="wrap">
-      <h1>Painel de Usuários (com Aprovações)</h1>
-      <div class="sub">
-        Admin fixo: <span class="mono">marcel.dorado2@gmail.com</span> • Armazenamento: <span class="mono">localStorage</span> (mesmo navegador/dispositivo)
-      </div>
+    <span class="brand">🏢 Sistema</span>
+    <div class="user-info">
+      <span id="headerUserName"></span>
+      <button onclick="doLogout()">Sair</button>
     </div>
   </header>
 
-  <main class="wrap">
-    <div class="grid">
-      <section class="card">
-        <div class="tabs">
-          <button class="tab active" data-view="login">Login</button>
-          <button class="tab" data-view="cadastro">Criar usuário</button>
-          <button class="tab" data-view="aprovacoes" id="tabAprovacoes" style="display:none">Aprovações</button>
-          <button class="tab" data-view="conta" id="tabConta" style="display:none">Minha conta</button>
-        </div>
+  <nav class="tabs" id="tabsNav">
+    <button class="active" onclick="switchTab('home',this)">🏠 Início</button>
+    <button onclick="switchTab('profile',this)">👤 Perfil</button>
+    <!-- aba Aprovações só aparece para admin (injetada via JS) -->
+  </nav>
 
-        <!-- LOGIN -->
-        <div id="view-login">
-          <div class="row">
-            <div style="flex:1; min-width: 220px;">
-              <label>E-mail</label>
-              <input id="loginEmail" type="email" placeholder="seuemail@dominio.com" autocomplete="username"/>
-            </div>
-            <div style="flex:1; min-width: 220px;">
-              <label>Senha</label>
-              <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password"/>
-            </div>
-          </div>
-          <div style="margin-top:12px" class="row">
-            <button class="btn ok" id="btnLogin">Entrar</button>
-            <button class="btn ghost" id="btnIrCadastro">Criar novo usuário</button>
-          </div>
-          <div class="sep"></div>
-          <div class="hint">
-            <div class="pill"><span class="dot warn"></span> Cadastro novo = <b>PENDENTE</b> até aprovação do admin</div>
-            <div class="pill"><span class="dot ok"></span> Admin é sempre <span class="mono">marcel.dorado2@gmail.com</span></div>
-          </div>
-        </div>
-
-        <!-- CADASTRO -->
-        <div id="view-cadastro" style="display:none">
-          <div class="row">
-            <div style="flex:1; min-width: 220px;">
-              <label>Nome</label>
-              <input id="regName" type="text" placeholder="Seu nome" />
-            </div>
-            <div style="flex:1; min-width: 220px;">
-              <label>E-mail</label>
-              <input id="regEmail" type="email" placeholder="seuemail@dominio.com" />
-            </div>
-          </div>
-          <div class="row">
-            <div style="flex:1; min-width: 220px;">
-              <label>Senha</label>
-              <input id="regPass" type="password" placeholder="Crie uma senha" />
-            </div>
-            <div style="flex:1; min-width: 220px;">
-              <label>Confirmar senha</label>
-              <input id="regPass2" type="password" placeholder="Repita a senha" />
-            </div>
-          </div>
-
-          <div style="margin-top:12px" class="row">
-            <button class="btn ok" id="btnCadastrar">Cadastrar (fica pendente)</button>
-            <button class="btn ghost" id="btnVoltarLogin">Voltar ao login</button>
-          </div>
-
-          <div class="sep"></div>
-          <div class="hint">
-            Após criar, o usuário aparece na aba <b>Aprovações</b> (visível apenas quando o admin estiver logado).
-          </div>
-        </div>
-
-        <!-- APROVAÇÕES -->
-        <div id="view-aprovacoes" style="display:none">
-          <div class="row" style="justify-content:space-between; align-items:center">
-            <div>
-              <div class="pill"><span class="dot warn"></span> Pendentes: <b id="countPendentes">0</b></div>
-              <div class="pill"><span class="dot ok"></span> Aprovados: <b id="countAprovados">0</b></div>
-              <div class="pill"><span class="dot bad"></span> Bloqueados: <b id="countBloqueados">0</b></div>
-            </div>
-            <div class="right">
-              <button class="btn warn" id="btnRecarregar">Recarregar lista</button>
-              <button class="btn bad" id="btnReset">Resetar tudo</button>
-            </div>
-          </div>
-
-          <div class="sep"></div>
-          <div class="small">
-            Dica: aprovar aqui libera o login imediatamente (neste mesmo link/origem do navegador).
-          </div>
-
-          <div class="list" id="aprovacoesList"></div>
-        </div>
-
-        <!-- CONTA -->
-        <div id="view-conta" style="display:none">
-          <div id="accountBox"></div>
-          <div class="sep"></div>
-          <div class="row">
-            <button class="btn bad" id="btnLogout">Sair</button>
-          </div>
-        </div>
-      </section>
-
-      <aside class="card">
-        <div class="pill">
-          <span class="dot" id="dotSessao"></span>
-          Sessão: <b id="sessaoStatus">deslogado</b>
-        </div>
-
-        <div class="sep"></div>
-
-        <div class="hint">
-          <b>Importante:</b> este exemplo é “front-end only”. Ele não tem servidor.
-          Então, a aprovação funciona para usuários cadastrados neste mesmo navegador/dispositivo.
-          <br><br>
-          Se você quer que qualquer pessoa crie usuário em qualquer computador e você aprove de um lugar só,
-          eu adapto para um backend (Firebase/Supabase).
-        </div>
-
-        <div class="sep"></div>
-
-        <div class="small">
-          <div>Chaves no localStorage:</div>
-          <div class="mono">mh_users_v1</div>
-          <div class="mono">mh_session_v1</div>
-        </div>
-      </aside>
+  <!-- TAB: INÍCIO -->
+  <div class="tab-content active" id="tab-home">
+    <div class="card">
+      <h3>Olá, <span id="welcomeName"></span>! 👋</h3>
+      <p style="color:#555;line-height:1.6">
+        Você está logado no sistema.<br>
+        Use o menu acima para navegar.
+      </p>
     </div>
-  </main>
+  </div>
 
-  <div class="toast" id="toast"></div>
+  <!-- TAB: PERFIL -->
+  <div class="tab-content" id="tab-profile">
+    <div class="card">
+      <h3>Meu Perfil</h3>
+      <div class="profile-form">
+        <input type="text"  id="pfName"  placeholder="Nome" />
+        <input type="email" id="pfEmail" placeholder="E-mail" readonly style="background:#f5f5f5" />
+        <input type="password" id="pfPass" placeholder="Nova senha (deixe em branco para manter)" />
+        <button onclick="saveProfile()">Salvar</button>
+        <div class="profile-msg" id="profileMsg"></div>
+      </div>
+    </div>
+  </div>
 
+  <!-- TAB: APROVAÇÕES (admin) -->
+  <div class="tab-content" id="tab-approvals">
+    <div class="card">
+      <h3>⏳ Cadastros Pendentes</h3>
+      <div id="pendingTableWrap"></div>
+    </div>
+    <div class="card">
+      <h3>✅ Usuários Aprovados</h3>
+      <div id="approvedTableWrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCRIPT
+════════════════════════════════ -->
 <script>
-(() => {
-  const ADMIN_EMAIL = "marcel.dorado2@gmail.com".toLowerCase();
+  const ADMIN_EMAIL = 'marcel.dorado2@gmail.com';
+  const LS_USERS    = 'sys_users';
+  const LS_SESSION  = 'sys_session';
 
-  const LS_USERS = "mh_users_v1";
-  const LS_SESSION = "mh_session_v1";
-
-  /** @type {{id:string,name:string,email:string,pass:string,status:'PENDING'|'APPROVED'|'BLOCKED',createdAt:number, approvedAt?:number, blockedAt?:number}[]} */
-  let users = loadUsers();
-  let session = loadSession(); // { email, at }
-
-  // ---------- helpers ----------
-  const $ = (id) => document.getElementById(id);
-
-  function uid(){
-    return "u_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+  /* ── helpers localStorage ── */
+  function getUsers() {
+    return JSON.parse(localStorage.getItem(LS_USERS) || '[]');
   }
-  function now(){ return Date.now(); }
-
-  function toast(msg){
-    const el = $("toast");
-    el.textContent = msg;
-    el.style.display = "block";
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => { el.style.display = "none"; }, 2600);
+  function saveUsers(u) {
+    localStorage.setItem(LS_USERS, JSON.stringify(u));
+  }
+  function getSession() {
+    return JSON.parse(localStorage.getItem(LS_SESSION) || 'null');
+  }
+  function saveSession(u) {
+    localStorage.setItem(LS_SESSION, JSON.stringify(u));
   }
 
-  function loadUsers(){
-    try{
-      const raw = localStorage.getItem(LS_USERS);
-      if(!raw) return [];
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : [];
-    }catch{
-      return [];
-    }
+  /* ── navegação entre telas ── */
+  function showLogin()    {
+    document.getElementById('loginScreen').style.display    = 'flex';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display      = 'none';
+    document.getElementById('loginMsg').textContent = '';
   }
-  function saveUsers(){
-    localStorage.setItem(LS_USERS, JSON.stringify(users));
+  function showRegister() {
+    document.getElementById('loginScreen').style.display    = 'none';
+    document.getElementById('registerScreen').style.display = 'flex';
+    document.getElementById('dashboard').style.display      = 'none';
+    document.getElementById('registerMsg').textContent = '';
   }
+  function showDashboard(user) {
+    document.getElementById('loginScreen').style.display    = 'none';
+    document.getElementById('registerScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display      = 'flex';
+    document.getElementById('headerUserName').textContent   = user.name;
+    document.getElementById('welcomeName').textContent      = user.name;
 
-  function loadSession(){
-    try{
-      const raw = localStorage.getItem(LS_SESSION);
-      if(!raw) return null;
-      const parsed = JSON.parse(raw);
-      if(parsed && typeof parsed.email === "string") return parsed;
-      return null;
-    }catch{
-      return null;
-    }
-  }
-  function saveSession(obj){
-    localStorage.setItem(LS_SESSION, JSON.stringify(obj));
-    session = obj;
-    syncUI();
-  }
-  function clearSession(){
-    localStorage.removeItem(LS_SESSION);
-    session = null;
-    syncUI();
-  }
-
-  function isAdminEmail(email){
-    return (email || "").toLowerCase() === ADMIN_EMAIL;
-  }
-
-  function getUserByEmail(email){
-    const e = (email || "").toLowerCase().trim();
-    return users.find(u => u.email === e) || null;
-  }
-
-  function ensureAdminRecord(){
-    // Opcional: criar registro do admin (não pendente) para facilitar login.
-    // Se você não quiser o admin "cadastrado" aqui, pode remover.
-    const existing = getUserByEmail(ADMIN_EMAIL);
-    if(!existing){
-      users.push({
-        id: uid(),
-        name: "Marcel (Admin)",
-        email: ADMIN_EMAIL,
-        pass: "admin", // senha demo; troque se quiser. (Front-only, não é seguro.)
-        status: "APPROVED",
-        createdAt: now(),
-        approvedAt: now()
-      });
-      saveUsers();
-    } else if(existing.status !== "APPROVED"){
-      existing.status = "APPROVED";
-      existing.approvedAt = now();
-      saveUsers();
-    }
-  }
-
-  // ---------- views ----------
-  const views = {
-    login: $("view-login"),
-    cadastro: $("view-cadastro"),
-    aprovacoes: $("view-aprovacoes"),
-    conta: $("view-conta"),
-  };
-
-  function setActiveTab(name){
-    document.querySelectorAll(".tab").forEach(t => {
-      t.classList.toggle("active", t.dataset.view === name);
-    });
-  }
-
-  function showView(name){
-    Object.entries(views).forEach(([k, el]) => el.style.display = (k === name ? "block" : "none"));
-    setActiveTab(name);
-  }
-
-  function fmtDate(ts){
-    try { return new Date(ts).toLocaleString("pt-BR"); } catch { return ""; }
-  }
-
-  function syncUI(){
-    const loggedIn = !!session?.email;
-    const admin = loggedIn && isAdminEmail(session.email);
-
-    $("sessaoStatus").textContent = loggedIn ? session.email : "deslogado";
-    $("dotSessao").className = "dot " + (loggedIn ? "ok" : "bad");
-
-    $("tabConta").style.display = loggedIn ? "inline-flex" : "none";
-    $("tabAprovacoes").style.display = admin ? "inline-flex" : "none";
-
-    if(loggedIn){
-      const me = getUserByEmail(session.email);
-      const status = me?.status || (admin ? "APPROVED" : "PENDING");
-      const statusPill = status === "APPROVED" ? `<span class="dot ok"></span> APROVADO`
-                        : status === "BLOCKED" ? `<span class="dot bad"></span> BLOQUEADO`
-                        : `<span class="dot warn"></span> PENDENTE`;
-
-      $("accountBox").innerHTML = `
-        <div class="pill">${statusPill}</div>
-        <div style="margin-top:10px">
-          <div><b>E-mail:</b> <span class="mono">${session.email}</span></div>
-          <div class="small">Último login: ${fmtDate(session.at)}</div>
-          ${admin ? `<div class="small" style="margin-top:8px"><b>Você é admin.</b> Use a aba Aprovações.</div>` : ``}
-        </div>
-      `;
-
-      // mantém o usuário numa view válida
-      if(admin){
-        // se estiver no login/cadastro, pode ir para aprovações por padrão
-        // mas não força: apenas garante que view atual exista
-      } else {
-        // usuário comum: não pode ver aprovações
-        if(document.querySelector(".tab.active")?.dataset.view === "aprovacoes"){
-          showView("conta");
-        }
+    /* injeta aba Aprovações apenas para admin */
+    const nav = document.getElementById('tabsNav');
+    const existingAprov = document.getElementById('tabBtnApprovals');
+    if (user.email === ADMIN_EMAIL) {
+      if (!existingAprov) {
+        const btn = document.createElement('button');
+        btn.id        = 'tabBtnApprovals';
+        btn.textContent = '✅ Aprovações';
+        btn.onclick   = function(){ switchTab('approvals', this); };
+        nav.appendChild(btn);
       }
     } else {
-      // deslogado não vê conta/aprovações
-      if(["conta","aprovacoes"].includes(document.querySelector(".tab.active")?.dataset.view)){
-        showView("login");
-      }
+      if (existingAprov) existingAprov.remove();
     }
 
+    /* preenche perfil */
+    document.getElementById('pfName').value  = user.name;
+    document.getElementById('pfEmail').value = user.email;
+    document.getElementById('pfPass').value  = '';
+
+    switchTab('home', nav.querySelector('button'));
+  }
+
+  /* ── tabs ── */
+  function switchTab(name, btn) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    if (btn) btn.classList.add('active');
+    if (name === 'approvals') renderApprovals();
+  }
+
+  /* ══════════════════════════════
+     LOGIN
+  ══════════════════════════════ */
+  function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const pass  = document.getElementById('loginPassword').value;
+    const msg   = document.getElementById('loginMsg');
+
+    if (!email) { msg.textContent = 'Informe o e-mail.'; return; }
+
+    /* ── ADMIN: sem senha ── */
+    if (email === ADMIN_EMAIL) {
+      const adminUser = { name: 'Marcel (Admin)', email: ADMIN_EMAIL, role: 'admin' };
+      saveSession(adminUser);
+      msg.textContent = '';
+      showDashboard(adminUser);
+      return;
+    }
+
+    /* ── USUÁRIO COMUM ── */
+    if (!pass) { msg.textContent = 'Informe a senha.'; return; }
+
+    const users = getUsers();
+    const user  = users.find(u => u.email === email);
+
+    if (!user) { msg.textContent = 'E-mail não encontrado.'; return; }
+    if (user.password !== pass) { msg.textContent = 'Senha incorreta.'; return; }
+    if (user.status === 'pending') {
+      msg.textContent = '⏳ Cadastro aguardando aprovação do administrador.'; return;
+    }
+
+    saveSession(user);
+    msg.textContent = '';
+    showDashboard(user);
+  }
+
+  /* ══════════════════════════════
+     CADASTRO
+  ══════════════════════════════ */
+  function doRegister() {
+    const name  = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim().toLowerCase();
+    const pass  = document.getElementById('regPass').value;
+    const pass2 = document.getElementById('regPass2').value;
+    const msg   = document.getElementById('registerMsg');
+
+    msg.style.color = '#e53935';
+    if (!name)           { msg.textContent = 'Informe seu nome.'; return; }
+    if (!email)          { msg.textContent = 'Informe seu e-mail.'; return; }
+    if (!pass)           { msg.textContent = 'Informe uma senha.'; return; }
+    if (pass !== pass2)  { msg.textContent = 'As senhas não coincidem.'; return; }
+    if (email === ADMIN_EMAIL) { msg.textContent = 'E-mail não permitido.'; return; }
+
+    const users = getUsers();
+    if (users.find(u => u.email === email)) {
+      msg.textContent = 'E-mail já cadastrado.'; return;
+    }
+
+    users.push({ name, email, password: pass, status: 'pending', createdAt: new Date().toISOString() });
+    saveUsers(users);
+
+    msg.style.color  = '#198754';
+    msg.textContent  = '✅ Cadastro enviado! Aguarde aprovação do administrador.';
+
+    /* limpa campos */
+    ['regName','regEmail','regPass','regPass2'].forEach(id =>
+      document.getElementById(id).value = '');
+  }
+
+  /* ══════════════════════════════
+     PERFIL
+  ══════════════════════════════ */
+  function saveProfile() {
+    const session = getSession();
+    const newName = document.getElementById('pfName').value.trim();
+    const newPass = document.getElementById('pfPass').value;
+    const msg     = document.getElementById('profileMsg');
+
+    if (!newName) { msg.style.color='#e53935'; msg.textContent='Nome não pode ser vazio.'; return; }
+
+    /* admin: só atualiza sessão (sem entrada no array de usuários) */
+    if (session.email === ADMIN_EMAIL) {
+      session.name = newName;
+      saveSession(session);
+      document.getElementById('headerUserName').textContent = newName;
+      document.getElementById('welcomeName').textContent    = newName;
+      msg.style.color = '#198754';
+      msg.textContent = 'Perfil atualizado!';
+      return;
+    }
+
+    const users = getUsers();
+    const idx   = users.findIndex(u => u.email === session.email);
+    if (idx === -1) return;
+    users[idx].name = newName;
+    if (newPass) users[idx].password = newPass;
+    saveUsers(users);
+
+    session.name = newName;
+    saveSession(session);
+    document.getElementById('headerUserName').textContent = newName;
+    document.getElementById('welcomeName').textContent    = newName;
+    msg.style.color = '#198754';
+    msg.textContent = 'Perfil atualizado!';
+  }
+
+  /* ══════════════════════════════
+     APROVAÇÕES
+  ══════════════════════════════ */
+  function renderApprovals() {
+    const users    = getUsers();
+    const pending  = users.filter(u => u.status === 'pending');
+    const approved = users.filter(u => u.status === 'approved');
+
+    document.getElementById('pendingTableWrap').innerHTML  = buildTable(pending,  true);
+    document.getElementById('approvedTableWrap').innerHTML = buildTable(approved, false);
+  }
+
+  function buildTable(list, isPending) {
+    if (!list.length) return '<div class="empty-state">Nenhum registro encontrado.</div>';
+
+    let html = `<table>
+      <thead><tr>
+        <th>Nome</th><th>E-mail</th><th>Data</th><th>Status</th><th>Ações</th>
+      </tr></thead><tbody>`;
+
+    list.forEach(u => {
+      const date = u.createdAt
+        ? new Date(u.createdAt).toLocaleDateString('pt-BR')
+        : '—';
+      const badge = isPending
+        ? '<span class="badge badge-pending">Pendente</span>'
+        : '<span class="badge badge-approved">Aprovado</span>';
+      const actions = isPending
+        ? `<button class="btn-approve" onclick="approveUser('${u.email}')">Aprovar</button>
+           <button class="btn-del"     onclick="deleteUser('${u.email}')">Excluir</button>`
+        : `<button class="btn-del"     onclick="deleteUser('${u.email}')">Excluir</button>`;
+
+      html += `<tr>
+        <td>${u.name}</td><td>${u.email}</td>
+        <td>${date}</td><td>${badge}</td><td>${actions}</td>
+      </tr>`;
+    });
+
+    return html + '</tbody></table>';
+  }
+
+  function approveUser(email) {
+    const users = getUsers();
+    const idx   = users.findIndex(u => u.email === email);
+    if (idx !== -1) { users[idx].status = 'approved'; saveUsers(users); }
     renderApprovals();
   }
 
-  function renderApprovals(){
-    const list = $("aprovacoesList");
-    if(!list) return;
-
-    const pend = users.filter(u => u.status === "PENDING");
-    const appr = users.filter(u => u.status === "APPROVED");
-    const bloc = users.filter(u => u.status === "BLOCKED");
-
-    $("countPendentes").textContent = String(pend.length);
-    $("countAprovados").textContent = String(appr.length);
-    $("countBloqueados").textContent = String(bloc.length);
-
-    const isAdmin = !!session?.email && isAdminEmail(session.email);
-    if(!isAdmin){
-      list.innerHTML = `<div class="hint">Apenas o admin vê esta aba.</div>`;
-      return;
-    }
-
-    const sorted = [...users].sort((a,b) => b.createdAt - a.createdAt);
-
-    if(sorted.length === 0){
-      list.innerHTML = `<div class="hint">Nenhum usuário cadastrado ainda.</div>`;
-      return;
-    }
-
-    list.innerHTML = sorted.map(u => {
-      const dot = u.status === "APPROVED" ? "ok" : u.status === "BLOCKED" ? "bad" : "warn";
-      const label = u.status === "APPROVED" ? "APROVADO" : u.status === "BLOCKED" ? "BLOQUEADO" : "PENDENTE";
-      const isTheAdmin = u.email === ADMIN_EMAIL;
-
-      const actions = isTheAdmin
-        ? `<span class="small">Admin fixo</span>`
-        : `
-          <button class="btn ok" data-act="approve" data-id="${u.id}" ${u.status==="APPROVED" ? "disabled" : ""}>Aprovar</button>
-          <button class="btn warn" data-act="pending" data-id="${u.id}" ${u.status==="PENDING" ? "disabled" : ""}>Marcar pendente</button>
-          <button class="btn bad" data-act="block" data-id="${u.id}" ${u.status==="BLOCKED" ? "disabled" : ""}>Bloquear</button>
-          <button class="btn ghost" data-act="delete" data-id="${u.id}">Excluir</button>
-        `;
-
-      return `
-        <div class="item">
-          <div>
-            <div class="title">
-              <span class="pill" style="margin:0 8px 0 0"><span class="dot ${dot}"></span> ${label}</span>
-              ${u.name || "(Sem nome)"} <span class="mono">(${u.email})</span>
-            </div>
-            <div class="meta">
-              Criado em: ${fmtDate(u.createdAt)}
-              ${u.approvedAt ? ` • Aprovado em: ${fmtDate(u.approvedAt)}` : ""}
-              ${u.blockedAt ? ` • Bloqueado em: ${fmtDate(u.blockedAt)}` : ""}
-            </div>
-          </div>
-          <div class="right">${actions}</div>
-        </div>
-      `;
-    }).join("");
-
-    // attach handlers
-    list.querySelectorAll("button[data-act]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const act = btn.dataset.act;
-        const id = btn.dataset.id;
-        const u = users.find(x => x.id === id);
-        if(!u) return;
-
-        if(act === "approve"){
-          u.status = "APPROVED";
-          u.approvedAt = now();
-          u.blockedAt = undefined;
-          saveUsers();
-          toast("Usuário aprovado.");
-        }
-        if(act === "pending"){
-          u.status = "PENDING";
-          u.approvedAt = undefined;
-          u.blockedAt = undefined;
-          saveUsers();
-          toast("Usuário marcado como pendente.");
-        }
-        if(act === "block"){
-          u.status = "BLOCKED";
-          u.blockedAt = now();
-          saveUsers();
-          toast("Usuário bloqueado.");
-        }
-        if(act === "delete"){
-          if(confirm(`Excluir o usuário ${u.email}?`)){
-            users = users.filter(x => x.id !== id);
-            saveUsers();
-            toast("Usuário excluído.");
-          }
-        }
-        syncUI();
-      });
-    });
+  function deleteUser(email) {
+    if (!confirm('Excluir este usuário?')) return;
+    saveUsers(getUsers().filter(u => u.email !== email));
+    renderApprovals();
   }
 
-  // ---------- actions ----------
-  $("btnIrCadastro").addEventListener("click", () => showView("cadastro"));
-  $("btnVoltarLogin").addEventListener("click", () => showView("login"));
-
-  document.querySelectorAll(".tab").forEach(t => {
-    t.addEventListener("click", () => showView(t.dataset.view));
-  });
-
-  $("btnCadastrar").addEventListener("click", () => {
-    const name = $("regName").value.trim();
-    const email = $("regEmail").value.trim().toLowerCase();
-    const pass = $("regPass").value;
-    const pass2 = $("regPass2").value;
-
-    if(!name || !email || !pass) return toast("Preencha nome, e-mail e senha.");
-    if(pass !== pass2) return toast("As senhas não conferem.");
-    if(!email.includes("@")) return toast("E-mail inválido.");
-
-    const exists = getUserByEmail(email);
-    if(exists) return toast("Esse e-mail já está cadastrado.");
-
-    // Admin fixo nunca entra como pendente
-    const status = isAdminEmail(email) ? "APPROVED" : "PENDING";
-
-    users.push({
-      id: uid(),
-      name,
-      email,
-      pass,
-      status,
-      createdAt: now(),
-      approvedAt: status === "APPROVED" ? now() : undefined
-    });
-    saveUsers();
-
-    toast(status === "APPROVED" ? "Admin cadastrado/aprovado." : "Usuário criado como PENDENTE. Aguarde aprovação.");
-    $("regName").value = $("regEmail").value = $("regPass").value = $("regPass2").value = "";
-    showView("login");
-    syncUI();
-  });
-
-  $("btnLogin").addEventListener("click", () => {
-    const email = $("loginEmail").value.trim().toLowerCase();
-    const pass = $("loginPass").value;
-
-    if(!email || !pass) return toast("Informe e-mail e senha.");
-
-    // Admin fixo: precisa existir registro e senha bater (demo), ou você pode liberar sem senha.
-    const u = getUserByEmail(email);
-    if(!u) return toast("Usuário não encontrado. Crie um usuário primeiro.");
-    if(u.pass !== pass) return toast("Senha incorreta.");
-
-    if(u.status === "PENDING") return toast("Seu acesso está PENDENTE. Aguarde aprovação do admin.");
-    if(u.status === "BLOCKED") return toast("Seu acesso está BLOQUEADO. Fale com o admin.");
-
-    saveSession({ email, at: now() });
-    toast("Login realizado.");
-    showView(isAdminEmail(email) ? "aprovacoes" : "conta");
-  });
-
-  $("btnLogout").addEventListener("click", () => {
-    clearSession();
-    toast("Saiu da conta.");
-    showView("login");
-  });
-
-  $("btnRecarregar").addEventListener("click", () => {
-    users = loadUsers();
-    toast("Lista recarregada.");
-    syncUI();
-  });
-
-  $("btnReset").addEventListener("click", () => {
-    if(!confirm("Isso vai apagar TODOS os usuários e a sessão deste navegador. Continuar?")) return;
-    localStorage.removeItem(LS_USERS);
+  /* ══════════════════════════════
+     LOGOUT
+  ══════════════════════════════ */
+  function doLogout() {
     localStorage.removeItem(LS_SESSION);
-    users = [];
-    session = null;
-    ensureAdminRecord();
-    toast("Reset concluído.");
-    showView("login");
-    syncUI();
-  });
-
-  // init
-  ensureAdminRecord();
-  syncUI();
-
-  // default view
-  if(session?.email){
-    showView(isAdminEmail(session.email) ? "aprovacoes" : "conta");
-  } else {
-    showView("login");
+    showLogin();
   }
-})();
+
+  /* ══════════════════════════════
+     INICIALIZAÇÃO
+  ══════════════════════════════ */
+  (function init() {
+    const session = getSession();
+    if (session) {
+      /* verifica se usuário comum ainda está aprovado */
+      if (session.email !== ADMIN_EMAIL) {
+        const users = getUsers();
+        const user  = users.find(u => u.email === session.email);
+        if (!user || user.status !== 'approved') {
+          localStorage.removeItem(LS_SESSION);
+          showLogin(); return;
+        }
+      }
+      showDashboard(session);
+    } else {
+      showLogin();
+    }
+
+    /* ── link de aprovação via URL: ?approve=email ── */
+    const params     = new URLSearchParams(window.location.search);
+    const approveEmail = params.get('approve');
+    if (approveEmail) {
+      const users = getUsers();
+      const idx   = users.findIndex(u => u.email === approveEmail);
+      if (idx !== -1 && users[idx].status === 'pending') {
+        users[idx].status = 'approved';
+        saveUsers(users);
+        alert('✅ Usuário ' + users[idx].name + ' aprovado com sucesso!');
+      }
+      /* remove o parâmetro da URL */
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  })();
 </script>
 </body>
 </html>
