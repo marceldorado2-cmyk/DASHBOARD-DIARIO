@@ -398,7 +398,7 @@
     }
     .clickable:hover{color:white;}
 
-    /* Gate de acesso (IMPORTANTE) */
+    /* Gate de acesso */
     .gate-wrap{max-width:980px;margin:0 auto; padding:24px 0 40px;}
     .gate-card{
       background:var(--card);
@@ -442,54 +442,31 @@
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <!-- ✅ SUPABASE (Auth) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 <div class="wrap">
 
-  <!-- ====== GATE DE ACESSO (CLIENT-SIDE) ======
-       ATENÇÃO: isso NÃO protege de verdade no GitHub Pages.
-       Serve apenas como "bloqueio visual" no navegador.
-       Para proteção real: use Cloudflare Access, Firebase Auth, Supabase, etc.
-  -->
+  <!-- ====== GATE DE ACESSO (SUPABASE) ====== -->
   <section id="gate" class="gate-wrap" style="display:none">
     <header>
       <h1>Acesso restrito</h1>
-      <p class="subtitle">Solicite acesso ao responsável e faça login para entrar.</p>
+      <p class="subtitle">Faça login para entrar.</p>
     </header>
 
     <div class="gate-card">
       <div class="note warn">
-        <strong>Importante</strong><br>
-        No GitHub Pages, não existe “autorização real” apenas com HTML/JS. Qualquer pessoa consegue baixar o código e ver os dados se o <code>dados.csv</code> estiver público.
-        Este gate é um <strong>controle local</strong> (client-side) para uso interno.
+        <strong>Supabase Auth</strong><br>
+        Este login é real (via Supabase). Para proteger também o <code>dados.csv</code>, ele não pode ficar público no GitHub Pages.
       </div>
 
       <div class="gate-grid">
         <div class="col">
-          <h3>1) Solicitar acesso</h3>
-          <p>Quem for entrar envia uma solicitação. O responsável (você) precisa aprovar.</p>
-
-          <div class="gate-row">
-            <label for="reqEmail">Email</label>
-            <input id="reqEmail" type="email" placeholder="ex.: pessoa@empresa.com" autocomplete="email" />
-          </div>
-
-          <div class="gate-row">
-            <label for="reqPass">Senha (para criar o login)</label>
-            <input id="reqPass" type="password" placeholder="Crie uma senha" autocomplete="new-password" />
-            <small>Esta senha será guardada no navegador do responsável (localStorage), não em servidor.</small>
-          </div>
-
-          <div class="gate-row">
-            <button class="btn primary" id="btnRequestAccess">Enviar solicitação</button>
-            <div id="reqMsg" class="note gate-status"></div>
-          </div>
-        </div>
-
-        <div class="col">
-          <h3>2) Entrar</h3>
-          <p>Após aprovado, a pessoa consegue fazer login.</p>
+          <h3>1) Entrar</h3>
+          <p>Use email e senha.</p>
 
           <div class="gate-row">
             <label for="loginEmail">Email</label>
@@ -507,39 +484,34 @@
             <div id="loginMsg" class="note gate-status"></div>
           </div>
         </div>
+
+        <div class="col">
+          <h3>2) Criar conta (opcional)</h3>
+          <p>Se você quiser permitir auto-cadastro, habilite no Supabase (Auth → Providers → Email).</p>
+
+          <div class="gate-row">
+            <label for="signEmail">Email</label>
+            <input id="signEmail" type="email" placeholder="ex.: pessoa@empresa.com" autocomplete="email" />
+          </div>
+
+          <div class="gate-row">
+            <label for="signPass">Senha</label>
+            <input id="signPass" type="password" placeholder="Crie uma senha" autocomplete="new-password" />
+            <small>Se exigir confirmação por email, a pessoa precisará confirmar antes de logar.</small>
+          </div>
+
+          <div class="gate-row">
+            <button class="btn" id="btnSignUp">Criar conta</button>
+            <div id="signMsg" class="note gate-status"></div>
+          </div>
+        </div>
       </div>
 
       <div class="divider"></div>
 
-      <div class="section-title">
-        Painel do responsável <span class="pill-tag">aprovar / negar</span>
-      </div>
-
       <div class="note">
-        <strong>Como você aprova</strong><br>
-        Use o “PIN do responsável” para abrir a lista de solicitações. (Você define o PIN na primeira vez.)
-      </div>
-
-      <div class="controls" style="margin:0;justify-content:flex-start">
-        <div class="control-group" style="min-width:260px">
-          <label>PIN do responsável</label>
-          <input id="adminPin" type="password" placeholder="Defina/Informe um PIN" autocomplete="off" />
-        </div>
-        <div class="control-group" style="min-width:220px">
-          <label>&nbsp;</label>
-          <button class="btn" id="btnAdminOpen">Abrir painel</button>
-        </div>
-        <div class="control-group" style="min-width:220px">
-          <label>&nbsp;</label>
-          <button class="btn danger" id="btnAdminReset">Resetar PIN e acessos</button>
-        </div>
-      </div>
-
-      <div id="adminPanel" style="display:none;margin-top:12px">
-        <div class="note success" style="margin-top:0">
-          <strong>Painel aberto.</strong> Aprove ou negue solicitações abaixo.
-        </div>
-        <div id="adminRequests"></div>
+        <strong>Whitelisting (recomendado)</strong><br>
+        Se você quer que só emails aprovados entrem, me diga e eu adiciono checagem por lista (tabela no Supabase ou array fixo).
       </div>
     </div>
   </section>
@@ -983,27 +955,26 @@
 
 <script>
 /* =========================================================
-   GATE DE ACESSO (client-side)
+   ✅ SUPABASE AUTH (substitui o gate client-side)
+   1) Cole suas credenciais abaixo
+   2) Configure no Supabase: Auth > URL Configuration
+      - Site URL: sua URL do GitHub Pages
+      - Redirect URLs: inclua sua URL também (se usar magic link)
 ========================================================= */
-const GATE = {
-  ADMIN_PIN_KEY: "painel_gate_admin_pin_v1",
-  REQUESTS_KEY : "painel_gate_requests_v1",
-  USERS_KEY    : "painel_gate_users_v1", // {email:{passHash,approvedAt}}
-  SESSION_KEY  : "painel_gate_session_v1", // {email,ts}
-};
+const SUPABASE_URL = "COLE_AQUI_SUA_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_SUPABASE_ANON_KEY";
+
+let supabase = null;
+try{
+  if(!SUPABASE_URL.includes("COLE_AQUI") && !SUPABASE_ANON_KEY.includes("COLE_AQUI")){
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+}catch(e){
+  console.error("Erro criando client Supabase:", e);
+}
 
 const el = id => document.getElementById(id);
 const norm = s  => (s ?? "").toString().toLowerCase().trim().replace(/\s+/g," ");
-
-async function sha256Hex(str){
-  const data = new TextEncoder().encode(String(str));
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return [...new Uint8Array(digest)].map(b=>b.toString(16).padStart(2,"0")).join("");
-}
-function loadJSON(key, fallback){
-  try{ const r=localStorage.getItem(key); return r?JSON.parse(r):fallback; }catch(e){ return fallback; }
-}
-function saveJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
 
 function showGateMsg(id, text, type="warn"){
   const box = el(id);
@@ -1013,217 +984,9 @@ function showGateMsg(id, text, type="warn"){
 }
 function hideGateMsg(id){ const box=el(id); box.classList.remove("show"); }
 
-function isLoggedIn(){
-  const s = loadJSON(GATE.SESSION_KEY, null);
-  return !!(s && s.email);
-}
-function setLoggedIn(email){
-  saveJSON(GATE.SESSION_KEY, { email, ts: Date.now() });
-}
-function logout(){
-  localStorage.removeItem(GATE.SESSION_KEY);
-}
-
-function getUsers(){ return loadJSON(GATE.USERS_KEY, {}); }
-function setUsers(u){ saveJSON(GATE.USERS_KEY, u||{}); }
-function getRequests(){ return loadJSON(GATE.REQUESTS_KEY, []); }
-function setRequests(r){ saveJSON(GATE.REQUESTS_KEY, Array.isArray(r)?r:[]); }
-
-async function ensureAdminPin(pin){
-  const cur = localStorage.getItem(GATE.ADMIN_PIN_KEY);
-  if(cur) return true;
-  if(!pin || String(pin).trim().length < 4) return false;
-  const h = await sha256Hex("PIN:"+pin);
-  localStorage.setItem(GATE.ADMIN_PIN_KEY, h);
-  return true;
-}
-async function checkAdminPin(pin){
-  const cur = localStorage.getItem(GATE.ADMIN_PIN_KEY);
-  if(!cur) return false;
-  const h = await sha256Hex("PIN:"+pin);
-  return h === cur;
-}
-
-function renderGateVisibility(){
-  const logged = isLoggedIn();
-  el("gate").style.display = logged ? "none" : "block";
-  el("app").style.display  = logged ? "block" : "none";
-  el("btnLogout").style.display = logged ? "inline-block" : "none";
-}
-
-function renderAdminRequests(){
-  const reqs = getRequests().sort((a,b)=>(b.ts||0)-(a.ts||0));
-  if(!reqs.length){
-    el("adminRequests").innerHTML = `<div class="note" style="margin:0">Nenhuma solicitação pendente.</div>`;
-    return;
-  }
-  el("adminRequests").innerHTML = `
-    <div class="table-wrap"><table style="min-width:820px">
-      <thead><tr>
-        <th>Email</th>
-        <th class="num">Data</th>
-        <th>Status</th>
-        <th class="num">Ações</th>
-      </tr></thead>
-      <tbody>
-        ${reqs.map(r=>{
-          const st = r.status || "pendente";
-          return `
-            <tr>
-              <td class="name">${r.email}</td>
-              <td class="num">${new Date(r.ts).toLocaleString("pt-BR")}</td>
-              <td>${st}</td>
-              <td class="num">
-                ${st==="pendente" ? `
-                  <button class="btn primary" data-approve="${encodeURIComponent(r.id)}">Aprovar</button>
-                  <button class="btn danger"  data-deny="${encodeURIComponent(r.id)}">Negar</button>
-                ` : `<span class="badge">—</span>`}
-              </td>
-            </tr>
-          `;
-        }).join("")}
-      </tbody>
-    </table></div>
-  `;
-
-  el("adminRequests").querySelectorAll("button[data-approve]").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const id = decodeURIComponent(btn.dataset.approve);
-      const reqs = getRequests();
-      const it = reqs.find(x=>x.id===id);
-      if(!it) return;
-
-      // aprovar -> vira user
-      const users = getUsers();
-      users[it.email] = { passHash: it.passHash, approvedAt: Date.now() };
-      setUsers(users);
-
-      it.status="aprovado"; it.handledAt = Date.now();
-      setRequests(reqs);
-
-      renderAdminRequests();
-    });
-  });
-  el("adminRequests").querySelectorAll("button[data-deny]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const id = decodeURIComponent(btn.dataset.deny);
-      const reqs = getRequests();
-      const it = reqs.find(x=>x.id===id);
-      if(!it) return;
-      it.status="negado"; it.handledAt=Date.now();
-      setRequests(reqs);
-      renderAdminRequests();
-    });
-  });
-}
-
-function setupGate(){
-  // request access
-  el("btnRequestAccess").addEventListener("click", async ()=>{
-    hideGateMsg("reqMsg");
-    const email = (el("reqEmail").value||"").trim().toLowerCase();
-    const pass  = (el("reqPass").value||"").trim();
-    if(!email || !email.includes("@")){ showGateMsg("reqMsg","Informe um email válido.","warn"); return; }
-    if(pass.length < 4){ showGateMsg("reqMsg","Senha muito curta (mín. 4 caracteres).","warn"); return; }
-
-    const users = getUsers();
-    if(users[email]){
-      showGateMsg("reqMsg","Este email já está aprovado. Faça login.","success");
-      return;
-    }
-
-    const reqs = getRequests();
-    const already = reqs.find(r=>r.email===email && (r.status||"pendente")==="pendente");
-    if(already){
-      showGateMsg("reqMsg","Já existe uma solicitação pendente para este email.","warn");
-      return;
-    }
-
-    const id = "req_"+Math.random().toString(16).slice(2)+"_"+Date.now().toString(16);
-    const passHash = await sha256Hex("PASS:"+pass);
-
-    reqs.push({ id, email, passHash, status:"pendente", ts: Date.now() });
-    setRequests(reqs);
-
-    el("reqPass").value = "";
-    showGateMsg("reqMsg","Solicitação enviada. Aguarde aprovação do responsável.","success");
-  });
-
-  // login
-  el("btnLogin").addEventListener("click", async ()=>{
-    hideGateMsg("loginMsg");
-    const email = (el("loginEmail").value||"").trim().toLowerCase();
-    const pass  = (el("loginPass").value||"").trim();
-    if(!email || !email.includes("@")){ showGateMsg("loginMsg","Informe um email válido.","warn"); return; }
-    if(!pass){ showGateMsg("loginMsg","Informe a senha.","warn"); return; }
-
-    const users = getUsers();
-    const u = users[email];
-    if(!u){ showGateMsg("loginMsg","Ainda não aprovado (ou não existe). Solicite acesso.","warn"); return; }
-
-    const passHash = await sha256Hex("PASS:"+pass);
-    if(passHash !== u.passHash){ showGateMsg("loginMsg","Senha incorreta.","bad"); return; }
-
-    setLoggedIn(email);
-    el("loginPass").value = "";
-    showGateMsg("loginMsg","Login ok. Entrando...","success");
-    renderGateVisibility();
-
-    // inicializa app só depois do login
-    if(!window.__APP_INIT_DONE){
-      window.__APP_INIT_DONE = true;
-      setup();
-      init();
-    } else {
-      updateAll();
-    }
-  });
-
-  el("btnLogout").addEventListener("click", ()=>{
-    logout();
-    renderGateVisibility();
-  });
-
-  // admin open
-  el("btnAdminOpen").addEventListener("click", async ()=>{
-    const pin = (el("adminPin").value||"").trim();
-    const hasPin = localStorage.getItem(GATE.ADMIN_PIN_KEY);
-
-    if(!hasPin){
-      const ok = await ensureAdminPin(pin);
-      if(!ok){ showGateMsg("loginMsg","Defina um PIN (mín. 4) para abrir o painel.","warn"); return; }
-    }
-
-    const ok = await checkAdminPin(pin);
-    if(!ok){ showGateMsg("loginMsg","PIN do responsável incorreto.","bad"); return; }
-
-    el("adminPanel").style.display = "block";
-    renderAdminRequests();
-  });
-
-  el("btnAdminReset").addEventListener("click", ()=>{
-    if(!confirm("Isso vai apagar PIN, usuários aprovados e solicitações (apenas neste navegador). Continuar?")) return;
-    localStorage.removeItem(GATE.ADMIN_PIN_KEY);
-    localStorage.removeItem(GATE.REQUESTS_KEY);
-    localStorage.removeItem(GATE.USERS_KEY);
-    localStorage.removeItem(GATE.SESSION_KEY);
-    el("adminPanel").style.display="none";
-    renderGateVisibility();
-  });
-
-  renderGateVisibility();
-  if(isLoggedIn()){
-    if(!window.__APP_INIT_DONE){
-      window.__APP_INIT_DONE = true;
-      setup();
-      init();
-    }
-  }
-}
-
-/* =========================================================
-   APP ORIGINAL + MELHORIA: Ranking por equipe (Desafios)
-========================================================= */
+/* ===== App (o resto do seu código original) =====
+   Mantive TODO seu código, só removi o gate antigo e liguei o boot ao Supabase.
+*/
 
 const CLIENT_NAME_HEADERS = [
   norm("nome do cliente"),norm("cliente"),norm("nome"),norm("casal"),
@@ -1250,8 +1013,6 @@ const sortState = {
   "perfil-renda"       :{ key:"vgvTotal",  dir:"desc" },
   "cancelamento-table" :{ key:"cotasTotal",dir:"desc" },
   "ch-results-table"   :{ key:"valor",     dir:"desc" },
-
-  /* novo: tabela do modal de ranking por equipe */
   "ch-team-ranking"    :{ key:"vgvTotal",  dir:"desc" },
 };
 
@@ -2120,7 +1881,7 @@ function applyFiltersForChallengeBase(rows){
   return f;
 }
 
-/* ===== NOVO: Ranking dos melhores por equipe (clicar no nome da equipe) ===== */
+/* ===== Modal ranking equipe ===== */
 function openTeamRankingModal(payload){
   const { challengeId, teamIndex } = payload;
   const ch = loadChallenges().find(x=>x.id===challengeId);
@@ -2135,19 +1896,16 @@ function openTeamRankingModal(payload){
   const tipoKey = norm(ch.profTipo||norm("promotor de marketing"));
   const memberSet = new Set((team.members||[]).map(norm));
 
-  // linhas apenas da equipe (por pessoa do tipo)
   const teamRows = inPeriod.filter(r=>{
     const who = (r[tipoKey]??"").toString().trim();
     return who && memberSet.has(norm(who));
   });
 
-  // agrupa por pessoa
   const rank = groupRanking(teamRows, tipoKey);
 
   el("teamModalTitle").textContent = `Ranking — ${team.name || `Equipe ${teamIndex+1}`}`;
   el("teamModalSub").textContent = `Desafio: ${(ch.name||"Desafio").trim()||"Desafio"} • Período: ${formatChallengePeriod(ch)} • Tipo: ${ch.profTipo} • Filtros: Status=${el("statusSelect").value}, UF=${el("ufSelect").value}`;
 
-  // render tabela com ordenação por cabeçalho (VGV, casais, eficiência etc.)
   const cid = "teamModalBody";
   const container = el(cid);
 
@@ -2196,7 +1954,6 @@ function openTeamRankingModal(payload){
     });
   };
 
-  // reset sort inicial
   sortState["ch-team-ranking"] = { key: "vgvTotal", dir: "desc" };
   render();
 
@@ -2314,7 +2071,6 @@ function renderChallengeResults(ch){
     </div>
   `;
 
-  // clique no nome da equipe -> abre modal com ranking
   el("chResults").querySelectorAll("[data-open-team]").forEach(a=>{
     a.addEventListener("click", ()=>{
       const challengeId = decodeURIComponent(a.dataset.openTeam);
@@ -2629,8 +2385,102 @@ async function init(){
   }
 }
 
-/* boot gate */
-setupGate();
+/* =========================================================
+   ✅ BOOT + LOGIN (Supabase)
+========================================================= */
+function renderAuthVisibility(user){
+  const logged = !!user;
+  el("gate").style.display = logged ? "none" : "block";
+  el("app").style.display  = logged ? "block" : "none";
+  el("btnLogout").style.display = logged ? "inline-block" : "none";
+}
+
+async function bootWithAuth(){
+  // se não configurou as credenciais, mostra gate com aviso
+  if(!supabase){
+    renderAuthVisibility(null);
+    showGateMsg("loginMsg","Configure SUPABASE_URL e SUPABASE_ANON_KEY no index.html.","warn");
+    return;
+  }
+
+  // listeners UI
+  el("btnLogin").addEventListener("click", async ()=>{
+    hideGateMsg("loginMsg");
+    const email = (el("loginEmail").value||"").trim();
+    const pass  = (el("loginPass").value||"").trim();
+    if(!email || !email.includes("@")){ showGateMsg("loginMsg","Informe um email válido.","warn"); return; }
+    if(!pass){ showGateMsg("loginMsg","Informe a senha.","warn"); return; }
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    if(error){ showGateMsg("loginMsg", error.message || "Falha no login.","bad"); return; }
+
+    showGateMsg("loginMsg","Login ok. Entrando...","success");
+    renderAuthVisibility(data.user);
+
+    if(!window.__APP_INIT_DONE){
+      window.__APP_INIT_DONE = true;
+      setup();
+      await init();
+    }else{
+      updateAll();
+    }
+  });
+
+  el("btnSignUp").addEventListener("click", async ()=>{
+    hideGateMsg("signMsg");
+    const email = (el("signEmail").value||"").trim();
+    const pass  = (el("signPass").value||"").trim();
+    if(!email || !email.includes("@")){ showGateMsg("signMsg","Informe um email válido.","warn"); return; }
+    if(pass.length < 6){ showGateMsg("signMsg","Senha muito curta (mín. 6).","warn"); return; }
+
+    const { data, error } = await supabase.auth.signUp({ email, password: pass });
+    if(error){ showGateMsg("signMsg", error.message || "Falha ao criar conta.","bad"); return; }
+
+    // se o projeto exigir confirmação por email, user pode vir null até confirmar
+    showGateMsg("signMsg", data.user ? "Conta criada e logada." : "Conta criada. Confirme o email para entrar.", "success");
+
+    const { data: s2 } = await supabase.auth.getSession();
+    const user = s2?.session?.user || null;
+    renderAuthVisibility(user);
+
+    if(user && !window.__APP_INIT_DONE){
+      window.__APP_INIT_DONE = true;
+      setup();
+      await init();
+    }
+  });
+
+  el("btnLogout").addEventListener("click", async ()=>{
+    await supabase.auth.signOut();
+    renderAuthVisibility(null);
+  });
+
+  // sessão atual
+  const { data } = await supabase.auth.getSession();
+  const user = data?.session?.user || null;
+  renderAuthVisibility(user);
+
+  if(user){
+    if(!window.__APP_INIT_DONE){
+      window.__APP_INIT_DONE = true;
+      setup();
+      await init();
+    }
+  }
+
+  // mudanças de auth (login/logout em outras abas etc)
+  supabase.auth.onAuthStateChange(async (_event, session)=>{
+    const u = session?.user || null;
+    renderAuthVisibility(u);
+    if(u && !window.__APP_INIT_DONE){
+      window.__APP_INIT_DONE = true;
+      setup();
+      await init();
+    }
+  });
+}
+
+bootWithAuth();
 </script>
 </body>
 </html>
