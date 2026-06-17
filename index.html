@@ -156,6 +156,7 @@
     .p-med{background:rgba(255,176,32,.12);color:var(--med);border-color:rgba(255,176,32,.28);}
     .p-good{background:rgba(92,255,176,.12);color:var(--good);border-color:rgba(92,255,176,.28);}
 
+    /* ── Promotores lista inline ── */
     .promo-list{display:flex;flex-direction:column;gap:8px;margin:0 0 6px;}
     .promo-row{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -183,6 +184,9 @@
     }
     .config-panel h4{margin:0 0 14px;font-size:1rem;font-weight:900;color:rgba(234,240,255,.9);}
 
+    /* ════════════════════════════════════════
+       COMPARATIVO LADO A LADO (supervisores)
+    ════════════════════════════════════════ */
     .sup-compare-wrap{
       background:var(--card);
       border:1px solid var(--stroke);
@@ -341,87 +345,71 @@
     .kpi-sub b{color:rgba(234,240,255,.88)}
     .hint{font-size:.9rem;color:var(--muted);line-height:1.45;}
 
-    /* DESAFIOS */
-    .challenge-grid{display:grid;grid-template-columns: 420px 1fr;gap:14px;align-items:start;margin-top:10px;}
-    .challenge-card{background:var(--card);border:1px solid var(--stroke);border-radius:var(--radius);padding:14px;backdrop-filter:blur(10px);overflow:hidden;}
+    /* ════════════════════════════════════════
+       DESAFIOS
+    ════════════════════════════════════════ */
+    .challenge-grid{
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:14px;
+      align-items:start;
+      margin-top:10px;
+    }
+    .challenge-card{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      padding:14px;
+      backdrop-filter:blur(10px);
+      overflow:hidden;
+    }
     .challenge-card h3{margin:0 0 10px;font-size:1.05rem;}
     .challenge-list{display:flex;flex-direction:column;gap:10px;max-height:65vh;overflow:auto;padding-right:6px;}
-    .challenge-item{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);border-radius:14px;padding:12px 12px;display:flex;flex-direction:column;gap:10px;}
-    .challenge-item .top{display:flex;gap:10px;align-items:baseline;justify-content:space-between;flex-wrap:wrap;}
-    .challenge-item .title{font-weight:950;display:flex;gap:10px;align-items:center;min-width:0;}
-    .challenge-item .title span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:360px;}
+    .challenge-item{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      border-radius:14px;
+      padding:12px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .challenge-item .top{
+      display:flex;gap:10px;align-items:baseline;justify-content:space-between;flex-wrap:wrap;
+    }
+    .challenge-item .title{
+      font-weight:950;
+      display:flex;gap:10px;align-items:center;min-width:0;
+    }
+    .challenge-item .title span{
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:360px;
+    }
     .challenge-item .meta{color:var(--muted);font-size:.9rem;}
     .challenge-item .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
     .teams-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px;}
-    .team-box{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.02);border-radius:14px;padding:12px;}
+    .team-box{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      border-radius:14px;
+      padding:12px;
+    }
     .team-box .hdr{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-bottom:10px;}
     .team-box .hdr b{font-size:.98rem;}
-    .team-members{border-top:1px solid rgba(255,255,255,.08);padding-top:10px;margin-top:10px;display:flex;flex-direction:column;gap:8px;}
+    .team-members{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:10px;
+      margin-top:10px;
+      display:flex;flex-direction:column;gap:8px;
+    }
     .member-row{display:flex;align-items:center;justify-content:space-between;gap:12px;}
     .member-row label{font-weight:750;color:rgba(234,240,255,.88);text-transform:none;letter-spacing:0;font-size:.95rem;}
     .member-row input[type="checkbox"]{transform:scale(1.1);}
     .tiny{font-size:.85rem;color:var(--muted);}
 
-    /* MODAL (ranking por equipe dentro de desafios) */
-    .modal-backdrop{
-      position:fixed; inset:0; background:rgba(0,0,0,.55);
-      display:none; align-items:center; justify-content:center;
-      padding:18px; z-index:9998;
-      backdrop-filter: blur(4px);
-    }
-    .modal-backdrop.open{display:flex;}
-    .modal{
-      width:min(1100px, 96vw);
-      max-height:86vh;
-      overflow:auto;
-      background:rgba(11,18,34,.94);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:22px;
-      box-shadow: 0 30px 100px rgba(0,0,0,.65);
-    }
-    .modal-head{
-      position:sticky; top:0; z-index:1;
-      background:rgba(11,18,34,.96);
-      border-bottom:1px solid rgba(255,255,255,.08);
-      padding:14px 16px;
-      display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
-    }
-    .modal-title{font-weight:950;}
-    .modal-sub{color:var(--muted); font-size:.92rem; margin-top:3px;}
-    .modal-body{padding:14px 16px;}
-    .modal-actions{display:flex; gap:10px; align-items:center; justify-content:flex-end;}
-    .clickable{
-      cursor:pointer;
-      text-decoration: underline;
-      text-decoration-color: rgba(34,211,238,.55);
-      text-underline-offset: 3px;
-    }
-    .clickable:hover{color:white;}
-
-    /* Gate de acesso */
-    .gate-wrap{max-width:980px;margin:0 auto; padding:24px 0 40px;}
-    .gate-card{
-      background:var(--card);
-      border:1px solid var(--stroke);
-      border-radius:var(--radius);
-      padding:18px;
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-    }
-    .gate-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;}
-    .gate-grid .col{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;}
-    .gate-grid h3{margin:0 0 10px;font-size:1.02rem;}
-    .gate-grid p{margin:0 0 10px;color:var(--muted);line-height:1.45;}
-    .gate-row{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
-    .gate-row small{color:var(--muted);line-height:1.35;}
-    .gate-status{margin-top:12px;display:none;}
-    .gate-status.show{display:block;}
-
     @media(max-width:1100px){
       .tabs{grid-template-columns:repeat(3,minmax(0,1fr));}
       .sup-compare-header,.sup-compare-row{grid-template-columns:160px 1fr 1fr 1fr;}
       .challenge-grid{grid-template-columns: 1fr;}
-      .gate-grid{grid-template-columns:1fr;}
     }
     @media(max-width:820px){
       .wrap{padding:0 16px}
@@ -442,551 +430,438 @@
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-
-  <!-- ✅ SUPABASE (Auth) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
 <div class="wrap">
+  <header>
+    <h1>Painel de Atendimentos</h1>
+    <p class="subtitle">Fonte: <strong>dados.csv</strong> (VGV = soma simples da coluna G)</p>
+  </header>
 
-  <!-- ====== GATE DE ACESSO (SUPABASE) ====== -->
-  <section id="gate" class="gate-wrap" style="display:none">
-    <header>
-      <h1>Acesso restrito</h1>
-      <p class="subtitle">Faça login para entrar.</p>
-    </header>
-
-    <div class="gate-card">
-      <div class="note warn">
-        <strong>Supabase Auth</strong><br>
-        Este login é real (via Supabase). Para proteger também o <code>dados.csv</code>, ele não pode ficar público no GitHub Pages.
+  <!-- ═══ FILTROS GLOBAIS ═══ -->
+  <div class="controls">
+    <div class="control-group" style="min-width:420px">
+      <label>Período</label>
+      <div class="range-row">
+        <input id="dateStart" type="date" />
+        <span class="sep">a</span>
+        <input id="dateEnd" type="date" />
+        <button class="btn" id="btnHoje">Hoje</button>
+        <button class="btn" id="btn30">30 dias</button>
+        <button class="btn" id="btnLimparPeriodo">Limpar</button>
       </div>
+    </div>
+    <div class="control-group">
+      <label>Status do contrato</label>
+      <select id="statusSelect">
+        <option value="todos">Todos</option>
+        <option value="ativo">Ativo</option>
+        <option value="cancelado">Cancelado</option>
+        <option value="sem_status">Sem status</option>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Profissional</label>
+      <select id="profTipo">
+        <option value="promotor de marketing">Promotor de marketing</option>
+        <option value="liner">Liner</option>
+        <option value="closer">Closer</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label>Nome</label>
+      <select id="profNome"><option value="todos">Todos</option></select>
+    </div>
+    <div class="control-group">
+      <label>UF</label>
+      <select id="ufSelect"><option value="todos">Todas</option></select>
+    </div>
+  </div>
 
-      <div class="gate-grid">
-        <div class="col">
-          <h3>1) Entrar</h3>
-          <p>Use email e senha.</p>
+  <!-- ═══ ABAS ═══ -->
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <div class="tab active" data-tab="resumo">📊 Resumo</div>
+      <div class="tab" data-tab="comparativo">🆚 Comparativo de períodos</div>
+      <div class="tab" data-tab="curva">📈 Curva de casais e vendas</div>
+      <div class="tab" data-tab="cancelamento">❌ Análise de cancelamento</div>
+      <div class="tab" data-tab="equipes">🧲 Equipes de captação</div>
+      <div class="tab" data-tab="equipes-supervisores">🧑‍✈️ Promotores (2 supervisores)</div>
+      <div class="tab" data-tab="desafios">🏁 Desafios</div>
+      <div class="tab" data-tab="ranking-promotor">🎯 Ranking Promotor</div>
+      <div class="tab" data-tab="ranking-liner">💬 Ranking Liner</div>
+      <div class="tab" data-tab="ranking-closer">🤝 Ranking Closer</div>
+      <div class="tab" data-tab="perfil-renda">💸 Perfil de renda</div>
+      <div class="tab" data-tab="profissionais">👥 Profissionais</div>
+    </div>
+  </div>
 
-          <div class="gate-row">
-            <label for="loginEmail">Email</label>
-            <input id="loginEmail" type="email" placeholder="ex.: pessoa@empresa.com" autocomplete="email" />
-          </div>
+  <!-- ═══ CONTEÚDO ═══ -->
+  <div id="content">
+    <div id="loading" class="note">Carregando dados...</div>
+    <div id="error"   class="note bad" style="display:none"></div>
 
-          <div class="gate-row">
-            <label for="loginPass">Senha</label>
-            <input id="loginPass" type="password" placeholder="Sua senha" autocomplete="current-password" />
-          </div>
-
-          <div class="gate-row">
-            <button class="btn primary" id="btnLogin">Entrar</button>
-            <button class="btn" id="btnLogout" style="display:none">Sair</button>
-            <div id="loginMsg" class="note gate-status"></div>
-          </div>
-        </div>
-
-        <div class="col">
-          <h3>2) Criar conta (opcional)</h3>
-          <p>Se você quiser permitir auto-cadastro, habilite no Supabase (Auth → Providers → Email).</p>
-
-          <div class="gate-row">
-            <label for="signEmail">Email</label>
-            <input id="signEmail" type="email" placeholder="ex.: pessoa@empresa.com" autocomplete="email" />
-          </div>
-
-          <div class="gate-row">
-            <label for="signPass">Senha</label>
-            <input id="signPass" type="password" placeholder="Crie uma senha" autocomplete="new-password" />
-            <small>Se exigir confirmação por email, a pessoa precisará confirmar antes de logar.</small>
-          </div>
-
-          <div class="gate-row">
-            <button class="btn" id="btnSignUp">Criar conta</button>
-            <div id="signMsg" class="note gate-status"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
+    <!-- ── RESUMO ── -->
+    <div id="tab-resumo" class="tab-content active">
+      <div class="stats" id="stats"></div>
       <div class="note">
-        <strong>Whitelisting (recomendado)</strong><br>
-        Se você quer que só emails aprovados entrem, me diga e eu adiciono checagem por lista (tabela no Supabase ou array fixo).
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== APP ====== -->
-  <div id="app" style="display:none">
-    <header>
-      <h1>Painel de Atendimentos</h1>
-      <p class="subtitle">Fonte: <strong>dados.csv</strong> (VGV = soma simples da coluna G)</p>
-    </header>
-
-    <!-- ═══ FILTROS GLOBAIS ═══ -->
-    <div class="controls">
-      <div class="control-group" style="min-width:420px">
-        <label>Período</label>
-        <div class="range-row">
-          <input id="dateStart" type="date" />
-          <span class="sep">a</span>
-          <input id="dateEnd" type="date" />
-          <button class="btn" id="btnHoje">Hoje</button>
-          <button class="btn" id="btn30">30 dias</button>
-          <button class="btn" id="btnLimparPeriodo">Limpar</button>
-        </div>
-      </div>
-      <div class="control-group">
-        <label>Status do contrato</label>
-        <select id="statusSelect">
-          <option value="todos">Todos</option>
-          <option value="ativo">Ativo</option>
-          <option value="cancelado">Cancelado</option>
-          <option value="sem_status">Sem status</option>
-          <option value="outro">Outro</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label>Profissional</label>
-        <select id="profTipo">
-          <option value="promotor de marketing">Promotor de marketing</option>
-          <option value="liner">Liner</option>
-          <option value="closer">Closer</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label>Nome</label>
-        <select id="profNome"><option value="todos">Todos</option></select>
-      </div>
-      <div class="control-group">
-        <label>UF</label>
-        <select id="ufSelect"><option value="todos">Todas</option></select>
+        <strong>Critérios</strong><br>
+        • Casais = linhas (com ajuste: Total − NoTour).<br>
+        • NoTour = linhas com <strong>Status atendimento</strong> = "NoTour".<br>
+        • Cotas ativas/canceladas = tokens na coluna "Status do contrato".<br>
+        • <strong>VGV total = Σ(coluna G)</strong> (soma simples).<br>
+        • VGV ativo/cancelado: rateio proporcional pelos tokens ATIVO/CANCELADO da linha.<br>
+        • <strong>Eficiência = (Cotas ÷ Casais) × 100</strong>.<br>
+        • <strong>Média de Casais/dia</strong> = total ÷ dias do período (inclusivo).
       </div>
     </div>
 
-    <!-- ═══ ABAS ═══ -->
-    <div class="tabs-wrap">
-      <div class="tabs">
-        <div class="tab active" data-tab="resumo">📊 Resumo</div>
-        <div class="tab" data-tab="comparativo">🆚 Comparativo de períodos</div>
-        <div class="tab" data-tab="curva">📈 Curva de casais e vendas</div>
-        <div class="tab" data-tab="cancelamento">❌ Análise de cancelamento</div>
-        <div class="tab" data-tab="equipes">🧲 Equipes de captação</div>
-        <div class="tab" data-tab="equipes-supervisores">🧑‍✈️ Promotores (2 supervisores)</div>
-        <div class="tab" data-tab="desafios">🏁 Desafios</div>
-        <div class="tab" data-tab="ranking-promotor">🎯 Ranking Promotor</div>
-        <div class="tab" data-tab="ranking-liner">💬 Ranking Liner</div>
-        <div class="tab" data-tab="ranking-closer">🤝 Ranking Closer</div>
-        <div class="tab" data-tab="perfil-renda">💸 Perfil de renda</div>
-        <div class="tab" data-tab="profissionais">👥 Profissionais</div>
+    <!-- ── COMPARATIVO ── -->
+    <div id="tab-comparativo" class="tab-content">
+      <div class="note">
+        <strong>Comparativo entre dois períodos</strong><br>
+        Período X e Y respeitam os filtros globais. <strong>Variação %</strong> = (X − Y) / Y × 100.
+      </div>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h3>Período X</h3>
+          <div class="controls" style="margin:0;justify-content:flex-start">
+            <div class="control-group" style="min-width:330px">
+              <label>Datas (X)</label>
+              <div class="range-row">
+                <input id="cmpXStart" type="date"/><span class="sep">a</span><input id="cmpXEnd" type="date"/>
+                <button class="btn" id="btnCmpXHoje">Hoje</button>
+                <button class="btn" id="btnCmpX30">30 dias</button>
+              </div>
+            </div>
+          </div>
+          <div class="stats" id="cmpStatsX" style="margin-top:10px"></div>
+        </div>
+        <div class="compare-card">
+          <h3>Período Y</h3>
+          <div class="controls" style="margin:0;justify-content:flex-start">
+            <div class="control-group" style="min-width:330px">
+              <label>Datas (Y)</label>
+              <div class="range-row">
+                <input id="cmpYStart" type="date"/><span class="sep">a</span><input id="cmpYEnd" type="date"/>
+                <button class="btn" id="btnCmpYHoje">Hoje</button>
+                <button class="btn" id="btnCmpY30">30 dias</button>
+              </div>
+            </div>
+          </div>
+          <div class="stats" id="cmpStatsY" style="margin-top:10px"></div>
+        </div>
+      </div>
+      <div class="compare-card" style="margin-top:14px">
+        <h3>Variação percentual (X vs Y)</h3>
+        <div id="cmpMeta" class="hint" style="margin:6px 0 12px">—</div>
+        <div id="cmpDeltas"></div>
       </div>
     </div>
 
-    <!-- ═══ CONTEÚDO ═══ -->
-    <div id="content">
-      <div id="loading" class="note">Carregando dados...</div>
-      <div id="error"   class="note bad" style="display:none"></div>
-
-      <!-- ── RESUMO ── -->
-      <div id="tab-resumo" class="tab-content active">
-        <div class="stats" id="stats"></div>
-        <div class="note">
-          <strong>Critérios</strong><br>
-          • Casais = linhas (com ajuste: Total − NoTour).<br>
-          • NoTour = linhas com <strong>Status atendimento</strong> = "NoTour".<br>
-          • Cotas ativas/canceladas = tokens na coluna "Status do contrato".<br>
-          • <strong>VGV total = Σ(coluna G)</strong> (soma simples).<br>
-          • VGV ativo/cancelado: rateio proporcional pelos tokens ATIVO/CANCELADO da linha.<br>
-          • <strong>Eficiência = (Cotas ÷ Casais) × 100</strong>.<br>
-          • <strong>Média de Casais/dia</strong> = total ÷ dias do período (inclusivo).
+    <!-- ── CURVA ── -->
+    <div id="tab-curva" class="tab-content">
+      <div class="stats" id="stats-curva"></div>
+      <div class="note">Respeita os filtros globais. • Casais/dia = linhas no dia. • Vendas/dia = soma de cotas. • Eficiência = Vendas ÷ Casais.</div>
+      <div class="chart-card">
+        <div class="chart-head">
+          <div class="chart-title">Curva diária (Casais × Vendas)</div>
+          <div class="chart-sub" id="curva-meta">—</div>
         </div>
+        <div class="chart-wrap"><canvas id="chartCurva"></canvas></div>
       </div>
-
-      <!-- ── COMPARATIVO ── -->
-      <div id="tab-comparativo" class="tab-content">
-        <div class="note">
-          <strong>Comparativo entre dois períodos</strong><br>
-          Período X e Y respeitam os filtros globais. <strong>Variação %</strong> = (X − Y) / Y × 100.
+      <div class="chart-card">
+        <div class="chart-head">
+          <div class="chart-title">Performance por dia da semana</div>
+          <div class="chart-sub">Vendas, VGV, Casais, Eficiência e Média de Casais/dia da semana</div>
         </div>
-        <div class="compare-grid">
-          <div class="compare-card">
-            <h3>Período X</h3>
-            <div class="controls" style="margin:0;justify-content:flex-start">
-              <div class="control-group" style="min-width:330px">
-                <label>Datas (X)</label>
-                <div class="range-row">
-                  <input id="cmpXStart" type="date"/><span class="sep">a</span><input id="cmpXEnd" type="date"/>
-                  <button class="btn" id="btnCmpXHoje">Hoje</button>
-                  <button class="btn" id="btnCmpX30">30 dias</button>
-                </div>
-              </div>
-            </div>
-            <div class="stats" id="cmpStatsX" style="margin-top:10px"></div>
-          </div>
-          <div class="compare-card">
-            <h3>Período Y</h3>
-            <div class="controls" style="margin:0;justify-content:flex-start">
-              <div class="control-group" style="min-width:330px">
-                <label>Datas (Y)</label>
-                <div class="range-row">
-                  <input id="cmpYStart" type="date"/><span class="sep">a</span><input id="cmpYEnd" type="date"/>
-                  <button class="btn" id="btnCmpYHoje">Hoje</button>
-                  <button class="btn" id="btnCmpY30">30 dias</button>
-                </div>
-              </div>
-            </div>
-            <div class="stats" id="cmpStatsY" style="margin-top:10px"></div>
-          </div>
-        </div>
-        <div class="compare-card" style="margin-top:14px">
-          <h3>Variação percentual (X vs Y)</h3>
-          <div id="cmpMeta" class="hint" style="margin:6px 0 12px">—</div>
-          <div id="cmpDeltas"></div>
-        </div>
+        <div class="chart-wrap small"><canvas id="chartSemana"></canvas></div>
       </div>
+    </div>
 
-      <!-- ── CURVA ── -->
-      <div id="tab-curva" class="tab-content">
-        <div class="stats" id="stats-curva"></div>
-        <div class="note">Respeita os filtros globais. • Casais/dia = linhas no dia. • Vendas/dia = soma de cotas. • Eficiência = Vendas ÷ Casais.</div>
-        <div class="chart-card">
-          <div class="chart-head">
-            <div class="chart-title">Curva diária (Casais × Vendas)</div>
-            <div class="chart-sub" id="curva-meta">—</div>
-          </div>
-          <div class="chart-wrap"><canvas id="chartCurva"></canvas></div>
+    <!-- ── CANCELAMENTO ── -->
+    <div id="tab-cancelamento" class="tab-content">
+      <div class="note"><strong>% Cancelamento</strong> = (cotas canceladas ÷ cotas totais) × 100.</div>
+      <div class="chart-card">
+        <div class="chart-head">
+          <div class="chart-title">% Cancelamento por qtd de cotas vendidas</div>
+          <div class="chart-sub" id="cancel-meta">—</div>
         </div>
-        <div class="chart-card">
-          <div class="chart-head">
-            <div class="chart-title">Performance por dia da semana</div>
-            <div class="chart-sub">Vendas, VGV, Casais, Eficiência e Média de Casais/dia da semana</div>
-          </div>
-          <div class="chart-wrap small"><canvas id="chartSemana"></canvas></div>
-        </div>
+        <div class="chart-wrap"><canvas id="chartCancelamento"></canvas></div>
       </div>
+      <div id="cancelamento-table"></div>
+    </div>
 
-      <!-- ── CANCELAMENTO ── -->
-      <div id="tab-cancelamento" class="tab-content">
-        <div class="note"><strong>% Cancelamento</strong> = (cotas canceladas ÷ cotas totais) × 100.</div>
-        <div class="chart-card">
-          <div class="chart-head">
-            <div class="chart-title">% Cancelamento por qtd de cotas vendidas</div>
-            <div class="chart-sub" id="cancel-meta">—</div>
-          </div>
-          <div class="chart-wrap"><canvas id="chartCancelamento"></canvas></div>
-        </div>
-        <div id="cancelamento-table"></div>
-      </div>
-
-      <!-- ── EQUIPES DE CAPTAÇÃO ── -->
-      <div id="tab-equipes" class="tab-content">
-        <div class="note"><strong>Equipes de captação</strong> — marque a equipe de cada Promotor de marketing. Salvo no seu navegador.</div>
-        <h3 style="margin:10px 0 6px">Equipe Parque</h3>
-        <div class="stats" id="stats-equipe-parque"></div>
-        <h3 style="margin:16px 0 6px">Equipe Externa</h3>
-        <div class="stats" id="stats-equipe-externa"></div>
-        <div class="note warn">Promotores sem equipe marcada entram em <strong>Sem equipe</strong>.</div>
-        <h3 style="margin:10px 0 6px">Sem equipe</h3>
-        <div class="stats" id="stats-equipe-sem"></div>
-        <div class="divider"></div>
-        <div class="team-grid">
-          <div class="team-card">
-            <h3>Marcar equipe</h3>
-            <div class="controls" style="margin:0;justify-content:flex-start">
-              <div class="control-group" style="min-width:260px">
-                <label>Promotor</label>
-                <select id="teamPromotorSelect"><option value="">Carregando...</option></select>
-              </div>
-              <div class="control-group" style="min-width:220px">
-                <label>Equipe</label>
-                <select id="teamEquipeSelect">
-                  <option value="Equipe Parque">Equipe Parque</option>
-                  <option value="Equipe Externa">Equipe Externa</option>
-                </select>
-              </div>
-              <div class="control-group" style="min-width:160px">
-                <label>&nbsp;</label>
-                <button class="btn primary" id="btnSalvarEquipe">💾 Salvar</button>
-              </div>
-              <div class="control-group" style="min-width:180px">
-                <label>&nbsp;</label>
-                <button class="btn danger" id="btnLimparEquipes">🗑 Limpar tudo</button>
-              </div>
-            </div>
-          </div>
-          <div class="team-card">
-            <h3>Marcações atuais</h3>
-            <div id="teamMappingList"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── SUPERVISORES ── -->
-      <div id="tab-equipes-supervisores" class="tab-content">
-        <div class="note">
-          <strong>Promotores de Marketing — 2 Supervisores</strong><br>
-          Comparativo lado a lado: Equipe Parque × Equipe Externa × Geral. Percentual de representação ao final.
-        </div>
-
-        <div class="section-title">
-          Comparativo Parque × Externa <span class="pill-tag">dado por dado</span>
-        </div>
-        <div class="sup-compare-wrap">
-          <div class="sup-compare-header">
-            <div class="col-label">Indicador</div>
-            <div class="col-parque">🟣 Equipe Parque</div>
-            <div class="col-externa">🔵 Equipe Externa</div>
-            <div class="col-geral">⚪ Geral</div>
-          </div>
-          <div id="supCompareRows"></div>
-        </div>
-
-        <div class="section-title" style="margin-top:22px">
-          Representatividade no total <span class="pill-tag">% de cada equipe</span>
-        </div>
-        <div id="supRepGrid"></div>
-
-        <div class="divider"></div>
-
-        <div class="section-title">
-          Configurar promotores <span class="pill-tag">Definir equipe</span>
-        </div>
-        <div class="config-panel">
-          <h4>Seleção rápida</h4>
-          <div class="controls" style="margin:0;justify-content:flex-start;flex-wrap:wrap">
+    <!-- ── EQUIPES DE CAPTAÇÃO ── -->
+    <div id="tab-equipes" class="tab-content">
+      <div class="note"><strong>Equipes de captação</strong> — marque a equipe de cada Promotor de marketing. Salvo no seu navegador.</div>
+      <h3 style="margin:10px 0 6px">Equipe Parque</h3>
+      <div class="stats" id="stats-equipe-parque"></div>
+      <h3 style="margin:16px 0 6px">Equipe Externa</h3>
+      <div class="stats" id="stats-equipe-externa"></div>
+      <div class="note warn">Promotores sem equipe marcada entram em <strong>Sem equipe</strong>.</div>
+      <h3 style="margin:10px 0 6px">Sem equipe</h3>
+      <div class="stats" id="stats-equipe-sem"></div>
+      <div class="divider"></div>
+      <div class="team-grid">
+        <div class="team-card">
+          <h3>Marcar equipe</h3>
+          <div class="controls" style="margin:0;justify-content:flex-start">
             <div class="control-group" style="min-width:260px">
               <label>Promotor</label>
-              <select id="supPromotorSelect"><option value="">Carregando...</option></select>
+              <select id="teamPromotorSelect"><option value="">Carregando...</option></select>
             </div>
-            <div class="control-group" style="min-width:200px">
+            <div class="control-group" style="min-width:220px">
               <label>Equipe</label>
-              <select id="supEquipeSelect">
+              <select id="teamEquipeSelect">
                 <option value="Equipe Parque">Equipe Parque</option>
                 <option value="Equipe Externa">Equipe Externa</option>
               </select>
             </div>
-            <div class="control-group" style="min-width:150px">
+            <div class="control-group" style="min-width:160px">
               <label>&nbsp;</label>
-              <button class="btn primary" id="btnSalvarEquipeSup">💾 Salvar</button>
+              <button class="btn primary" id="btnSalvarEquipe">💾 Salvar</button>
             </div>
             <div class="control-group" style="min-width:180px">
               <label>&nbsp;</label>
-              <button class="btn danger" id="btnLimparEquipesSup">🗑 Limpar tudo</button>
+              <button class="btn danger" id="btnLimparEquipes">🗑 Limpar tudo</button>
             </div>
           </div>
         </div>
-        <div class="config-panel" style="margin-top:0">
-          <h4>Lista completa — altere diretamente</h4>
-          <div id="supMappingList" class="promo-list"></div>
+        <div class="team-card">
+          <h3>Marcações atuais</h3>
+          <div id="teamMappingList"></div>
         </div>
       </div>
+    </div>
 
-      <!-- ── DESAFIOS ── -->
-      <div id="tab-desafios" class="tab-content">
-        <div class="note">
-          <strong>Desafios</strong><br>
-          Crie desafios com período, número de equipes, nome das equipes, seleção de profissionais por equipe e escolha do critério de apuração.
-          Tudo fica salvo no seu navegador (localStorage).
-          <br><br>
-          <strong>Novo:</strong> clique no <u>nome da equipe</u> na apuração para abrir o <strong>Ranking dos melhores (por pessoa)</strong> e ordenar clicando em <strong>VGV</strong>, <strong>Nº de casais</strong>, <strong>Eficiência</strong> etc.
+    <!-- ══════════════════════════════════════════════════
+         ABA: PROMOTORES (2 SUPERVISORES)
+    ══════════════════════════════════════════════════ -->
+    <div id="tab-equipes-supervisores" class="tab-content">
+
+      <div class="note">
+        <strong>Promotores de Marketing — 2 Supervisores</strong><br>
+        Comparativo lado a lado: Equipe Parque × Equipe Externa × Geral. Percentual de representação ao final.
+      </div>
+
+      <div class="section-title">
+        Comparativo Parque × Externa <span class="pill-tag">dado por dado</span>
+      </div>
+      <div class="sup-compare-wrap">
+        <div class="sup-compare-header">
+          <div class="col-label">Indicador</div>
+          <div class="col-parque">🟣 Equipe Parque</div>
+          <div class="col-externa">🔵 Equipe Externa</div>
+          <div class="col-geral">⚪ Geral</div>
         </div>
+        <div id="supCompareRows"></div>
+      </div>
 
-        <div class="challenge-grid">
-          <div class="challenge-card">
-            <h3 id="challengeFormTitle">Criar desafio</h3>
+      <div class="section-title" style="margin-top:22px">
+        Representatividade no total <span class="pill-tag">% de cada equipe</span>
+      </div>
+      <div id="supRepGrid"></div>
 
-            <div class="controls" style="margin:0;justify-content:flex-start">
-              <div class="control-group" style="min-width:260px">
-                <label>Nome do desafio</label>
-                <input id="chName" placeholder="Ex.: Desafio Junho" />
-              </div>
+      <div class="divider"></div>
 
-              <div class="control-group" style="min-width:330px">
-                <label>Período do desafio</label>
-                <div class="range-row">
-                  <input id="chStart" type="date" />
-                  <span class="sep">a</span>
-                  <input id="chEnd" type="date" />
-                </div>
-              </div>
-
-              <div class="control-group" style="min-width:220px">
-                <label>Apuração</label>
-                <select id="chMetric">
-                  <option value="casais">Número de casais</option>
-                  <option value="vgv">VGV</option>
-                  <option value="casais_atendidos">Casais atendidos</option>
-                  <option value="eficiencia">Eficiência</option>
-                </select>
-              </div>
-
-              <div class="control-group" style="min-width:220px">
-                <label>Qtd. de equipes</label>
-                <select id="chTeamsCount">
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                </select>
-              </div>
-
-              <div class="control-group" style="min-width:180px">
-                <label>Tipo de profissional</label>
-                <select id="chProfTipo">
-                  <option value="promotor de marketing">Promotor de marketing</option>
-                  <option value="liner">Liner</option>
-                  <option value="closer">Closer</option>
-                </select>
-                <div class="tiny">A seleção abaixo lista apenas nomes desse tipo.</div>
-              </div>
-            </div>
-
-            <div class="divider" style="margin:16px 0 14px"></div>
-
-            <div class="section-title" style="margin-bottom:10px">
-              Equipes <span class="pill-tag">nomes + membros</span>
-            </div>
-            <div id="chTeamsEditor" class="teams-wrap"></div>
-
-            <div class="divider" style="margin:16px 0 14px"></div>
-
-            <div class="controls" style="margin:0;justify-content:flex-start">
-              <div class="control-group" style="min-width:180px">
-                <label>&nbsp;</label>
-                <button class="btn primary" id="btnChSave">💾 Salvar desafio</button>
-              </div>
-              <div class="control-group" style="min-width:220px">
-                <label>&nbsp;</label>
-                <button class="btn" id="btnChNew">➕ Novo</button>
-              </div>
-              <div class="control-group" style="min-width:220px">
-                <label>&nbsp;</label>
-                <button class="btn danger" id="btnChClearAll">🗑 Apagar todos</button>
-              </div>
-            </div>
-
-            <div id="chFormMsg" class="note" style="display:none;margin-top:12px"></div>
+      <div class="section-title">
+        Configurar promotores <span class="pill-tag">Definir equipe</span>
+      </div>
+      <div class="config-panel">
+        <h4>Seleção rápida</h4>
+        <div class="controls" style="margin:0;justify-content:flex-start;flex-wrap:wrap">
+          <div class="control-group" style="min-width:260px">
+            <label>Promotor</label>
+            <select id="supPromotorSelect"><option value="">Carregando...</option></select>
           </div>
-
-          <div class="challenge-card">
-            <h3>Meus desafios</h3>
-            <div id="chList" class="challenge-list"></div>
-
-            <div class="divider"></div>
-
-            <h3>Apuração (no período do desafio)</h3>
-            <div class="note warn" style="margin-top:10px">
-              A apuração do desafio <strong>ignora</strong> o filtro global de período e usa o período definido no desafio.
-              Ela <strong>respeita</strong> os filtros globais de <strong>Status</strong> e <strong>UF</strong>.
-            </div>
-            <div id="chResults"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── RANKING PROMOTOR ── -->
-      <div id="tab-ranking-promotor" class="tab-content">
-        <div class="note">Ranking por <span class="badge">Promotor de marketing</span>. Clique nos cabeçalhos para ordenar.</div>
-        <div id="ranking-promotor"></div>
-      </div>
-
-      <!-- ── RANKING LINER ── -->
-      <div id="tab-ranking-liner" class="tab-content">
-        <div class="note">Ranking por <span class="badge">Liner</span>. Clique nos cabeçalhos para ordenar.</div>
-        <div id="ranking-liner"></div>
-      </div>
-
-      <!-- ── RANKING CLOSER ── -->
-      <div id="tab-ranking-closer" class="tab-content">
-        <div class="note">Ranking por <span class="badge">Closer</span>. Clique nos cabeçalhos para ordenar.</div>
-        <div id="ranking-closer"></div>
-      </div>
-
-      <!-- ── PERFIL DE RENDA ── -->
-      <div id="tab-perfil-renda" class="tab-content">
-        <div class="note">Performance por faixa de renda. Clique nos cabeçalhos para ordenar.</div>
-        <div id="perfil-renda"></div>
-      </div>
-
-      <!-- ── PROFISSIONAIS ── -->
-      <div id="tab-profissionais" class="tab-content">
-        <div class="note">Selecione um profissional para ver o detalhe individual no período filtrado.</div>
-        <div class="controls" style="margin-top:10px">
-          <div class="control-group">
-            <label>Área (individual)</label>
-            <select id="profTipoSingle">
-              <option value="promotor de marketing">Promotor de marketing</option>
-              <option value="liner">Liner</option>
-              <option value="closer">Closer</option>
+          <div class="control-group" style="min-width:200px">
+            <label>Equipe</label>
+            <select id="supEquipeSelect">
+              <option value="Equipe Parque">Equipe Parque</option>
+              <option value="Equipe Externa">Equipe Externa</option>
             </select>
           </div>
-          <div class="control-group">
-            <label>Nome (individual)</label>
-            <select id="profNomeSingle"><option value="">Selecione...</option></select>
+          <div class="control-group" style="min-width:150px">
+            <label>&nbsp;</label>
+            <button class="btn primary" id="btnSalvarEquipeSup">💾 Salvar</button>
+          </div>
+          <div class="control-group" style="min-width:180px">
+            <label>&nbsp;</label>
+            <button class="btn danger" id="btnLimparEquipesSup">🗑 Limpar tudo</button>
           </div>
         </div>
-        <div class="stats" id="stats-single" style="margin-top:10px"></div>
-        <div class="note" style="margin-top:8px">Tabela por profissional (respeita os filtros globais):</div>
-        <div id="profissionais-table"></div>
       </div>
-    </div>
-  </div>
+      <div class="config-panel" style="margin-top:0">
+        <h4>Lista completa — altere diretamente</h4>
+        <div id="supMappingList" class="promo-list"></div>
+      </div>
 
-</div>
+    </div>
 
-<!-- Modal: ranking de melhores por equipe (desafios) -->
-<div id="teamModalBackdrop" class="modal-backdrop" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="teamModalTitle">
-    <div class="modal-head">
-      <div>
-        <div id="teamModalTitle" class="modal-title">Ranking da equipe</div>
-        <div id="teamModalSub" class="modal-sub">—</div>
+    <!-- ══════════════════════════════════════════════════
+         ABA: DESAFIOS
+    ══════════════════════════════════════════════════ -->
+    <div id="tab-desafios" class="tab-content">
+      <div class="note">
+        <strong>Desafios</strong><br>
+        Crie desafios com período, número de equipes, nome das equipes, seleção de profissionais por equipe e escolha do critério de apuração.
+        Tudo fica salvo no seu navegador (localStorage).
       </div>
-      <div class="modal-actions">
-        <button class="btn" id="btnTeamModalClose">Fechar</button>
+
+      <div class="challenge-grid">
+        <!-- Criar/Editar -->
+        <div class="challenge-card">
+          <h3 id="challengeFormTitle">Criar desafio</h3>
+
+          <div class="controls" style="margin:0;justify-content:flex-start">
+            <div class="control-group" style="min-width:260px">
+              <label>Nome do desafio</label>
+              <input id="chName" placeholder="Ex.: Desafio Junho" />
+            </div>
+
+            <div class="control-group" style="min-width:330px">
+              <label>Período do desafio</label>
+              <div class="range-row">
+                <input id="chStart" type="date" />
+                <span class="sep">a</span>
+                <input id="chEnd" type="date" />
+              </div>
+            </div>
+
+            <div class="control-group" style="min-width:220px">
+              <label>Apuração</label>
+              <select id="chMetric">
+                <option value="casais">Número de casais</option>
+                <option value="vgv">VGV</option>
+                <option value="casais_atendidos">Casais atendidos</option>
+                <option value="eficiencia">Eficiência</option>
+              </select>
+            </div>
+
+            <div class="control-group" style="min-width:220px">
+              <label>Qtd. de equipes</label>
+              <select id="chTeamsCount">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+
+            <div class="control-group" style="min-width:180px">
+              <label>Tipo de profissional</label>
+              <select id="chProfTipo">
+                <option value="promotor de marketing">Promotor de marketing</option>
+                <option value="liner">Liner</option>
+                <option value="closer">Closer</option>
+              </select>
+              <div class="tiny">A seleção abaixo lista apenas nomes desse tipo.</div>
+            </div>
+          </div>
+
+          <div class="divider" style="margin:16px 0 14px"></div>
+
+          <div class="section-title" style="margin-bottom:10px">
+            Equipes <span class="pill-tag">nomes + membros</span>
+          </div>
+          <div id="chTeamsEditor" class="teams-wrap"></div>
+
+          <div class="divider" style="margin:16px 0 14px"></div>
+
+          <div class="controls" style="margin:0;justify-content:flex-start">
+            <div class="control-group" style="min-width:180px">
+              <label>&nbsp;</label>
+              <button class="btn primary" id="btnChSave">💾 Salvar desafio</button>
+            </div>
+            <div class="control-group" style="min-width:220px">
+              <label>&nbsp;</label>
+              <button class="btn" id="btnChNew">➕ Novo</button>
+            </div>
+            <div class="control-group" style="min-width:220px">
+              <label>&nbsp;</label>
+              <button class="btn danger" id="btnChClearAll">🗑 Apagar todos</button>
+            </div>
+          </div>
+
+          <div id="chFormMsg" class="note" style="display:none;margin-top:12px"></div>
+        </div>
+
+        <!-- Lista + Resultado -->
+        <div class="challenge-card">
+          <h3>Meus desafios</h3>
+          <div id="chList" class="challenge-list"></div>
+
+          <div class="divider"></div>
+
+          <h3>Apuração (no período do desafio)</h3>
+          <div class="note warn" style="margin-top:10px">
+            A apuração do desafio <strong>ignora</strong> o filtro global de período e usa o período definido no desafio.
+            Ela <strong>respeita</strong> os filtros globais de <strong>Status</strong> e <strong>UF</strong>.
+          </div>
+          <div id="chResults"></div>
+        </div>
       </div>
     </div>
-    <div class="modal-body">
-      <div id="teamModalBody"></div>
+
+    <!-- ── RANKING PROMOTOR ── -->
+    <div id="tab-ranking-promotor" class="tab-content">
+      <div class="note">Ranking por <span class="badge">Promotor de marketing</span>. Clique nos cabeçalhos para ordenar.</div>
+      <div id="ranking-promotor"></div>
     </div>
+
+    <!-- ── RANKING LINER ── -->
+    <div id="tab-ranking-liner" class="tab-content">
+      <div class="note">Ranking por <span class="badge">Liner</span>. Clique nos cabeçalhos para ordenar.</div>
+      <div id="ranking-liner"></div>
+    </div>
+
+    <!-- ── RANKING CLOSER ── -->
+    <div id="tab-ranking-closer" class="tab-content">
+      <div class="note">Ranking por <span class="badge">Closer</span>. Clique nos cabeçalhos para ordenar.</div>
+      <div id="ranking-closer"></div>
+    </div>
+
+    <!-- ── PERFIL DE RENDA ── -->
+    <div id="tab-perfil-renda" class="tab-content">
+      <div class="note">Performance por faixa de renda. Clique nos cabeçalhos para ordenar.</div>
+      <div id="perfil-renda"></div>
+    </div>
+
+    <!-- ── PROFISSIONAIS ── -->
+    <div id="tab-profissionais" class="tab-content">
+      <div class="note">Selecione um profissional para ver o detalhe individual no período filtrado.</div>
+      <div class="controls" style="margin-top:10px">
+        <div class="control-group">
+          <label>Área (individual)</label>
+          <select id="profTipoSingle">
+            <option value="promotor de marketing">Promotor de marketing</option>
+            <option value="liner">Liner</option>
+            <option value="closer">Closer</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label>Nome (individual)</label>
+          <select id="profNomeSingle"><option value="">Selecione...</option></select>
+        </div>
+      </div>
+      <div class="stats" id="stats-single" style="margin-top:10px"></div>
+      <div class="note" style="margin-top:8px">Tabela por profissional (respeita os filtros globais):</div>
+      <div id="profissionais-table"></div>
+    </div>
+
   </div>
 </div>
 
 <script>
-/* =========================================================
-   ✅ SUPABASE AUTH (substitui o gate client-side)
-   1) Cole suas credenciais abaixo
-   2) Configure no Supabase: Auth > URL Configuration
-      - Site URL: sua URL do GitHub Pages
-      - Redirect URLs: inclua sua URL também (se usar magic link)
-========================================================= */
-const SUPABASE_URL = "COLE_AQUI_SUA_SUPABASE_URL";
-const SUPABASE_ANON_KEY = "COLE_AQUI_SUA_SUPABASE_ANON_KEY";
-
-let supabase = null;
-try{
-  if(!SUPABASE_URL.includes("COLE_AQUI") && !SUPABASE_ANON_KEY.includes("COLE_AQUI")){
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  }
-}catch(e){
-  console.error("Erro criando client Supabase:", e);
-}
-
-const el = id => document.getElementById(id);
+/* ═══════════════════════════════════════════════
+   UTILITÁRIOS
+═══════════════════════════════════════════════ */
+const el   = id => document.getElementById(id);
 const norm = s  => (s ?? "").toString().toLowerCase().trim().replace(/\s+/g," ");
-
-function showGateMsg(id, text, type="warn"){
-  const box = el(id);
-  box.className = "note gate-status " + (type==="bad"?"bad":type==="success"?"success":"warn");
-  box.textContent = text;
-  box.classList.add("show");
-}
-function hideGateMsg(id){ const box=el(id); box.classList.remove("show"); }
-
-/* ===== App (o resto do seu código original) =====
-   Mantive TODO seu código, só removi o gate antigo e liguei o boot ao Supabase.
-*/
 
 const CLIENT_NAME_HEADERS = [
   norm("nome do cliente"),norm("cliente"),norm("nome"),norm("casal"),
@@ -1012,18 +887,24 @@ const sortState = {
   "profissionais-table":{ key:"vendas",    dir:"desc" },
   "perfil-renda"       :{ key:"vgvTotal",  dir:"desc" },
   "cancelamento-table" :{ key:"cotasTotal",dir:"desc" },
+
+  /* desafios */
   "ch-results-table"   :{ key:"valor",     dir:"desc" },
-  "ch-team-ranking"    :{ key:"vgvTotal",  dir:"desc" },
 };
 
+/* ── localStorage ── */
 const TEAM_KEY    = "painel_equipes_promotores_v1";
 const loadTeamMap = () => { try{ const r=localStorage.getItem(TEAM_KEY); const o=r?JSON.parse(r):{}; return(o&&typeof o==="object")?o:{}; }catch(e){return{};} };
 const saveTeamMap = m  => localStorage.setItem(TEAM_KEY, JSON.stringify(m||{}));
 
+/* desafios */
 const CH_KEY = "painel_desafios_v1";
 const loadChallenges = () => { try{ const r=localStorage.getItem(CH_KEY); const o=r?JSON.parse(r):[]; return Array.isArray(o)?o:[]; }catch(e){ return []; } };
 const saveChallenges = arr => localStorage.setItem(CH_KEY, JSON.stringify(Array.isArray(arr)?arr:[]));
 
+/* ═══════════════════════════════════════════════
+   PARSE CSV
+═══════════════════════════════════════════════ */
 function parseDelimited(text, delimiter=";"){
   const lines=text.replace(/\r\n/g,"\n").replace(/\r/g,"\n").split("\n").filter(l=>l.trim());
   if(!lines.length) return [];
@@ -1052,6 +933,9 @@ function parseDelimited(text, delimiter=";"){
   return data;
 }
 
+/* ═══════════════════════════════════════════════
+   HELPERS DE VALOR
+═══════════════════════════════════════════════ */
 function parseMoneyBR(str){
   if(!str||typeof str!=="string") return 0;
   const c=str.replace(/[^\d,.-]/g,""); if(!c) return 0;
@@ -1086,6 +970,9 @@ function parseDateOnlyInput(s){
 const toISO = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
 const fmtBR = iso => { const m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/); return m?`${m[3]}/${m[2]}/${m[1]}`:iso; };
 
+/* ═══════════════════════════════════════════════
+   STATUS / COTAS
+═══════════════════════════════════════════════ */
 function countQuotas(s){
   let a=0,c=0,o=0;
   ((s??"")+""  ).trim().split("#").map(x=>x.trim()).filter(Boolean).forEach(t=>{
@@ -1101,6 +988,9 @@ function contractBucket(s){
   return "outro";
 }
 
+/* ═══════════════════════════════════════════════
+   BUILD OBJECTS
+═══════════════════════════════════════════════ */
 function buildObjects(rows){
   if(!rows.length) throw new Error("CSV vazio.");
   const cnk=(()=>{ const ks=Object.keys(rows[0]); for(const c of CLIENT_NAME_HEADERS) if(ks.includes(c)) return c; return null; })();
@@ -1117,6 +1007,9 @@ function buildObjects(rows){
   });
 }
 
+/* ═══════════════════════════════════════════════
+   FILTROS
+═══════════════════════════════════════════════ */
 function applyFilters(rows){
   const status  =el("statusSelect").value;
   const profTipo=norm(el("profTipo").value);
@@ -1136,6 +1029,9 @@ function applyFilters(rows){
   return f;
 }
 
+/* ═══════════════════════════════════════════════
+   STATS
+═══════════════════════════════════════════════ */
 function sumVGV(rows){
   return rows.reduce((a,r)=>{
     const v=r._valorVgv??0,at=r._quotas?.ativo??0,ca=r._quotas?.cancelado??0,t=at+ca;
@@ -1169,6 +1065,9 @@ function statsFor(rows){
   };
 }
 
+/* ═══════════════════════════════════════════════
+   RENDER CARDS
+═══════════════════════════════════════════════ */
 function renderCards(cid,rows){
   const s=statsFor(rows);
   el(cid).innerHTML=`
@@ -1183,6 +1082,9 @@ function renderCards(cid,rows){
     <div class="stat-card"><div class="stat-value">${s.noTour}</div><div class="stat-label">NoTour</div></div>`;
 }
 
+/* ═══════════════════════════════════════════════
+   RANKING
+═══════════════════════════════════════════════ */
 function groupRanking(rows,fieldKey){
   const map=new Map();
   rows.forEach(r=>{ const n=(r[fieldKey]??"").toString().trim(); if(!n) return; if(!map.has(n)) map.set(n,[]); map.get(n).push(r); });
@@ -1244,7 +1146,9 @@ function renderRanking(list,cid,badge){
   });
 }
 
-/* PERFIL RENDA */
+/* ═══════════════════════════════════════════════
+   PERFIL DE RENDA
+═══════════════════════════════════════════════ */
 function rendaBucket(v){
   const x=v||0;
   if(x<9000)   return "Abaixo de R$ 9 mil";
@@ -1292,7 +1196,9 @@ function renderPerfilRenda(rows,cid){
   });
 }
 
-/* CHARTS */
+/* ═══════════════════════════════════════════════
+   GRÁFICOS
+═══════════════════════════════════════════════ */
 function destroyChart(ch){ try{ch?.destroy?.();}catch(e){} }
 
 function renderCurva(rows){
@@ -1350,7 +1256,9 @@ function renderCurva(rows){
   });
 }
 
-/* CANCELAMENTO */
+/* ═══════════════════════════════════════════════
+   CANCELAMENTO
+═══════════════════════════════════════════════ */
 function renderCancelamento(rows){
   el("cancel-meta").textContent=[
     (el("dateStart").value||el("dateEnd").value)?`Período: ${fmtBR(el("dateStart").value)||"—"} a ${fmtBR(el("dateEnd").value)||"—"}`:"Período: (sem filtro)",
@@ -1408,7 +1316,9 @@ function renderCancelamento(rows){
   });
 }
 
-/* EQUIPES */
+/* ═══════════════════════════════════════════════
+   EQUIPES DE CAPTAÇÃO
+═══════════════════════════════════════════════ */
 function renderEquipes(){
   const map=loadTeamMap();
   renderCards("stats-equipe-parque",  state.filtered.filter(r=>{ const p=(r[KEY.promotor]??"").toString().trim(); return p&&map[p]==="Equipe Parque"; }));
@@ -1446,7 +1356,9 @@ function renderTeamMappingUI(){
   });
 }
 
-/* SUPERVISORES */
+/* ═══════════════════════════════════════════════
+   SUPERVISORES
+═══════════════════════════════════════════════ */
 function renderSupervisores(){
   const map=loadTeamMap();
   const rowP = state.filtered.filter(r=>{ const p=(r[KEY.promotor]??"").toString().trim(); return p&&map[p]==="Equipe Parque"; });
@@ -1575,7 +1487,9 @@ function renderSupervisores(){
   });
 }
 
-/* PROFISSIONAL INDIVIDUAL */
+/* ═══════════════════════════════════════════════
+   PROFISSIONAL INDIVIDUAL
+═══════════════════════════════════════════════ */
 function renderSingle(){
   const tipo=norm(el("profTipoSingle").value);
   const nome=el("profNomeSingle").value;
@@ -1595,7 +1509,9 @@ function renderSingle(){
     <div class="stat-card"><div class="stat-value">${s.noTour}</div><div class="stat-label">NoTour</div></div>`;
 }
 
-/* COMPARATIVO */
+/* ═══════════════════════════════════════════════
+   COMPARATIVO
+═══════════════════════════════════════════════ */
 function filterByRange(rows,s,e){
   const d1=parseDateOnlyInput(s),d2=parseDateOnlyInput(e);
   if(!d1&&!d2) return rows.slice();
@@ -1637,7 +1553,9 @@ function renderComparativo(){
     </div>`; }).join("");
 }
 
-/* SELECTS */
+/* ═══════════════════════════════════════════════
+   SELECTS
+═══════════════════════════════════════════════ */
 function updateProfFilters(tipoId,nomeId){
   const tipo=norm(el(tipoId).value);
   const names=new Set();
@@ -1652,7 +1570,9 @@ function updateUFFilter(){
   el("ufSelect").innerHTML='<option value="todos">Todas</option>'+[...ufs].sort().map(u=>`<option value="${u}">${u}</option>`).join("");
 }
 
-/* DESAFIOS */
+/* ═══════════════════════════════════════════════
+   DESAFIOS (CRUD + APURAÇÃO)
+═══════════════════════════════════════════════ */
 let currentChallengeId = null;
 
 const metricLabel = m => ({
@@ -1662,7 +1582,9 @@ const metricLabel = m => ({
   eficiencia:"Eficiência",
 }[m]||m);
 
-function uid(){ return "ch_"+Math.random().toString(16).slice(2)+"_"+Date.now().toString(16); }
+function uid(){
+  return "ch_"+Math.random().toString(16).slice(2)+"_"+Date.now().toString(16);
+}
 
 function showChMsg(text,type="success"){
   const box=el("chFormMsg");
@@ -1689,11 +1611,20 @@ function newChallengeTemplate(){
   };
 }
 
+function getNamesForChallengeTipo(ch){
+  const tipo = ch?.profTipo || norm("promotor de marketing");
+  return listNamesByTipo(tipo);
+}
+
 function ensureTeamsCount(ch, n){
   const nn = Math.max(2, Math.min(6, Number(n)||2));
   ch.teams = Array.isArray(ch.teams)?ch.teams:[];
-  while(ch.teams.length < nn) ch.teams.push({ name:`Equipe ${ch.teams.length+1}`, members:[] });
-  while(ch.teams.length > nn) ch.teams.pop();
+  while(ch.teams.length < nn){
+    ch.teams.push({ name:`Equipe ${ch.teams.length+1}`, members:[] });
+  }
+  while(ch.teams.length > nn){
+    ch.teams.pop();
+  }
   ch.teams.forEach((t,i)=>{
     if(!t || typeof t!=="object") ch.teams[i] = { name:`Equipe ${i+1}`, members:[] };
     if(typeof ch.teams[i].name!=="string") ch.teams[i].name = `Equipe ${i+1}`;
@@ -1706,8 +1637,11 @@ function renderChallengeTeamsEditor(){
   const ch = challenges.find(x=>x.id===currentChallengeId) || null;
   const tipo = norm(el("chProfTipo").value);
   const names = listNamesByTipo(tipo);
+
   const teamsCount = Number(el("chTeamsCount").value)||2;
 
+  // se estiver criando novo (ainda não salvo), renderiza com base nos inputs (sem storage)
+  // mas para simplificar: quando não existe no storage, usamos um objeto temporário.
   const tmp = ch ? structuredClone(ch) : newChallengeTemplate();
   tmp.profTipo = tipo;
   ensureTeamsCount(tmp, teamsCount);
@@ -1716,6 +1650,7 @@ function renderChallengeTeamsEditor(){
   tmp.teams.forEach(t=>t.members.forEach(m=>used.add(norm(m))));
 
   el("chTeamsEditor").innerHTML = tmp.teams.map((t,idx)=>{
+    const teamId = `t${idx}`;
     return `
       <div class="team-box" data-team-index="${idx}">
         <div class="hdr">
@@ -1747,6 +1682,8 @@ function renderChallengeTeamsEditor(){
     `;
   }).join("");
 
+  // listeners (inputs/checkboxes) -> atualiza objeto no storage (se existir) ou um draft em memória via dataset
+  // Implementação: gravar direto no storage quando currentChallengeId existe; caso contrário, só atualiza UI e salvar na hora.
   el("chTeamsEditor").querySelectorAll("input[data-team-name]").forEach(inp=>{
     inp.addEventListener("input", ()=>{
       if(!currentChallengeId) return;
@@ -1767,17 +1704,25 @@ function renderChallengeTeamsEditor(){
       const tIdx = Number(cb.dataset.teamMember);
       const member = decodeURIComponent(cb.dataset.member);
 
+      // atualiza no storage se editando existente; senão ignora (vai ser lido ao salvar)
       if(currentChallengeId){
         const arr=loadChallenges();
         const ch=arr.find(x=>x.id===currentChallengeId);
         if(!ch) return;
         ensureTeamsCount(ch, Number(el("chTeamsCount").value)||2);
+
+        // remove de todas as equipes (garante exclusividade)
         ch.teams.forEach(t=>t.members = (t.members||[]).filter(x=>norm(x)!==norm(member)));
-        if(cb.checked) ch.teams[tIdx].members.push(member);
+
+        // adiciona se checked
+        if(cb.checked){
+          ch.teams[tIdx].members.push(member);
+        }
         ch.updatedAt = Date.now();
         saveChallenges(arr);
       }
 
+      // re-render para aplicar disable/contadores
       renderDesafios(false);
     });
   });
@@ -1792,23 +1737,29 @@ function readChallengeFromForm(){
   const teamsCount = Number(el("chTeamsCount").value)||2;
 
   const names = listNamesByTipo(profTipo);
-  const teams = [];
-  for(let i=0;i<teamsCount;i++) teams.push({ name:`Equipe ${i+1}`, members:[] });
 
+  // montar times lendo editor atual (inputs/checkboxes)
+  const teams = [];
+  for(let i=0;i<teamsCount;i++){
+    teams.push({ name:`Equipe ${i+1}`, members:[] });
+  }
+  // nomes
   document.querySelectorAll("#chTeamsEditor input[data-team-name]").forEach(inp=>{
     const idx=Number(inp.dataset.teamName);
     if(Number.isFinite(idx) && teams[idx]) teams[idx].name = (inp.value||`Equipe ${idx+1}`).trim() || `Equipe ${idx+1}`;
   });
-
+  // membros
   document.querySelectorAll("#chTeamsEditor input[type='checkbox'][data-team-member]").forEach(cb=>{
     if(!cb.checked) return;
     const tIdx=Number(cb.dataset.teamMember);
     const member=decodeURIComponent(cb.dataset.member);
     if(!teams[tIdx]) return;
+    // valida membro existir na lista do tipo (evita lixo)
     if(!names.some(n=>norm(n)===norm(member))) return;
     teams[tIdx].members.push(member);
   });
 
+  // garantir exclusividade (caso alguma checagem tenha escapado)
   const seen=new Set();
   teams.forEach(t=>{
     t.members = t.members.filter(m=>{
@@ -1844,6 +1795,7 @@ function loadChallengeIntoForm(ch){
   el("chMetric").value = ch.metric||"casais";
   el("chProfTipo").value = (ch.profTipo||norm("promotor de marketing"));
   el("chTeamsCount").value = String(Math.max(2, Math.min(6, (ch.teams||[]).length || 2)));
+
   renderChallengeTeamsEditor();
   renderDesafios(false);
 }
@@ -1866,13 +1818,16 @@ function challengeMetricValue(ch, rowsForTeam){
   switch(ch.metric){
     case "casais": return { val: s.casais, fmt: v=>String(v|0) };
     case "vgv": return { val: s.vgvTotal, fmt: fmtMoney };
-    case "casais_atendidos": return { val: s.totalLinhas, fmt: v=>String(v|0) };
+    case "casais_atendidos":
+      // aqui interpretamos como "linhas totais" (inclui NoTour)
+      return { val: s.totalLinhas, fmt: v=>String(v|0) };
     case "eficiencia": return { val: s.eficiencia, fmt: fmtPctBR };
     default: return { val: s.casais, fmt: v=>String(v|0) };
   }
 }
 
 function applyFiltersForChallengeBase(rows){
+  // desafio: IGNORA período global; respeita status e UF globais
   const status  =el("statusSelect").value;
   const ufSel   =el("ufSelect").value;
   let f=rows.slice();
@@ -1881,123 +1836,28 @@ function applyFiltersForChallengeBase(rows){
   return f;
 }
 
-/* ===== Modal ranking equipe ===== */
-function openTeamRankingModal(payload){
-  const { challengeId, teamIndex } = payload;
-  const ch = loadChallenges().find(x=>x.id===challengeId);
-  if(!ch) return;
-
-  const team = (ch.teams||[])[teamIndex];
-  if(!team) return;
-
-  const base = applyFiltersForChallengeBase(state.rows);
-  const inPeriod = filterByRange(base, ch.start, ch.end);
-
-  const tipoKey = norm(ch.profTipo||norm("promotor de marketing"));
-  const memberSet = new Set((team.members||[]).map(norm));
-
-  const teamRows = inPeriod.filter(r=>{
-    const who = (r[tipoKey]??"").toString().trim();
-    return who && memberSet.has(norm(who));
-  });
-
-  const rank = groupRanking(teamRows, tipoKey);
-
-  el("teamModalTitle").textContent = `Ranking — ${team.name || `Equipe ${teamIndex+1}`}`;
-  el("teamModalSub").textContent = `Desafio: ${(ch.name||"Desafio").trim()||"Desafio"} • Período: ${formatChallengePeriod(ch)} • Tipo: ${ch.profTipo} • Filtros: Status=${el("statusSelect").value}, UF=${el("ufSelect").value}`;
-
-  const cid = "teamModalBody";
-  const container = el(cid);
-
-  const render = ()=>{
-    const ord = sortedList(rank, "ch-team-ranking", "vgvTotal");
-    container.innerHTML = rank.length ? `
-      <div class="note">Clique nos cabeçalhos para ordenar (VGV, Nº de casais, Eficiência, etc.).</div>
-      <div class="table-wrap"><table style="min-width:980px">
-        <thead><tr>
-          <th style="width:84px">#</th>
-          <th class="sortable" data-sort="name">Nome ${sortInd("ch-team-ranking","name")}</th>
-          <th class="num sortable" data-sort="casais">Casais ${sortInd("ch-team-ranking","casais")}</th>
-          <th class="num sortable" data-sort="vendas">Cotas ${sortInd("ch-team-ranking","vendas")}</th>
-          <th class="num sortable" data-sort="cotasCanceladas">Canceladas ${sortInd("ch-team-ranking","cotasCanceladas")}</th>
-          <th class="num sortable" data-sort="vgvTotal">VGV ${sortInd("ch-team-ranking","vgvTotal")}</th>
-          <th class="num sortable" data-sort="eficiencia">Eficiência ${sortInd("ch-team-ranking","eficiencia")}</th>
-          <th class="num sortable" data-sort="pctCancel">%Cancel ${sortInd("ch-team-ranking","pctCancel")}</th>
-          <th class="num sortable" data-sort="ticketMedio">Ticket ${sortInd("ch-team-ranking","ticketMedio")}</th>
-        </tr></thead>
-        <tbody>
-          ${ord.map((it,i)=>{
-            const p=i+1,tr=p===1?"🥇":p===2?"🥈":p===3?"🥉":"";
-            return `
-              <tr>
-                <td class="rank-col">${tr} ${p}°</td>
-                <td class="name" title="${it.name}">${it.name}</td>
-                <td class="num">${it.casais}</td>
-                <td class="num">${it.vendas}</td>
-                <td class="num">${it.cotasCanceladas}</td>
-                <td class="num">${fmtMoney(it.vgvTotal)}</td>
-                <td class="num"><span class="pill ${effPill(it.eficiencia)}">${fmtPctBR(it.eficiencia)}</span></td>
-                <td class="num"><span class="pill ${canPill(it.pctCancel)}">${fmtPctBR(it.pctCancel)}</span></td>
-                <td class="num">${fmtMoney(it.ticketMedio)}</td>
-              </tr>
-            `;
-          }).join("")}
-        </tbody>
-      </table></div>
-    ` : `<div class="note">Sem dados para esta equipe no período (ou equipe sem membros).</div>`;
-
-    container.querySelectorAll("thead th.sortable").forEach(th=>{
-      th.addEventListener("click", ()=>{
-        setSort("ch-team-ranking", th.dataset.sort);
-        render();
-      });
-    });
-  };
-
-  sortState["ch-team-ranking"] = { key: "vgvTotal", dir: "desc" };
-  render();
-
-  const bd = el("teamModalBackdrop");
-  bd.classList.add("open");
-  bd.setAttribute("aria-hidden","false");
-}
-
-function closeTeamModal(){
-  const bd = el("teamModalBackdrop");
-  bd.classList.remove("open");
-  bd.setAttribute("aria-hidden","true");
-  el("teamModalBody").innerHTML = "";
-}
-
-el("btnTeamModalClose").addEventListener("click", closeTeamModal);
-el("teamModalBackdrop").addEventListener("click", (e)=>{
-  if(e.target === el("teamModalBackdrop")) closeTeamModal();
-});
-window.addEventListener("keydown",(e)=>{
-  if(e.key==="Escape") closeTeamModal();
-});
-
 function renderChallengeResults(ch){
   if(!ch){ el("chResults").innerHTML = `<div class="note">Selecione um desafio na lista para ver a apuração.</div>`; return; }
 
   const base = applyFiltersForChallengeBase(state.rows);
   const inPeriod = filterByRange(base, ch.start, ch.end);
 
+  // agrupar por time, filtrando por profissional do tipo escolhido
   const tipoKey = norm(ch.profTipo||norm("promotor de marketing"));
   const teams = Array.isArray(ch.teams)?ch.teams:[];
-  const results = teams.map((t, idx)=>{
+  const results = teams.map(t=>{
     const members = (t.members||[]).map(x=>x.toString());
     const memberSet = new Set(members.map(norm));
 
     const rowsTeam = inPeriod.filter(r=>{
       const who = (r[tipoKey]??"").toString().trim();
-      return who && memberSet.has(norm(who));
+      if(!who) return false;
+      return memberSet.has(norm(who));
     });
 
     const met = challengeMetricValue(ch, rowsTeam);
 
     return {
-      teamIndex: idx,
       teamName: (t.name||"Equipe").trim() || "Equipe",
       membersCount: members.length,
       valor: met.val,
@@ -2006,6 +1866,7 @@ function renderChallengeResults(ch){
     };
   });
 
+  // ordenar por valor (desc), desempate por nome
   const sorted = results.slice().sort((a,b)=>{
     const av = (typeof a.valor==="number")?a.valor:0;
     const bv = (typeof b.valor==="number")?b.valor:0;
@@ -2049,11 +1910,7 @@ function renderChallengeResults(ch){
             return `
               <tr>
                 <td class="rank-col">${medal} ${pos}°</td>
-                <td class="name">
-                  <span class="clickable" data-open-team="${encodeURIComponent(ch.id)}" data-team-index="${r.teamIndex}" title="Clique para ver o ranking dos melhores desta equipe">
-                    ${r.teamName}
-                  </span>
-                </td>
+                <td class="name" title="${r.teamName}">${r.teamName}</td>
                 <td class="num">${r.membersCount}</td>
                 <td class="num">
                   <b>${main}</b>
@@ -2071,28 +1928,26 @@ function renderChallengeResults(ch){
     </div>
   `;
 
-  el("chResults").querySelectorAll("[data-open-team]").forEach(a=>{
-    a.addEventListener("click", ()=>{
-      const challengeId = decodeURIComponent(a.dataset.openTeam);
-      const teamIndex = Number(a.dataset.teamIndex);
-      openTeamRankingModal({ challengeId, teamIndex });
-    });
-  });
-
+  // sort (simples) para tabela de desafios
   el("chResults").querySelectorAll("thead th.sortable").forEach(th=>{
     th.addEventListener("click", ()=>{
       setSort("ch-results-table", th.dataset.sort);
+      // aplicar sortState manualmente
       const st = sortState["ch-results-table"] || {key:"valor",dir:"desc"};
       const again = results.slice().sort((a,b)=>{
         const key = st.key;
         const dir = st.dir;
         const va = a[key], vb = b[key];
         const num = (x)=> (typeof x==="number")?x:0;
-        const cmp = (x,y)=> String(x??"").localeCompare(String(y??""),"pt-BR",{sensitivity:"base"});
+        const cmp = (x,y)=> {
+          if(typeof x==="number" && typeof y==="number") return x-y;
+          return String(x??"").localeCompare(String(y??""),"pt-BR",{sensitivity:"base"});
+        };
         const baseCmp = (key==="valor"||key==="membersCount") ? (num(va)-num(vb)) : cmp(va,vb);
         return dir==="asc" ? baseCmp : -baseCmp;
       });
 
+      // re-render só o tbody rapidamente
       const tbody = el("chResults").querySelector("tbody");
       tbody.innerHTML = again.map((r,i)=>{
         const pos=i+1;
@@ -2103,11 +1958,7 @@ function renderChallengeResults(ch){
         return `
           <tr>
             <td class="rank-col">${medal} ${pos}°</td>
-            <td class="name">
-              <span class="clickable" data-open-team="${encodeURIComponent(ch.id)}" data-team-index="${r.teamIndex}">
-                ${r.teamName}
-              </span>
-            </td>
+            <td class="name" title="${r.teamName}">${r.teamName}</td>
             <td class="num">${r.membersCount}</td>
             <td class="num"><b>${main}</b></td>
             <td class="num">${r.stats.casais}</td>
@@ -2117,19 +1968,12 @@ function renderChallengeResults(ch){
           </tr>
         `;
       }).join("");
-
-      tbody.querySelectorAll("[data-open-team]").forEach(a=>{
-        a.addEventListener("click", ()=>{
-          const challengeId = decodeURIComponent(a.dataset.openTeam);
-          const teamIndex = Number(a.dataset.teamIndex);
-          openTeamRankingModal({ challengeId, teamIndex });
-        });
-      });
     });
   });
 }
 
 function renderDesafios(recalcTeamsEditor=true){
+  // lista
   const arr = loadChallenges().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
   el("chList").innerHTML = arr.length ? arr.map(ch=>{
     const active = (ch.id===currentChallengeId);
@@ -2165,6 +2009,7 @@ function renderDesafios(recalcTeamsEditor=true){
       const ch=loadChallenges().find(x=>x.id===id);
       if(!ch) return;
       currentChallengeId = id;
+      // mantém form como está (se não estava editando), mas mostra apuração
       renderChallengeResults(ch);
       renderDesafios(false);
     });
@@ -2177,13 +2022,17 @@ function renderDesafios(recalcTeamsEditor=true){
     });
   });
 
+  // editor de equipes
   if(recalcTeamsEditor) renderChallengeTeamsEditor();
 
+  // apuração do selecionado
   const current = currentChallengeId ? loadChallenges().find(x=>x.id===currentChallengeId) : null;
   renderChallengeResults(current);
 }
 
-/* UPDATE ALL */
+/* ═══════════════════════════════════════════════
+   UPDATE ALL
+═══════════════════════════════════════════════ */
 function updateAll(){
   state.filtered=applyFilters(state.rows);
   renderCards("stats",       state.filtered);
@@ -2199,10 +2048,12 @@ function updateAll(){
   renderEquipes();
   renderSupervisores();
   renderComparativo();
-  renderDesafios(false);
+  renderDesafios(false); // desafios respeitam status/UF globais na apuração
 }
 
-/* EVENTOS */
+/* ═══════════════════════════════════════════════
+   EVENTOS
+═══════════════════════════════════════════════ */
 function setup(){
   ["statusSelect","profNome","ufSelect","dateStart","dateEnd"].forEach(id=>el(id).addEventListener("change",updateAll));
   el("profTipo").addEventListener("change",()=>{ updateProfFilters("profTipo","profNome"); updateAll(); });
@@ -2221,6 +2072,7 @@ function setup(){
   el("profTipoSingle").addEventListener("change",()=>{ updateProfFilters("profTipoSingle","profNomeSingle"); renderSingle(); });
   el("profNomeSingle").addEventListener("change",renderSingle);
 
+  /* equipes */
   el("btnSalvarEquipe").addEventListener("click",()=>{
     const p=el("teamPromotorSelect").value,t=el("teamEquipeSelect").value;
     if(!p) return; const m=loadTeamMap(); m[p]=t; saveTeamMap(m); renderTeamMappingUI(); renderEquipes(); renderSupervisores();
@@ -2230,6 +2082,7 @@ function setup(){
     saveTeamMap({}); renderTeamMappingUI(); renderEquipes(); renderSupervisores();
   });
 
+  /* supervisores */
   el("btnSalvarEquipeSup").addEventListener("click",()=>{
     const p=el("supPromotorSelect").value,t=el("supEquipeSelect").value;
     if(!p) return; const m=loadTeamMap(); m[p]=t; saveTeamMap(m); renderSupervisores(); renderEquipes(); renderTeamMappingUI();
@@ -2239,6 +2092,7 @@ function setup(){
     saveTeamMap({}); renderSupervisores(); renderEquipes(); renderTeamMappingUI();
   });
 
+  /* desafios */
   el("chTeamsCount").addEventListener("change", ()=>{
     if(currentChallengeId){
       const arr=loadChallenges();
@@ -2257,6 +2111,7 @@ function setup(){
       const ch=arr.find(x=>x.id===currentChallengeId);
       if(ch){
         ch.profTipo = norm(el("chProfTipo").value);
+        // ao trocar tipo, limpa membros (para evitar membros inexistentes)
         ch.teams.forEach(t=>t.members=[]);
         ch.updatedAt = Date.now();
         saveChallenges(arr);
@@ -2292,8 +2147,11 @@ function setup(){
     if(form.start && form.end){
       const d1=parseDateOnlyInput(form.start), d2=parseDateOnlyInput(form.end);
       if(d1 && d2 && d2.getTime() < d1.getTime()){ showChMsg("Período inválido: a data final é menor que a inicial.", "warn"); return; }
-    } else { showChMsg("Informe o período (início e fim) do desafio.", "warn"); return; }
+    } else {
+      showChMsg("Informe o período (início e fim) do desafio.", "warn"); return;
+    }
 
+    // valida: não permitir equipe vazia? (vou permitir, mas avisar)
     const emptyTeams = form.teams.filter(t=>(t.members||[]).length===0).length;
     if(emptyTeams>0){
       if(!confirm("Existem equipes sem membros. Deseja salvar assim mesmo?")) return;
@@ -2302,7 +2160,10 @@ function setup(){
     const arr=loadChallenges();
     let ch=null;
 
-    if(currentChallengeId) ch = arr.find(x=>x.id===currentChallengeId) || null;
+    if(currentChallengeId){
+      ch = arr.find(x=>x.id===currentChallengeId);
+      if(!ch){ currentChallengeId=null; }
+    }
 
     if(!ch){
       ch = newChallengeTemplate();
@@ -2317,7 +2178,7 @@ function setup(){
     ch.metric = form.metric;
     ch.profTipo = form.profTipo;
     ensureTeamsCount(ch, form.teamsCount);
-
+    // aplica nomes e membros
     ch.teams.forEach((t,i)=>{
       t.name = (form.teams[i]?.name || `Equipe ${i+1}`).trim() || `Equipe ${i+1}`;
       t.members = (form.teams[i]?.members || []).slice();
@@ -2336,6 +2197,7 @@ function setup(){
     renderDesafios();
   });
 
+  /* tabs */
   document.querySelectorAll(".tab").forEach(t=>{
     t.addEventListener("click",()=>{
       document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
@@ -2345,12 +2207,17 @@ function setup(){
       if(["curva","cancelamento"].includes(t.dataset.tab)){
         setTimeout(()=>{ try{charts.curva?.resize?.();charts.semana?.resize?.();charts.cancelamento?.resize?.();}catch(e){} },80);
       }
-      if(t.dataset.tab==="desafios") renderDesafios(true);
+      if(t.dataset.tab==="desafios"){
+        // garante render atual no abrir
+        renderDesafios(true);
+      }
     });
   });
 }
 
-/* INIT */
+/* ═══════════════════════════════════════════════
+   INIT — fetch dados.csv
+═══════════════════════════════════════════════ */
 async function init(){
   try{
     el("loading").style.display="block";
@@ -2372,7 +2239,8 @@ async function init(){
     el("cmpXStart").value=toISO(sX); el("cmpXEnd").value=toISO(e);
     el("cmpYStart").value=toISO(sY); el("cmpYEnd").value=toISO(eY);
 
-    resetChallengeForm();
+    // init desafios
+    resetChallengeForm(); // prepara editor
     renderDesafios(true);
 
     updateAll();
@@ -2385,102 +2253,8 @@ async function init(){
   }
 }
 
-/* =========================================================
-   ✅ BOOT + LOGIN (Supabase)
-========================================================= */
-function renderAuthVisibility(user){
-  const logged = !!user;
-  el("gate").style.display = logged ? "none" : "block";
-  el("app").style.display  = logged ? "block" : "none";
-  el("btnLogout").style.display = logged ? "inline-block" : "none";
-}
-
-async function bootWithAuth(){
-  // se não configurou as credenciais, mostra gate com aviso
-  if(!supabase){
-    renderAuthVisibility(null);
-    showGateMsg("loginMsg","Configure SUPABASE_URL e SUPABASE_ANON_KEY no index.html.","warn");
-    return;
-  }
-
-  // listeners UI
-  el("btnLogin").addEventListener("click", async ()=>{
-    hideGateMsg("loginMsg");
-    const email = (el("loginEmail").value||"").trim();
-    const pass  = (el("loginPass").value||"").trim();
-    if(!email || !email.includes("@")){ showGateMsg("loginMsg","Informe um email válido.","warn"); return; }
-    if(!pass){ showGateMsg("loginMsg","Informe a senha.","warn"); return; }
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-    if(error){ showGateMsg("loginMsg", error.message || "Falha no login.","bad"); return; }
-
-    showGateMsg("loginMsg","Login ok. Entrando...","success");
-    renderAuthVisibility(data.user);
-
-    if(!window.__APP_INIT_DONE){
-      window.__APP_INIT_DONE = true;
-      setup();
-      await init();
-    }else{
-      updateAll();
-    }
-  });
-
-  el("btnSignUp").addEventListener("click", async ()=>{
-    hideGateMsg("signMsg");
-    const email = (el("signEmail").value||"").trim();
-    const pass  = (el("signPass").value||"").trim();
-    if(!email || !email.includes("@")){ showGateMsg("signMsg","Informe um email válido.","warn"); return; }
-    if(pass.length < 6){ showGateMsg("signMsg","Senha muito curta (mín. 6).","warn"); return; }
-
-    const { data, error } = await supabase.auth.signUp({ email, password: pass });
-    if(error){ showGateMsg("signMsg", error.message || "Falha ao criar conta.","bad"); return; }
-
-    // se o projeto exigir confirmação por email, user pode vir null até confirmar
-    showGateMsg("signMsg", data.user ? "Conta criada e logada." : "Conta criada. Confirme o email para entrar.", "success");
-
-    const { data: s2 } = await supabase.auth.getSession();
-    const user = s2?.session?.user || null;
-    renderAuthVisibility(user);
-
-    if(user && !window.__APP_INIT_DONE){
-      window.__APP_INIT_DONE = true;
-      setup();
-      await init();
-    }
-  });
-
-  el("btnLogout").addEventListener("click", async ()=>{
-    await supabase.auth.signOut();
-    renderAuthVisibility(null);
-  });
-
-  // sessão atual
-  const { data } = await supabase.auth.getSession();
-  const user = data?.session?.user || null;
-  renderAuthVisibility(user);
-
-  if(user){
-    if(!window.__APP_INIT_DONE){
-      window.__APP_INIT_DONE = true;
-      setup();
-      await init();
-    }
-  }
-
-  // mudanças de auth (login/logout em outras abas etc)
-  supabase.auth.onAuthStateChange(async (_event, session)=>{
-    const u = session?.user || null;
-    renderAuthVisibility(u);
-    if(u && !window.__APP_INIT_DONE){
-      window.__APP_INIT_DONE = true;
-      setup();
-      await init();
-    }
-  });
-}
-
-bootWithAuth();
+setup();
+init();
 </script>
 </body>
 </html>
