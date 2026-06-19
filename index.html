@@ -42,15 +42,14 @@
     .controls{display:flex;flex-wrap:wrap;gap:16px;margin:22px 0 10px;align-items:end;justify-content:center;}
     .control-group{display:flex;flex-direction:column;gap:8px;min-width:210px;}
     .control-group label{font-size:0.82rem;color:var(--muted);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;}
-    select,input,textarea{
+    select,input{
       padding:12px 14px;border:1px solid var(--stroke);border-radius:var(--radius2);
       background:var(--card);color:var(--text);font-size:1rem;outline:none;
       transition:all 0.2s ease;backdrop-filter:blur(10px);
     }
-    textarea{min-height:92px;resize:vertical}
     input[type="date"]{color-scheme:dark;cursor:pointer;}
     input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);cursor:pointer;}
-    select:focus,input:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,0.12);}
+    select:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(124,92,255,0.12);}
     select option{color:#0B1222;background:#EAF0FF;font-weight:700;}
     .range-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
     .range-row .sep{color:var(--muted);font-weight:800;padding:0 2px;white-space:nowrap;}
@@ -135,12 +134,15 @@
       text-transform:uppercase;letter-spacing:.6px;background:rgba(255,255,255,0.03);
       border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:1;white-space:nowrap;
     }
+    thead th.sortable{cursor:pointer;user-select:none;transition:all 0.2s ease;}
+    thead th.sortable:hover{color:var(--text);background:rgba(255,255,255,0.08);}
+    thead th .sort-ind{margin-left:6px;opacity:.9;font-size:.95em;color:var(--accent2);}
     tbody td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle;white-space:nowrap;}
     tbody tr:hover{background:rgba(255,255,255,.03);}
     tbody tr:last-child td{border-bottom:none;}
     .rank-col{font-family:var(--mono);font-weight:900;width:76px;}
     .num{font-family:var(--mono);text-align:right;}
-    .name{font-weight:900;max-width:520px;overflow:hidden;text-overflow:ellipsis;}
+    .name{font-weight:900;max-width:420px;overflow:hidden;text-overflow:ellipsis;}
     .badge{
       display:inline-block;padding:2px 8px;border:1px solid rgba(255,255,255,.14);
       border-radius:999px;font-size:.78rem;color:var(--muted);font-family:var(--mono);margin-left:8px;
@@ -183,6 +185,16 @@
       color:rgba(234,240,255,.9);
     }
     .mp-sum .chip b{color:var(--accent2)}
+    .mp-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 12px;}
+    .mp-tab{
+      padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);cursor:pointer;font-weight:850;color:rgba(234,240,255,.85);
+    }
+    .mp-tab.active{
+      border-color:rgba(124,92,255,.45);
+      background:rgba(124,92,255,.18);
+      color:white;
+    }
     .mp-prof-table{width:100%;border-collapse:separate;border-spacing:0;min-width:980px;}
     .mp-prof-table thead th{
       padding:10px 14px;font-size:.78rem;color:var(--muted);
@@ -200,7 +212,7 @@
     .role-pill.liner{background:rgba(34,211,238,.12);border-color:rgba(34,211,238,.35);color:#7eedff;}
     .role-pill.closer{background:rgba(92,255,176,.10);border-color:rgba(92,255,176,.30);color:#b0fff0;}
 
-    /* Perfil renda */
+    /* Perfil renda — novos estilos */
     .pr-prof-panel{
       background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
       border-radius:var(--radius);padding:20px 22px;margin:18px 0;
@@ -209,7 +221,7 @@
     .pr-controls{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-bottom:18px;}
     .pr-controls .control-group{min-width:200px;}
 
-    .pr-faixa-table{width:100%;border-collapse:separate;border-spacing:0;min-width:860px;}
+    .pr-faixa-table{width:100%;border-collapse:separate;border-spacing:0;min-width:680px;}
     .pr-faixa-table thead th{
       text-align:left;padding:10px 14px;font-size:.78rem;color:var(--muted);
       text-transform:uppercase;letter-spacing:.6px;background:rgba(255,255,255,.03);
@@ -221,11 +233,24 @@
     }
     .pr-faixa-table tbody tr:last-child td{border-bottom:none;}
     .pr-faixa-table tbody tr:hover{background:rgba(255,255,255,.03);}
-    .pr-bar-cell{width:180px;}
+    .pr-bar-cell{width:160px;}
     .pr-bar-wrap{background:rgba(255,255,255,.06);border-radius:999px;height:8px;overflow:hidden;width:100%;}
     .pr-bar-fill{height:100%;border-radius:999px;transition:width .4s ease;}
     .pr-bar-fill.geral{background:linear-gradient(90deg,var(--accent),var(--accent2));}
 
+    .pr-side-table{width:100%;border-collapse:separate;border-spacing:0;min-width:840px;}
+    .pr-side-table thead th{
+      text-align:left;padding:10px 14px;font-size:.78rem;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.6px;background:rgba(255,255,255,.03);
+      border-bottom:1px solid rgba(255,255,255,.06);white-space:nowrap;
+    }
+    .pr-side-table tbody td{
+      padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+      vertical-align:middle;white-space:nowrap;
+    }
+    .pr-side-table tbody tr:last-child td{border-bottom:none;}
+    .pr-side-table tbody tr:hover{background:rgba(255,255,255,.03);}
+    .pr-side-table td.faixa-label{font-weight:850;color:rgba(234,240,255,.9);}
     .delta-pill{
       display:inline-flex;align-items:center;justify-content:center;
       padding:3px 10px;border-radius:999px;font-family:var(--mono);font-weight:900;font-size:.85rem;
@@ -234,26 +259,6 @@
     .delta-pill.pos{background:rgba(92,255,176,.12);color:var(--good);border-color:rgba(92,255,176,.28);}
     .delta-pill.neg{background:rgba(255,45,85,.12);color:var(--bad);border-color:rgba(255,45,85,.28);}
     .delta-pill.neu{background:rgba(255,255,255,.06);color:var(--muted);border-color:rgba(255,255,255,.12);}
-
-    .rating-box{
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
-      border-radius:14px;
-      padding:14px;
-      margin-top:14px;
-    }
-    .rating-grid{
-      display:grid;
-      grid-template-columns: 220px 1fr;
-      gap:12px;
-      align-items:end;
-    }
-    .rating-meta{
-      display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;color:var(--muted);font-size:.9rem
-    }
-    .rating-meta span{font-family:var(--mono);font-weight:900;color:rgba(234,240,255,.9)}
-    .small{font-size:.86rem;color:var(--muted)}
-    .kbd{font-family:var(--mono);padding:2px 8px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.04)}
 
     @media(max-width:1100px){
       .tabs{grid-template-columns:repeat(3,minmax(0,1fr));}
@@ -267,22 +272,22 @@
       table{min-width:820px;}
       .tabs{grid-template-columns:repeat(2,minmax(0,1fr));}
       .tab{justify-content:flex-start;text-align:left;padding:12px 12px;}
-      .rating-grid{grid-template-columns:1fr}
     }
   </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 </head>
 
 <body>
 <div class="wrap">
   <header>
     <h1>Painel de Atendimentos</h1>
-    <p class="subtitle">Fonte: <strong>dados.csv</strong></p>
+    <p class="subtitle">Fonte: <strong>dados.csv</strong> (VGV = soma simples da coluna G)</p>
   </header>
 
-  <!-- filtros globais -->
   <div class="controls">
     <div class="control-group" style="min-width:420px">
-      <label>Período (global)</label>
+      <label>Período</label>
       <div class="range-row">
         <input id="dateStart" type="date" />
         <span class="sep">a</span>
@@ -292,7 +297,6 @@
         <button class="btn" id="btnLimparPeriodo">Limpar</button>
       </div>
     </div>
-
     <div class="control-group">
       <label>Status do contrato</label>
       <select id="statusSelect">
@@ -303,7 +307,6 @@
         <option value="outro">Outro</option>
       </select>
     </div>
-
     <div class="control-group">
       <label>Profissional (filtro global)</label>
       <select id="profTipo">
@@ -316,14 +319,12 @@
       <label>Nome (filtro global)</label>
       <select id="profNome"><option value="todos">Todos</option></select>
     </div>
-
     <div class="control-group">
       <label>UF</label>
       <select id="ufSelect"><option value="todos">Todas</option></select>
     </div>
   </div>
 
-  <!-- tabs -->
   <div class="tabs-wrap">
     <div class="tabs">
       <div class="tab active" data-tab="resumo">📊 Resumo</div>
@@ -343,19 +344,25 @@
       <div class="note">
         • Casais = linhas (com ajuste: Total − NoTour). • NoTour = Status atendimento = "NoTour".<br>
         • Cotas = tokens em "Status do contrato" (separados por #).<br>
-        • VGV total = soma da coluna G. VGV ativo/cancelado é rateado proporcionalmente aos tokens da linha.
+        • VGV total = Σ(coluna G). VGV ativo/cancelado é rateado proporcionalmente aos tokens da linha.
       </div>
     </div>
 
     <!-- DESAFIOS -->
     <div id="tab-desafios" class="tab-content">
       <div class="note">
-        Clique no <strong>nome da equipe</strong> para abrir o painel com <strong>todos profissionais do grupo</strong>
-        (Promotor + Liner + Closer) e os <strong>números individuais</strong>.
+        Ao clicar no <strong>nome da equipe</strong>, agora aparece um painel com <strong>todos os profissionais do grupo</strong>
+        (Promotor + Liner + Closer) e os <strong>números de cada um</strong>.
       </div>
 
       <div class="controls" style="margin-top:10px;justify-content:flex-start">
-        <div class="control-group" style="min-width:260px">
+        <div class="control-group" style="min-width:280px">
+          <label>Desafio (demo)</label>
+          <select id="chDemo">
+            <option value="on">Ativo</option>
+          </select>
+        </div>
+        <div class="control-group" style="min-width:240px">
           <label>Período do desafio</label>
           <div class="range-row">
             <input id="chStart" type="date" />
@@ -363,47 +370,46 @@
             <input id="chEnd" type="date" />
           </div>
         </div>
-
-        <div class="control-group" style="min-width:280px">
-          <label>Tipo base da equipe (para montar)</label>
+        <div class="control-group" style="min-width:260px">
+          <label>Profissionais do grupo (para montar equipe)</label>
           <select id="chProfTipo">
             <option value="promotor de marketing">Promotor de marketing</option>
             <option value="liner">Liner</option>
             <option value="closer">Closer</option>
           </select>
-          <div class="small">O painel de membros soma os 3 tipos.</div>
+          <div style="color:var(--muted);font-size:.85rem">A apuração do painel de membros soma todos os tipos.</div>
         </div>
-
         <div class="control-group" style="min-width:220px">
           <label>Métrica do desafio</label>
           <select id="chMetric">
             <option value="casais">Número de casais</option>
             <option value="vgv">VGV</option>
-            <option value="casais_atendidos">Casais atendidos (linhas)</option>
+            <option value="casais_atendidos">Casais atendidos</option>
             <option value="eficiencia">Eficiência</option>
           </select>
         </div>
       </div>
 
       <div class="note warn" id="chWarn"></div>
+
       <div id="chResults"></div>
     </div>
 
     <!-- PERFIL RENDA -->
     <div id="tab-perfil-renda" class="tab-content">
       <div class="note">
-        • Análise individual: mostra <span class="kbd">Casais por faixa</span> + campo de <span class="kbd">Avaliação</span> (salvo no navegador).<br>
-        • Comparativo: mesma lógica lado a lado (A vs B).
+        Aqui você consegue ver <strong>quantos casais</strong> cada profissional atendeu por <strong>faixa de renda</strong>
+        (ex.: <strong>R$ 20 mil a R$ 50 mil</strong>) e também comparar 2 profissionais lado a lado.
       </div>
 
       <div class="section-title">📌 Geral por faixa <span class="pill-tag">todos no filtro</span></div>
       <div id="perfil-renda"></div>
 
       <div class="divider"></div>
-      <div class="section-title">🔍 Avaliar profissional <span class="pill-tag">casais por faixa</span></div>
+      <div class="section-title">🔍 Análise por profissional <span class="pill-tag">casais por faixa</span></div>
 
       <div class="pr-prof-panel">
-        <h4>Selecione um profissional para ver casais por faixa de renda e registrar sua avaliação</h4>
+        <h4>Selecione um profissional para ver a distribuição de casais por faixa de renda</h4>
         <div class="pr-controls">
           <div class="control-group">
             <label>Tipo</label>
@@ -418,36 +424,14 @@
             <select id="prNome1"><option value="">Selecione...</option></select>
           </div>
         </div>
-
         <div id="prResult1"></div>
-
-        <!-- Campo de avaliação -->
-        <div class="rating-box" id="prRatingBox" style="display:none">
-          <div class="section-title" style="margin:0 0 10px">📝 Avaliação do profissional <span class="pill-tag">salva localmente</span></div>
-          <div class="rating-grid">
-            <div class="control-group">
-              <label>Nota (0 a 10)</label>
-              <input id="prRateScore" type="number" min="0" max="10" step="0.5" placeholder="Ex.: 8.5" />
-            </div>
-            <div class="control-group">
-              <label>Comentário</label>
-              <textarea id="prRateNote" placeholder="Ex.: ótimo em faixa 20-50k, precisa melhorar cancelamento..."></textarea>
-            </div>
-          </div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-            <button class="btn primary" id="prRateSave">Salvar avaliação</button>
-            <button class="btn danger" id="prRateClear">Apagar avaliação</button>
-          </div>
-          <div class="rating-meta" id="prRateMeta"></div>
-        </div>
       </div>
 
       <div class="divider"></div>
-      <div class="section-title">⚖️ Comparar profissionais <span class="pill-tag">A vs B</span></div>
+      <div class="section-title">⚖️ Comparativo lado a lado <span class="pill-tag">A vs B</span></div>
 
       <div class="pr-prof-panel">
-        <h4>Selecione dois profissionais para comparar casais por faixa de renda</h4>
-
+        <h4>Selecione dois profissionais para comparar</h4>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
           <div>
             <div class="section-title" style="font-size:.95rem;margin-bottom:10px">🟣 Profissional A</div>
@@ -569,7 +553,7 @@ function parseDelimited(text, delimiter=";"){
   }
   const keys=Object.keys(data[0]||{});
   state.meta.firstColKey=keys[0]||null;
-  state.meta.vgvColKey  =keys[6]||null; // coluna G
+  state.meta.vgvColKey  =keys[6]||null;
   if(!state.meta.vgvColKey) throw new Error("CSV precisa ter pelo menos 7 colunas (VGV na coluna G).");
   return data;
 }
@@ -693,6 +677,7 @@ function statsFor(rows){
     ticketMedio: q.total ? (vgv.total/q.total) : 0,
   };
 }
+
 const effPill = f => { const p=(f||0)*100; return p<15?"p-bad":p<25?"p-med":"p-good"; };
 const canPill = f => { const p=(f||0)*100; return p<20?"p-good":p<=30?"p-med":"p-bad"; };
 
@@ -701,7 +686,7 @@ function renderCards(cid,rows){
   el(cid).innerHTML=`
     <div class="stat-card"><div class="stat-value">${s.casais}</div><div class="stat-label">Casais</div></div>
     <div class="stat-card"><div class="stat-value">${s.vendas}</div><div class="stat-label">Cotas</div></div>
-    <div class="stat-card"><div class="stat-value">${fmtMoney(s.vgvTotal)}</div><div class="stat-label">VGV</div></div>
+    <div class="stat-card"><div class="stat-value">${fmtMoney(s.vgvTotal)}</div><div class="stat-label">VGV (Σ col G)</div></div>
     <div class="stat-card"><div class="stat-value">${fmtPctBR(s.eficiencia)}</div><div class="stat-label">Eficiência</div></div>
     <div class="stat-card"><div class="stat-value">${fmtPctBR(s.pctCancel)}</div><div class="stat-label">% Cancelamento</div></div>
     <div class="stat-card"><div class="stat-value">${fmtMoney(s.ticketMedio)}</div><div class="stat-label">Ticket médio</div></div>
@@ -780,13 +765,7 @@ function renderPrIndividual(){
   const tipoNome=el("prTipo1").value;
   const nome=el("prNome1").value;
   const c=el("prResult1");
-  const rb=el("prRatingBox");
-
-  if(!nome){
-    c.innerHTML=`<div class="note" style="margin:0">Selecione um profissional acima.</div>`;
-    rb.style.display="none";
-    return;
-  }
+  if(!nome){ c.innerHTML=`<div class="note" style="margin:0">Selecione um profissional acima.</div>`; return; }
 
   const colKey=resolveTipoKey(tipoNome);
   const mine=state.filtered.filter(r=>norm(r[colKey]??"")===norm(nome));
@@ -822,7 +801,7 @@ function renderPrIndividual(){
             const w   = (f.casais/maxCasais)*100;
             return `
               <tr>
-                <td class="name">${f.faixa}</td>
+                <td class="faixa-label">${f.faixa}</td>
                 <td class="num"><b style="color:var(--accent2)">${f.casais}</b></td>
                 <td class="num">${fmtNumBR(pct,1,1)}%</td>
                 <td class="num">${f.vendas}</td>
@@ -834,12 +813,7 @@ function renderPrIndividual(){
           }).join("")}
         </tbody>
       </table>
-    </div>
-  `;
-
-  // Mostra e carrega avaliação
-  rb.style.display="block";
-  loadRating(tipoNome, nome);
+    </div>`;
 }
 
 function renderPrComparativo(){
@@ -857,6 +831,8 @@ function renderPrComparativo(){
   const rowsB=nomeB ? state.filtered.filter(r=>norm(r[colB]??"")===norm(nomeB)) : [];
   const sA=statsFor(rowsA), sB=statsFor(rowsB);
   const faA=buildFaixaList(rowsA), faB=buildFaixaList(rowsB);
+
+  const maxCasais=Math.max(...faA.map(x=>x.casais), ...faB.map(x=>x.casais), 1);
 
   const mkLine=(label,va,vb,fmt)=>`
     <div style="padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);">
@@ -878,12 +854,13 @@ function renderPrComparativo(){
     </div>
 
     <div class="table-wrap" style="margin:0">
-      <table class="pr-faixa-table" style="min-width:${(nomeA&&nomeB)?980:820}px">
+      <table class="pr-side-table" style="min-width:${(nomeA&&nomeB)?980:780}px">
         <thead><tr>
           <th>Faixa</th>
           ${nomeA?`<th class="num">Casais (A)</th>`:""}
           ${nomeB?`<th class="num">Casais (B)</th>`:""}
           ${(nomeA&&nomeB)?`<th class="num">Δ</th>`:""}
+          <th>Proporção</th>
           ${nomeA?`<th class="num">VGV (A)</th>`:""}
           ${nomeB?`<th class="num">VGV (B)</th>`:""}
         </tr></thead>
@@ -893,12 +870,31 @@ function renderPrComparativo(){
             const cA=a.casais, cB=b.casais;
             const delta=cA-cB;
             const cls=delta>0?"pos":delta<0?"neg":"neu";
+            const wA=(cA/maxCasais)*100, wB=(cB/maxCasais)*100;
             return `
               <tr>
-                <td class="name">${faixa}</td>
-                ${nomeA?`<td class="num" style="color:#c4b5ff;font-weight:900">${cA}</td>`:""}
-                ${nomeB?`<td class="num" style="color:#7eedff;font-weight:900">${cB}</td>`:""}
+                <td class="faixa-label">${faixa}</td>
+                ${nomeA?`<td class="num">${cA}</td>`:""}
+                ${nomeB?`<td class="num">${cB}</td>`:""}
                 ${(nomeA&&nomeB)?`<td class="num"><span class="delta-pill ${cls}">${delta===0?"=":(delta>0?"+":"")+delta}</span></td>`:""}
+                <td>
+                  <div style="display:flex;flex-direction:column;gap:6px;min-width:180px">
+                    ${nomeA?`<div style="display:flex;align-items:center;gap:8px">
+                      <span style="width:10px;height:10px;border-radius:2px;background:#7C5CFF"></span>
+                      <div style="flex:1;background:rgba(255,255,255,.06);height:6px;border-radius:999px;overflow:hidden">
+                        <div style="width:${wA.toFixed(1)}%;height:100%;background:linear-gradient(90deg,#7C5CFF,#c4b5ff)"></div>
+                      </div>
+                      <span style="font-family:var(--mono);color:var(--muted)">${cA}</span>
+                    </div>`:""}
+                    ${nomeB?`<div style="display:flex;align-items:center;gap:8px">
+                      <span style="width:10px;height:10px;border-radius:2px;background:#22D3EE"></span>
+                      <div style="flex:1;background:rgba(255,255,255,.06);height:6px;border-radius:999px;overflow:hidden">
+                        <div style="width:${wB.toFixed(1)}%;height:100%;background:linear-gradient(90deg,#22D3EE,#7eedff)"></div>
+                      </div>
+                      <span style="font-family:var(--mono);color:var(--muted)">${cB}</span>
+                    </div>`:""}
+                  </div>
+                </td>
                 ${nomeA?`<td class="num">${fmtMoney(a.vgvTotal)}</td>`:""}
                 ${nomeB?`<td class="num">${fmtMoney(b.vgvTotal)}</td>`:""}
               </tr>`;
@@ -910,60 +906,7 @@ function renderPrComparativo(){
 }
 
 /* ===============================
-   Avaliações (localStorage)
-=============================== */
-function ratingKey(tipoNome, nome){
-  return `rating.v1.${norm(tipoNome)}.${norm(nome)}`;
-}
-function loadRating(tipoNome, nome){
-  const key=ratingKey(tipoNome,nome);
-  const raw=localStorage.getItem(key);
-  const meta=el("prRateMeta");
-  const score=el("prRateScore");
-  const note=el("prRateNote");
-  let obj=null;
-  try{ obj = raw ? JSON.parse(raw) : null; }catch(e){ obj=null; }
-
-  score.value = obj?.score ?? "";
-  note.value  = obj?.note ?? "";
-
-  meta.innerHTML = obj
-    ? `<div>Última atualização: <span>${obj.updatedAt || "—"}</span></div>`
-      + `<div>Profissional: <span>${nome}</span></div>`
-      + `<div>Tipo: <span>${tipoNome}</span></div>`
-    : `<div>Nenhuma avaliação salva para <span>${nome}</span>.</div>`;
-}
-function saveRating(){
-  const tipoNome=el("prTipo1").value;
-  const nome=el("prNome1").value;
-  if(!nome) return;
-
-  const scoreStr=String(el("prRateScore").value||"").trim();
-  const score = scoreStr==="" ? null : Number(scoreStr);
-  if(score!==null && (Number.isNaN(score) || score<0 || score>10)){
-    alert("Nota inválida. Use um número de 0 a 10 (ex.: 8.5).");
-    return;
-  }
-
-  const obj={
-    score,
-    note: el("prRateNote").value || "",
-    updatedAt: new Date().toLocaleString("pt-BR"),
-  };
-  localStorage.setItem(ratingKey(tipoNome,nome), JSON.stringify(obj));
-  loadRating(tipoNome,nome);
-}
-function clearRating(){
-  const tipoNome=el("prTipo1").value;
-  const nome=el("prNome1").value;
-  if(!nome) return;
-  if(!confirm(`Apagar avaliação salva de "${nome}"?`)) return;
-  localStorage.removeItem(ratingKey(tipoNome,nome));
-  loadRating(tipoNome,nome);
-}
-
-/* ===============================
-   Desafios: painel de membros somando roles
+   Desafios: painel de membros SOMANDO roles
 =============================== */
 function filterByRange(rows, s, e){
   const d1=parseDateOnlyInput(s), d2=parseDateOnlyInput(e);
@@ -973,10 +916,18 @@ function filterByRange(rows, s, e){
   return rows.filter(r=>r._dt && r._dt.getTime()>=st && r._dt.getTime()<=en);
 }
 
+/**
+ * Constrói "membros consolidados" do grupo:
+ * - Recebe os members do desafio (que foram cadastrados em 1 tipo)
+ * - Encontra todas as linhas do período onde:
+ *   promotor OR liner OR closer está na lista de membros
+ * - Agrega por profissional (nome + role) e calcula KPIs por pessoa
+ */
 function buildTeamPeopleStats(inPeriod, teamMembers){
   const set = new Set((teamMembers||[]).map(m=>norm(m)));
-  if(set.size===0) return { people:[], totals:statsFor([]), relevantCount:0 };
+  if(set.size===0) return { people:[], totals:statsFor([]) };
 
+  // filas relevantes = qualquer linha onde algum papel bate com set
   const relevant = inPeriod.filter(r=>{
     const pm = norm(r[KEY.promotor]??"");
     const li = norm(r[KEY.liner]??"");
@@ -984,43 +935,176 @@ function buildTeamPeopleStats(inPeriod, teamMembers){
     return set.has(pm) || set.has(li) || set.has(cl);
   });
 
+  // Agrupa por "role+nome" (porque pode existir mesmo nome em role diferente)
   const map = new Map();
-  for (const row of relevant){
-    const pm = (row[KEY.promotor]??"").toString().trim();
-    const li = (row[KEY.liner]??"").toString().trim();
-    const cl = (row[KEY.closer]??"").toString().trim();
+  const push = (roleKey, roleName, roleCss) => {
+    const raw = (roleKey??"").toString().trim();
+    if(!raw) return;
+    const key = roleName+"||"+norm(raw);
+    if(!map.has(key)) map.set(key,{ name: raw, role: roleName, roleCss, rows: [] });
+    map.get(key).rows.push(curRow);
+  };
 
-    if(pm && set.has(norm(pm))){
+  for (const curRow of relevant){
+    // adiciona para cada role que esteja no set
+    const pm = (curRow[KEY.promotor]??"").toString().trim();
+    const li = (curRow[KEY.liner]??"").toString().trim();
+    const cl = (curRow[KEY.closer]??"").toString().trim();
+    if(pm && set.has(norm(pm))) {
       const k="pm||"+norm(pm);
       if(!map.has(k)) map.set(k,{name:pm,role:"Promotor",roleCss:"pm",rows:[]});
-      map.get(k).rows.push(row);
+      map.get(k).rows.push(curRow);
     }
-    if(li && set.has(norm(li))){
+    if(li && set.has(norm(li))) {
       const k="liner||"+norm(li);
       if(!map.has(k)) map.set(k,{name:li,role:"Liner",roleCss:"liner",rows:[]});
-      map.get(k).rows.push(row);
+      map.get(k).rows.push(curRow);
     }
-    if(cl && set.has(norm(cl))){
+    if(cl && set.has(norm(cl))) {
       const k="closer||"+norm(cl);
       if(!map.has(k)) map.set(k,{name:cl,role:"Closer",roleCss:"closer",rows:[]});
-      map.get(k).rows.push(row);
+      map.get(k).rows.push(curRow);
     }
   }
 
-  const people = [...map.values()].map(p=>({ ...p, stats: statsFor(p.rows) }))
-    .sort((a,b)=>
-      (b.stats.vgvTotal-a.stats.vgvTotal) ||
-      (b.stats.vendas-a.stats.vendas) ||
-      (b.stats.casais-a.stats.casais) ||
-      a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"})
-    );
+  const people = [...map.values()].map(p=>{
+    const s=statsFor(p.rows);
+    return { ...p, stats:s };
+  }).sort((a,b)=>
+    (b.stats.vgvTotal-a.stats.vgvTotal) ||
+    (b.stats.vendas-a.stats.vendas) ||
+    (b.stats.casais-a.stats.casais) ||
+    a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"})
+  );
 
-  return { people, totals: statsFor(relevant), relevantCount: relevant.length };
+  const totals = statsFor(relevant);
+  return { people, totals, relevantCount: relevant.length };
+}
+
+function renderChallengeResults(){
+  const warn = el("chWarn");
+  const chStart = el("chStart").value;
+  const chEnd   = el("chEnd").value;
+  if(!chStart || !chEnd){
+    warn.style.display="block";
+    warn.textContent="Defina o período do desafio (início e fim).";
+    el("chResults").innerHTML="";
+    return;
+  }
+  warn.style.display="none";
+
+  // Demo: 2 equipes fixas só pra manter o exemplo totalmente funcional em um único arquivo.
+  // Você pode trocar isso pela sua estrutura persistida depois, se quiser.
+  const membersPool = listNamesByTipo(el("chProfTipo").value);
+  const half = Math.ceil(membersPool.length/2);
+  const teams = [
+    { name:"Equipe 1", members: membersPool.slice(0,half) },
+    { name:"Equipe 2", members: membersPool.slice(half) },
+  ];
+
+  // base = rows filtradas pelo status/UF globais (período global não se aplica ao desafio)
+  const status = el("statusSelect").value;
+  const ufSel  = el("ufSelect").value;
+  let base = state.rows.slice();
+  if(status!=="todos") base=base.filter(r=>r._bucket===status);
+  if(ufSel!=="todos")  base=base.filter(r=>(r[KEY.uf]??"").toString().trim()===ufSel);
+
+  const inPeriod = filterByRange(base, chStart, chEnd);
+
+  // Apuração de "valor" por equipe: usa rows do time baseado no tipo escolhido (como era antes)
+  const colKey = resolveTipoKey(el("chProfTipo").value);
+
+  const metric = el("chMetric").value;
+  const metricLabel = m => ({casais:"Casais",vgv:"VGV",casais_atendidos:"Casais atendidos",eficiencia:"Eficiência"}[m]||m);
+
+  const getMetric = rows=>{
+    const s=statsFor(rows);
+    if(metric==="casais") return {val:s.casais, fmt:v=>String(v|0)};
+    if(metric==="vgv") return {val:s.vgvTotal, fmt:fmtMoney};
+    if(metric==="casais_atendidos") return {val:rows.length, fmt:v=>String(v|0)};
+    if(metric==="eficiencia") return {val:s.eficiencia, fmt:fmtPctBR};
+    return {val:s.casais, fmt:v=>String(v|0)};
+  };
+
+  const results = teams.map(t=>{
+    const memberSet = new Set((t.members||[]).map(m=>norm(m)));
+    const teamRows = inPeriod.filter(r=>{
+      const who=(r[colKey]??"").toString().trim();
+      return who && memberSet.has(norm(who));
+    });
+    const met = getMetric(teamRows);
+    return { ...t, teamRows, value: met.val, fmt: met.fmt, stats: statsFor(teamRows) };
+  }).sort((a,b)=>{
+    const av=typeof a.value==="number"?a.value:0;
+    const bv=typeof b.value==="number"?b.value:0;
+    return (bv-av) || a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"});
+  });
+
+  const best = results[0]?.value ?? 0;
+
+  el("chResults").innerHTML=`
+    <div class="note">
+      Período do desafio: <strong>${fmtBR(chStart)}</strong> a <strong>${fmtBR(chEnd)}</strong> •
+      Base do grupo: <strong>${el("chProfTipo").value}</strong> •
+      Métrica: <strong>${metricLabel(metric)}</strong><br>
+      Filtros aplicados: Status=<strong>${status}</strong> • UF=<strong>${ufSel}</strong> • Registros no período: <strong>${inPeriod.length}</strong>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="width:84px">#</th>
+          <th>Equipe</th>
+          <th class="num">Membros</th>
+          <th class="num">${metricLabel(metric)}</th>
+          <th class="num">Casais</th>
+          <th class="num">Cotas</th>
+          <th class="num">VGV</th>
+          <th class="num">Eficiência</th>
+        </tr></thead>
+        <tbody>
+          ${results.map((r,i)=>{
+            const pos=i+1;
+            const medal=pos===1?"🥇":pos===2?"🥈":pos===3?"🥉":"";
+            const delta = (typeof r.value==="number" && typeof best==="number") ? (r.value-best) : 0;
+            const deltaStr = pos>1 ? (metric==="vgv" ? fmtMoney(delta) : metric==="eficiencia" ? fmtNumBR(delta*100,1,1)+"%" : String(delta|0)) : "";
+            const rowId=`mr_${i}_${Date.now()}`;
+            return `
+              <tr>
+                <td class="rank-col">${medal} ${pos}°</td>
+                <td class="name">
+                  <button class="team-name-btn" data-members-row="${rowId}">
+                    ${r.name}<span class="chevron">▶</span>
+                  </button>
+                  ${pos>1?`<span class="badge">dif.: ${deltaStr}</span>`:""}
+                </td>
+                <td class="num">${r.members.length}</td>
+                <td class="num"><b>${r.fmt(r.value)}</b></td>
+                <td class="num">${r.stats.casais}</td>
+                <td class="num">${r.stats.vendas}</td>
+                <td class="num">${fmtMoney(r.stats.vgvTotal)}</td>
+                <td class="num"><span class="pill ${effPill(r.stats.eficiencia)}">${fmtPctBR(r.stats.eficiencia)}</span></td>
+              </tr>
+
+              <tr class="members-row hidden" data-members-id="${rowId}">
+                <td colspan="8">
+                  ${renderTeamMembersPanelHTML(inPeriod, r)}
+                </td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  attachMembersToggle(el("chResults"));
 }
 
 function renderTeamMembersPanelHTML(inPeriod, teamObj){
   const { people, totals, relevantCount } = buildTeamPeopleStats(inPeriod, teamObj.members);
 
+  // somatórios rápidos
   const sumChips = `
     <div class="mp-sum">
       <div class="chip">Casais <b>${totals.casais}</b></div>
@@ -1097,123 +1181,6 @@ function attachMembersToggle(container){
   });
 }
 
-function renderChallengeResults(){
-  const warn = el("chWarn");
-  const chStart = el("chStart").value;
-  const chEnd   = el("chEnd").value;
-  if(!chStart || !chEnd){
-    warn.style.display="block";
-    warn.textContent="Defina o período do desafio (início e fim).";
-    el("chResults").innerHTML="";
-    return;
-  }
-  warn.style.display="none";
-
-  // Demo: 2 equipes automáticas (você pode trocar depois por equipes cadastradas)
-  const membersPool = listNamesByTipo(el("chProfTipo").value);
-  const half = Math.ceil(membersPool.length/2);
-  const teams = [
-    { name:"Equipe 1", members: membersPool.slice(0,half) },
-    { name:"Equipe 2", members: membersPool.slice(half) },
-  ];
-
-  // base = aplica filtros globais (status/uf); período do desafio é próprio
-  const status = el("statusSelect").value;
-  const ufSel  = el("ufSelect").value;
-  let base = state.rows.slice();
-  if(status!=="todos") base=base.filter(r=>r._bucket===status);
-  if(ufSel!=="todos")  base=base.filter(r=>(r[KEY.uf]??"").toString().trim()===ufSel);
-
-  const inPeriod = filterByRange(base, chStart, chEnd);
-
-  const colKey = resolveTipoKey(el("chProfTipo").value);
-  const metric = el("chMetric").value;
-  const metricLabel = m => ({casais:"Casais",vgv:"VGV",casais_atendidos:"Casais atendidos",eficiencia:"Eficiência"}[m]||m);
-
-  const getMetric = rows=>{
-    const s=statsFor(rows);
-    if(metric==="casais") return {val:s.casais, fmt:v=>String(v|0)};
-    if(metric==="vgv") return {val:s.vgvTotal, fmt:fmtMoney};
-    if(metric==="casais_atendidos") return {val:rows.length, fmt:v=>String(v|0)};
-    if(metric==="eficiencia") return {val:s.eficiencia, fmt:fmtPctBR};
-    return {val:s.casais, fmt:v=>String(v|0)};
-  };
-
-  const results = teams.map(t=>{
-    const memberSet = new Set((t.members||[]).map(m=>norm(m)));
-    const teamRows = inPeriod.filter(r=>{
-      const who=(r[colKey]??"").toString().trim();
-      return who && memberSet.has(norm(who));
-    });
-    const met = getMetric(teamRows);
-    return { ...t, teamRows, value: met.val, fmt: met.fmt, stats: statsFor(teamRows) };
-  }).sort((a,b)=>{
-    const av=typeof a.value==="number"?a.value:0;
-    const bv=typeof b.value==="number"?b.value:0;
-    return (bv-av) || a.name.localeCompare(b.name,"pt-BR",{sensitivity:"base"});
-  });
-
-  const best = results[0]?.value ?? 0;
-
-  el("chResults").innerHTML=`
-    <div class="note">
-      Período do desafio: <strong>${fmtBR(chStart)}</strong> a <strong>${fmtBR(chEnd)}</strong> •
-      Base do grupo: <strong>${el("chProfTipo").value}</strong> •
-      Métrica: <strong>${metricLabel(metric)}</strong><br>
-      Filtros aplicados: Status=<strong>${status}</strong> • UF=<strong>${ufSel}</strong> • Registros no período: <strong>${inPeriod.length}</strong>
-    </div>
-
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th style="width:84px">#</th>
-          <th>Equipe</th>
-          <th class="num">Membros (base)</th>
-          <th class="num">${metricLabel(metric)}</th>
-          <th class="num">Casais</th>
-          <th class="num">Cotas</th>
-          <th class="num">VGV</th>
-          <th class="num">Eficiência</th>
-        </tr></thead>
-        <tbody>
-          ${results.map((r,i)=>{
-            const pos=i+1;
-            const medal=pos===1?"🥇":pos===2?"🥈":pos===3?"🥉":"";
-            const delta = (typeof r.value==="number" && typeof best==="number") ? (r.value-best) : 0;
-            const deltaStr = pos>1 ? (metric==="vgv" ? fmtMoney(delta) : metric==="eficiencia" ? fmtNumBR(delta*100,1,1)+"%" : String(delta|0)) : "";
-            const rowId=`mr_${i}_${Date.now()}`;
-            return `
-              <tr>
-                <td class="rank-col">${medal} ${pos}°</td>
-                <td class="name">
-                  <button class="team-name-btn" data-members-row="${rowId}">
-                    ${r.name}<span class="chevron">▶</span>
-                  </button>
-                  ${pos>1?`<span class="badge">dif.: ${deltaStr}</span>`:""}
-                </td>
-                <td class="num">${r.members.length}</td>
-                <td class="num"><b>${r.fmt(r.value)}</b></td>
-                <td class="num">${r.stats.casais}</td>
-                <td class="num">${r.stats.vendas}</td>
-                <td class="num">${fmtMoney(r.stats.vgvTotal)}</td>
-                <td class="num"><span class="pill ${effPill(r.stats.eficiencia)}">${fmtPctBR(r.stats.eficiencia)}</span></td>
-              </tr>
-
-              <tr class="members-row hidden" data-members-id="${rowId}">
-                <td colspan="8">
-                  ${renderTeamMembersPanelHTML(inPeriod, r)}
-                </td>
-              </tr>
-            `;
-          }).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-
-  attachMembersToggle(el("chResults"));
-}
-
 /* ===============================
    Selects globais e Profissionais
 =============================== */
@@ -1277,10 +1244,6 @@ function setupEvents(){
 
   el("prTipoB").addEventListener("change",()=>{ updatePrSelect("prTipoB","prNomeB"); renderPrComparativo(); });
   el("prNomeB").addEventListener("change",renderPrComparativo);
-
-  // avaliação
-  el("prRateSave").addEventListener("click",saveRating);
-  el("prRateClear").addEventListener("click",clearRating);
 
   // desafios
   ["chStart","chEnd","chProfTipo","chMetric"].forEach(id=>el(id).addEventListener("change",renderChallengeResults));
