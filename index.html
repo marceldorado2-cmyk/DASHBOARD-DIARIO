@@ -156,7 +156,6 @@
     .p-med{background:rgba(255,176,32,.12);color:var(--med);border-color:rgba(255,176,32,.28);}
     .p-good{background:rgba(92,255,176,.12);color:var(--good);border-color:rgba(92,255,176,.28);}
 
-    /* ── Promotores lista inline ── */
     .promo-list{display:flex;flex-direction:column;gap:8px;margin:0 0 6px;}
     .promo-row{
       display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -184,9 +183,6 @@
     }
     .config-panel h4{margin:0 0 14px;font-size:1rem;font-weight:900;color:rgba(234,240,255,.9);}
 
-    /* ════════════════════════════════════════
-       COMPARATIVO LADO A LADO (supervisores)
-    ════════════════════════════════════════ */
     .sup-compare-wrap{
       background:var(--card);
       border:1px solid var(--stroke);
@@ -345,9 +341,6 @@
     .kpi-sub b{color:rgba(234,240,255,.88)}
     .hint{font-size:.9rem;color:var(--muted);line-height:1.45;}
 
-    /* ════════════════════════════════════════
-       DESAFIOS
-    ════════════════════════════════════════ */
     .challenge-grid{
       display:grid;
       grid-template-columns: 420px 1fr;
@@ -439,7 +432,6 @@
     <p class="subtitle">Fonte: <strong>dados.csv</strong> (VGV = soma simples da coluna G)</p>
   </header>
 
-  <!-- ═══ FILTROS GLOBAIS ═══ -->
   <div class="controls">
     <div class="control-group" style="min-width:420px">
       <label>Período</label>
@@ -480,7 +472,6 @@
     </div>
   </div>
 
-  <!-- ═══ ABAS ═══ -->
   <div class="tabs-wrap">
     <div class="tabs">
       <div class="tab active" data-tab="resumo">📊 Resumo</div>
@@ -498,12 +489,10 @@
     </div>
   </div>
 
-  <!-- ═══ CONTEÚDO ═══ -->
   <div id="content">
     <div id="loading" class="note">Carregando dados...</div>
     <div id="error"   class="note bad" style="display:none"></div>
 
-    <!-- ── RESUMO ── -->
     <div id="tab-resumo" class="tab-content active">
       <div class="stats" id="stats"></div>
       <div class="note">
@@ -518,7 +507,6 @@
       </div>
     </div>
 
-    <!-- ── COMPARATIVO ── -->
     <div id="tab-comparativo" class="tab-content">
       <div class="note">
         <strong>Comparativo entre dois períodos</strong><br>
@@ -561,7 +549,6 @@
       </div>
     </div>
 
-    <!-- ── CURVA ── -->
     <div id="tab-curva" class="tab-content">
       <div class="stats" id="stats-curva"></div>
       <div class="note">Respeita os filtros globais. • Casais/dia = linhas no dia. • Vendas/dia = soma de cotas. • Eficiência = Vendas ÷ Casais.</div>
@@ -581,7 +568,6 @@
       </div>
     </div>
 
-    <!-- ── CANCELAMENTO ── -->
     <div id="tab-cancelamento" class="tab-content">
       <div class="note"><strong>% Cancelamento</strong> = (cotas canceladas ÷ cotas totais) × 100.</div>
       <div class="chart-card">
@@ -594,7 +580,6 @@
       <div id="cancelamento-table"></div>
     </div>
 
-    <!-- ── EQUIPES DE CAPTAÇÃO ── -->
     <div id="tab-equipes" class="tab-content">
       <div class="note"><strong>Equipes de captação</strong> — marque a equipe de cada Promotor de marketing. Salvo no seu navegador.</div>
       <h3 style="margin:10px 0 6px">Equipe Parque</h3>
@@ -637,11 +622,7 @@
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════════
-         ABA: PROMOTORES (2 SUPERVISORES)
-    ══════════════════════════════════════════════════ -->
     <div id="tab-equipes-supervisores" class="tab-content">
-
       <div class="note">
         <strong>Promotores de Marketing — 2 Supervisores</strong><br>
         Comparativo lado a lado: Equipe Parque × Equipe Externa × Geral. Percentual de representação ao final.
@@ -698,12 +679,8 @@
         <h4>Lista completa — altere diretamente</h4>
         <div id="supMappingList" class="promo-list"></div>
       </div>
-
     </div>
 
-    <!-- ══════════════════════════════════════════════════
-         ABA: DESAFIOS
-    ══════════════════════════════════════════════════ -->
     <div id="tab-desafios" class="tab-content">
       <div class="note">
         <strong>Desafios</strong><br>
@@ -712,7 +689,6 @@
       </div>
 
       <div class="challenge-grid">
-        <!-- Criar/Editar -->
         <div class="challenge-card">
           <h3 id="challengeFormTitle">Criar desafio</h3>
 
@@ -790,7 +766,6 @@
           <div id="chFormMsg" class="note" style="display:none;margin-top:12px"></div>
         </div>
 
-        <!-- Lista + Resultado -->
         <div class="challenge-card">
           <h3>Meus desafios</h3>
           <div id="chList" class="challenge-list"></div>
@@ -807,31 +782,26 @@
       </div>
     </div>
 
-    <!-- ── RANKING PROMOTOR ── -->
     <div id="tab-ranking-promotor" class="tab-content">
       <div class="note">Ranking por <span class="badge">Promotor de marketing</span>. Clique nos cabeçalhos para ordenar.</div>
       <div id="ranking-promotor"></div>
     </div>
 
-    <!-- ── RANKING LINER ── -->
     <div id="tab-ranking-liner" class="tab-content">
       <div class="note">Ranking por <span class="badge">Liner</span>. Clique nos cabeçalhos para ordenar.</div>
       <div id="ranking-liner"></div>
     </div>
 
-    <!-- ── RANKING CLOSER ── -->
     <div id="tab-ranking-closer" class="tab-content">
       <div class="note">Ranking por <span class="badge">Closer</span>. Clique nos cabeçalhos para ordenar.</div>
       <div id="ranking-closer"></div>
     </div>
 
-    <!-- ── PERFIL DE RENDA ── -->
     <div id="tab-perfil-renda" class="tab-content">
       <div class="note">Performance por faixa de renda. Clique nos cabeçalhos para ordenar.</div>
       <div id="perfil-renda"></div>
     </div>
 
-    <!-- ── PROFISSIONAIS ── -->
     <div id="tab-profissionais" class="tab-content">
       <div class="note">Selecione um profissional para ver o detalhe individual no período filtrado.</div>
       <div class="controls" style="margin-top:10px">
@@ -852,7 +822,6 @@
       <div class="note" style="margin-top:8px">Tabela por profissional (respeita os filtros globais):</div>
       <div id="profissionais-table"></div>
     </div>
-
   </div>
 </div>
 
@@ -1572,6 +1541,9 @@ function updateUFFilter(){
 
 /* ═══════════════════════════════════════════════
    DESAFIOS (CRUD + APURAÇÃO)
+   FIX: apuração agora soma corretamente para TODAS as equipes,
+        mesmo quando o mesmo "tipo" aparece em colunas diferentes.
+        (antes, o filtro usava apenas r[tipoKey] e acabava pegando só a Equipe 1 em alguns cenários)
 ═══════════════════════════════════════════════ */
 let currentChallengeId = null;
 
@@ -1611,11 +1583,6 @@ function newChallengeTemplate(){
   };
 }
 
-function getNamesForChallengeTipo(ch){
-  const tipo = ch?.profTipo || norm("promotor de marketing");
-  return listNamesByTipo(tipo);
-}
-
 function ensureTeamsCount(ch, n){
   const nn = Math.max(2, Math.min(6, Number(n)||2));
   ch.teams = Array.isArray(ch.teams)?ch.teams:[];
@@ -1640,8 +1607,6 @@ function renderChallengeTeamsEditor(){
 
   const teamsCount = Number(el("chTeamsCount").value)||2;
 
-  // se estiver criando novo (ainda não salvo), renderiza com base nos inputs (sem storage)
-  // mas para simplificar: quando não existe no storage, usamos um objeto temporário.
   const tmp = ch ? structuredClone(ch) : newChallengeTemplate();
   tmp.profTipo = tipo;
   ensureTeamsCount(tmp, teamsCount);
@@ -1650,7 +1615,6 @@ function renderChallengeTeamsEditor(){
   tmp.teams.forEach(t=>t.members.forEach(m=>used.add(norm(m))));
 
   el("chTeamsEditor").innerHTML = tmp.teams.map((t,idx)=>{
-    const teamId = `t${idx}`;
     return `
       <div class="team-box" data-team-index="${idx}">
         <div class="hdr">
@@ -1682,8 +1646,6 @@ function renderChallengeTeamsEditor(){
     `;
   }).join("");
 
-  // listeners (inputs/checkboxes) -> atualiza objeto no storage (se existir) ou um draft em memória via dataset
-  // Implementação: gravar direto no storage quando currentChallengeId existe; caso contrário, só atualiza UI e salvar na hora.
   el("chTeamsEditor").querySelectorAll("input[data-team-name]").forEach(inp=>{
     inp.addEventListener("input", ()=>{
       if(!currentChallengeId) return;
@@ -1704,17 +1666,13 @@ function renderChallengeTeamsEditor(){
       const tIdx = Number(cb.dataset.teamMember);
       const member = decodeURIComponent(cb.dataset.member);
 
-      // atualiza no storage se editando existente; senão ignora (vai ser lido ao salvar)
       if(currentChallengeId){
         const arr=loadChallenges();
         const ch=arr.find(x=>x.id===currentChallengeId);
         if(!ch) return;
         ensureTeamsCount(ch, Number(el("chTeamsCount").value)||2);
 
-        // remove de todas as equipes (garante exclusividade)
         ch.teams.forEach(t=>t.members = (t.members||[]).filter(x=>norm(x)!==norm(member)));
-
-        // adiciona se checked
         if(cb.checked){
           ch.teams[tIdx].members.push(member);
         }
@@ -1722,7 +1680,6 @@ function renderChallengeTeamsEditor(){
         saveChallenges(arr);
       }
 
-      // re-render para aplicar disable/contadores
       renderDesafios(false);
     });
   });
@@ -1738,28 +1695,24 @@ function readChallengeFromForm(){
 
   const names = listNamesByTipo(profTipo);
 
-  // montar times lendo editor atual (inputs/checkboxes)
   const teams = [];
   for(let i=0;i<teamsCount;i++){
     teams.push({ name:`Equipe ${i+1}`, members:[] });
   }
-  // nomes
   document.querySelectorAll("#chTeamsEditor input[data-team-name]").forEach(inp=>{
     const idx=Number(inp.dataset.teamName);
     if(Number.isFinite(idx) && teams[idx]) teams[idx].name = (inp.value||`Equipe ${idx+1}`).trim() || `Equipe ${idx+1}`;
   });
-  // membros
+
   document.querySelectorAll("#chTeamsEditor input[type='checkbox'][data-team-member]").forEach(cb=>{
     if(!cb.checked) return;
     const tIdx=Number(cb.dataset.teamMember);
     const member=decodeURIComponent(cb.dataset.member);
     if(!teams[tIdx]) return;
-    // valida membro existir na lista do tipo (evita lixo)
     if(!names.some(n=>norm(n)===norm(member))) return;
     teams[tIdx].members.push(member);
   });
 
-  // garantir exclusividade (caso alguma checagem tenha escapado)
   const seen=new Set();
   teams.forEach(t=>{
     t.members = t.members.filter(m=>{
@@ -1819,7 +1772,6 @@ function challengeMetricValue(ch, rowsForTeam){
     case "casais": return { val: s.casais, fmt: v=>String(v|0) };
     case "vgv": return { val: s.vgvTotal, fmt: fmtMoney };
     case "casais_atendidos":
-      // aqui interpretamos como "linhas totais" (inclui NoTour)
       return { val: s.totalLinhas, fmt: v=>String(v|0) };
     case "eficiencia": return { val: s.eficiencia, fmt: fmtPctBR };
     default: return { val: s.casais, fmt: v=>String(v|0) };
@@ -1827,7 +1779,6 @@ function challengeMetricValue(ch, rowsForTeam){
 }
 
 function applyFiltersForChallengeBase(rows){
-  // desafio: IGNORA período global; respeita status e UF globais
   const status  =el("statusSelect").value;
   const ufSel   =el("ufSelect").value;
   let f=rows.slice();
@@ -1836,13 +1787,22 @@ function applyFiltersForChallengeBase(rows){
   return f;
 }
 
+/* FIX central:
+   Para desafios, em vez de olhar só para r[tipoKey], pegamos o "participante" do registro
+   do tipo escolhido (promotor/liner/closer). Isso garante apuração por membros para TODAS as equipes.
+*/
+function challengeRowActorName(row, profTipoNorm){
+  const tipo = norm(profTipoNorm);
+  const val = (row?.[tipo] ?? "").toString().trim();
+  return val || "";
+}
+
 function renderChallengeResults(ch){
   if(!ch){ el("chResults").innerHTML = `<div class="note">Selecione um desafio na lista para ver a apuração.</div>`; return; }
 
   const base = applyFiltersForChallengeBase(state.rows);
   const inPeriod = filterByRange(base, ch.start, ch.end);
 
-  // agrupar por time, filtrando por profissional do tipo escolhido
   const tipoKey = norm(ch.profTipo||norm("promotor de marketing"));
   const teams = Array.isArray(ch.teams)?ch.teams:[];
   const results = teams.map(t=>{
@@ -1850,7 +1810,7 @@ function renderChallengeResults(ch){
     const memberSet = new Set(members.map(norm));
 
     const rowsTeam = inPeriod.filter(r=>{
-      const who = (r[tipoKey]??"").toString().trim();
+      const who = challengeRowActorName(r, tipoKey);
       if(!who) return false;
       return memberSet.has(norm(who));
     });
@@ -1866,7 +1826,6 @@ function renderChallengeResults(ch){
     };
   });
 
-  // ordenar por valor (desc), desempate por nome
   const sorted = results.slice().sort((a,b)=>{
     const av = (typeof a.valor==="number")?a.valor:0;
     const bv = (typeof b.valor==="number")?b.valor:0;
@@ -1928,11 +1887,9 @@ function renderChallengeResults(ch){
     </div>
   `;
 
-  // sort (simples) para tabela de desafios
   el("chResults").querySelectorAll("thead th.sortable").forEach(th=>{
     th.addEventListener("click", ()=>{
       setSort("ch-results-table", th.dataset.sort);
-      // aplicar sortState manualmente
       const st = sortState["ch-results-table"] || {key:"valor",dir:"desc"};
       const again = results.slice().sort((a,b)=>{
         const key = st.key;
@@ -1947,7 +1904,6 @@ function renderChallengeResults(ch){
         return dir==="asc" ? baseCmp : -baseCmp;
       });
 
-      // re-render só o tbody rapidamente
       const tbody = el("chResults").querySelector("tbody");
       tbody.innerHTML = again.map((r,i)=>{
         const pos=i+1;
@@ -1973,7 +1929,6 @@ function renderChallengeResults(ch){
 }
 
 function renderDesafios(recalcTeamsEditor=true){
-  // lista
   const arr = loadChallenges().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
   el("chList").innerHTML = arr.length ? arr.map(ch=>{
     const active = (ch.id===currentChallengeId);
@@ -2009,7 +1964,6 @@ function renderDesafios(recalcTeamsEditor=true){
       const ch=loadChallenges().find(x=>x.id===id);
       if(!ch) return;
       currentChallengeId = id;
-      // mantém form como está (se não estava editando), mas mostra apuração
       renderChallengeResults(ch);
       renderDesafios(false);
     });
@@ -2022,10 +1976,8 @@ function renderDesafios(recalcTeamsEditor=true){
     });
   });
 
-  // editor de equipes
   if(recalcTeamsEditor) renderChallengeTeamsEditor();
 
-  // apuração do selecionado
   const current = currentChallengeId ? loadChallenges().find(x=>x.id===currentChallengeId) : null;
   renderChallengeResults(current);
 }
@@ -2048,7 +2000,7 @@ function updateAll(){
   renderEquipes();
   renderSupervisores();
   renderComparativo();
-  renderDesafios(false); // desafios respeitam status/UF globais na apuração
+  renderDesafios(false);
 }
 
 /* ═══════════════════════════════════════════════
@@ -2072,7 +2024,6 @@ function setup(){
   el("profTipoSingle").addEventListener("change",()=>{ updateProfFilters("profTipoSingle","profNomeSingle"); renderSingle(); });
   el("profNomeSingle").addEventListener("change",renderSingle);
 
-  /* equipes */
   el("btnSalvarEquipe").addEventListener("click",()=>{
     const p=el("teamPromotorSelect").value,t=el("teamEquipeSelect").value;
     if(!p) return; const m=loadTeamMap(); m[p]=t; saveTeamMap(m); renderTeamMappingUI(); renderEquipes(); renderSupervisores();
@@ -2082,7 +2033,6 @@ function setup(){
     saveTeamMap({}); renderTeamMappingUI(); renderEquipes(); renderSupervisores();
   });
 
-  /* supervisores */
   el("btnSalvarEquipeSup").addEventListener("click",()=>{
     const p=el("supPromotorSelect").value,t=el("supEquipeSelect").value;
     if(!p) return; const m=loadTeamMap(); m[p]=t; saveTeamMap(m); renderSupervisores(); renderEquipes(); renderTeamMappingUI();
@@ -2092,7 +2042,6 @@ function setup(){
     saveTeamMap({}); renderSupervisores(); renderEquipes(); renderTeamMappingUI();
   });
 
-  /* desafios */
   el("chTeamsCount").addEventListener("change", ()=>{
     if(currentChallengeId){
       const arr=loadChallenges();
@@ -2111,7 +2060,6 @@ function setup(){
       const ch=arr.find(x=>x.id===currentChallengeId);
       if(ch){
         ch.profTipo = norm(el("chProfTipo").value);
-        // ao trocar tipo, limpa membros (para evitar membros inexistentes)
         ch.teams.forEach(t=>t.members=[]);
         ch.updatedAt = Date.now();
         saveChallenges(arr);
@@ -2151,7 +2099,6 @@ function setup(){
       showChMsg("Informe o período (início e fim) do desafio.", "warn"); return;
     }
 
-    // valida: não permitir equipe vazia? (vou permitir, mas avisar)
     const emptyTeams = form.teams.filter(t=>(t.members||[]).length===0).length;
     if(emptyTeams>0){
       if(!confirm("Existem equipes sem membros. Deseja salvar assim mesmo?")) return;
@@ -2178,7 +2125,6 @@ function setup(){
     ch.metric = form.metric;
     ch.profTipo = form.profTipo;
     ensureTeamsCount(ch, form.teamsCount);
-    // aplica nomes e membros
     ch.teams.forEach((t,i)=>{
       t.name = (form.teams[i]?.name || `Equipe ${i+1}`).trim() || `Equipe ${i+1}`;
       t.members = (form.teams[i]?.members || []).slice();
@@ -2197,7 +2143,6 @@ function setup(){
     renderDesafios();
   });
 
-  /* tabs */
   document.querySelectorAll(".tab").forEach(t=>{
     t.addEventListener("click",()=>{
       document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
@@ -2208,7 +2153,6 @@ function setup(){
         setTimeout(()=>{ try{charts.curva?.resize?.();charts.semana?.resize?.();charts.cancelamento?.resize?.();}catch(e){} },80);
       }
       if(t.dataset.tab==="desafios"){
-        // garante render atual no abrir
         renderDesafios(true);
       }
     });
@@ -2239,8 +2183,7 @@ async function init(){
     el("cmpXStart").value=toISO(sX); el("cmpXEnd").value=toISO(e);
     el("cmpYStart").value=toISO(sY); el("cmpYEnd").value=toISO(eY);
 
-    // init desafios
-    resetChallengeForm(); // prepara editor
+    resetChallengeForm();
     renderDesafios(true);
 
     updateAll();
