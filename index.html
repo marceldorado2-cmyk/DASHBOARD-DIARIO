@@ -406,6 +406,104 @@
     .member-row input[type="checkbox"]{transform:scale(1.1);}
     .tiny{font-size:.85rem;color:var(--muted);}
 
+    /* ════════════════════════════════════════
+       INDIVIDUAL MÊS/MÊS (NOVA ABA)
+    ════════════════════════════════════════ */
+    .month-filter{
+      display:flex;flex-wrap:wrap;gap:10px;
+      align-items:center;justify-content:flex-start;
+      margin:12px 0 10px;
+    }
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.04);
+      cursor:pointer;user-select:none;
+      font-weight:850;
+      color:rgba(234,240,255,.86);
+      transition:all .15s ease;
+    }
+    .chip:hover{transform:translateY(-1px);box-shadow:0 14px 36px rgba(0,0,0,.35);border-color:rgba(255,255,255,.22);}
+    .chip.active{
+      background:linear-gradient(135deg,rgba(124,92,255,.30),rgba(34,211,238,.14));
+      border-color:rgba(124,92,255,.55);
+      color:white;
+    }
+    .chip small{font-family:var(--mono);color:rgba(234,240,255,.65);font-weight:900;}
+    .month-actions{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 6px;}
+    .sticky-head{
+      position:sticky; top:0; z-index:2;
+      background:rgba(7,10,18,.72);
+      backdrop-filter: blur(10px);
+      border-radius:16px;
+      padding:10px 10px 2px;
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    /* tabela comparativa mês a mês */
+    .mm-table-wrap{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      overflow:auto;
+      backdrop-filter:blur(10px);
+      margin:10px 0 26px;
+      max-height:72vh;
+    }
+    table.mm{min-width:1100px;border-collapse:separate;border-spacing:0;width:100%;}
+    table.mm thead th{
+      position:sticky; top:0; z-index:1;
+      background:rgba(255,255,255,0.03);
+    }
+    table.mm th.metric{
+      left:0; z-index:3; position:sticky;
+      background:rgba(11,18,34,.92);
+      border-right:1px solid rgba(255,255,255,.08);
+      min-width:240px;
+    }
+    table.mm td.metric{
+      left:0; z-index:2; position:sticky;
+      background:rgba(11,18,34,.78);
+      border-right:1px solid rgba(255,255,255,.08);
+      font-weight:900;
+      color:rgba(234,240,255,.92);
+    }
+    table.mm td, table.mm th{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.05);white-space:nowrap;}
+    table.mm tbody tr:hover td{background:rgba(255,255,255,.02);}
+    .mm-subhead{
+      font-size:.78rem;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.6px;
+    }
+    .mm-month{
+      font-weight:950;
+      text-align:center;
+      color:white;
+    }
+    .mm-month span{
+      font-family:var(--mono);
+      font-size:.85rem;
+      color:rgba(234,240,255,.75);
+      font-weight:900;
+      margin-left:6px;
+    }
+    .mm-prof{
+      font-weight:900;
+      text-align:center;
+      color:rgba(234,240,255,.88);
+    }
+    .mm-cell{font-family:var(--mono);text-align:right;}
+    .mm-cell.center{text-align:center;}
+    .mm-pill{
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:3px 9px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      font-weight:950;
+      font-family:var(--mono);
+    }
+
     @media(max-width:1100px){
       .tabs{grid-template-columns:repeat(3,minmax(0,1fr));}
       .sup-compare-header,.sup-compare-row{grid-template-columns:160px 1fr 1fr 1fr;}
@@ -426,6 +524,7 @@
       .promo-row select.mini-sel{min-width:140px;}
       .sup-compare-header,.sup-compare-row{grid-template-columns:130px 1fr 1fr 1fr;font-size:.85rem;}
       .sup-compare-row > div,.sup-compare-header > div{padding:10px 10px;}
+      table.mm th.metric, table.mm td.metric{min-width:200px;}
     }
   </style>
 
@@ -484,6 +583,7 @@
   <div class="tabs-wrap">
     <div class="tabs">
       <div class="tab active" data-tab="resumo">📊 Resumo</div>
+      <div class="tab" data-tab="individual-mom">🧩 Individual mês/mês</div>
       <div class="tab" data-tab="comparativo">🆚 Comparativo de períodos</div>
       <div class="tab" data-tab="curva">📈 Curva de casais e vendas</div>
       <div class="tab" data-tab="cancelamento">❌ Análise de cancelamento</div>
@@ -516,6 +616,32 @@
         • <strong>Eficiência = (Cotas ÷ Casais) × 100</strong>.<br>
         • <strong>Média de Casais/dia</strong> = total ÷ dias do período (inclusivo).
       </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════
+         ABA: INDIVIDUAL MÊS/MÊS (NOVA)
+    ══════════════════════════════════════════════════ -->
+    <div id="tab-individual-mom" class="tab-content">
+      <div class="note">
+        <strong>Individual mês/mês</strong><br>
+        Clique nos meses para comparar lado a lado (máx. <strong>6</strong> meses). A comparação respeita os filtros globais de <strong>Status</strong>, <strong>UF</strong> e <strong>Profissional/Nome</strong>.
+      </div>
+
+      <div class="sticky-head">
+        <div class="section-title" style="margin-bottom:6px">
+          Selecionar meses <span class="pill-tag">até 6</span>
+        </div>
+        <div id="momMonths" class="month-filter"></div>
+        <div class="month-actions">
+          <button class="btn" id="btnMomUltimos6">Últimos 6 meses</button>
+          <button class="btn" id="btnMomLimpar">Limpar seleção</button>
+        </div>
+        <div id="momMeta" class="hint" style="margin:6px 2px 8px">—</div>
+      </div>
+
+      <div id="momWarn" class="note warn" style="display:none;margin-top:10px"></div>
+
+      <div id="momTable"></div>
     </div>
 
     <!-- ── COMPARATIVO ── -->
@@ -878,7 +1004,7 @@ const KEY = {
   closer  : norm("closer"),
 };
 
-const state   = { rows:[], filtered:[], meta:{ vgvColKey:null, firstColKey:null } };
+const state   = { rows:[], filtered:[], meta:{ vgvColKey:null, firstColKey:null }, mom:{monthsAll:[], selected:new Set()} };
 const charts  = { curva:null, semana:null, cancelamento:null };
 const sortState = {
   "ranking-promotor"   :{ key:"vendas",    dir:"desc" },
@@ -969,6 +1095,16 @@ function parseDateOnlyInput(s){
 }
 const toISO = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`;
 const fmtBR = iso => { const m=String(iso).match(/^(\d{4})-(\d{2})-(\d{2})$/); return m?`${m[3]}/${m[2]}/${m[1]}`:iso; };
+const monthKey = dt => `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}`; // YYYY-MM
+const monthLabelPt = ym => {
+  const m = String(ym).match(/^(\d{4})-(\d{2})$/);
+  if(!m) return ym;
+  const y=+m[1], mo=+m[2]-1;
+  const d=new Date(y,mo,1);
+  const name = d.toLocaleDateString("pt-BR",{month:"short"});
+  const nice = name.replace(".",""); // "jun."
+  return `${nice.charAt(0).toUpperCase()+nice.slice(1)}/${String(y).slice(2)}`; // Ex.: "Jun/26"
+};
 
 /* ═══════════════════════════════════════════════
    STATUS / COTAS
@@ -1003,6 +1139,7 @@ function buildObjects(rows){
     o._bucket    =contractBucket(o[KEY.statusContrato]);
     o._clientName=cnk?(o[cnk]??"").toString().trim():"";
     o._statusAt  =norm(o[KEY.statusAtendimento]??"");
+    o._monthKey  =o._dt ? monthKey(o._dt) : null;
     return o;
   });
 }
@@ -1062,7 +1199,7 @@ function statsFor(rows){
     eficiencia:eff,pctCancel:q.total?(q.cancelado/q.total):0,
     ticketMedio:q.total?(vgv.total/q.total):0,
     rendaMed:avgRenda(rows),mediaCasaisPeriodo:avgCasais(rows),
-    pctCancelamentosVendas: q.total ? (q.cancelado / q.total) : 0, /* inclusão solicitada */
+    pctCancelamentosVendas: q.total ? (q.cancelado / q.total) : 0,
   };
 }
 
@@ -1460,8 +1597,9 @@ function renderSupervisores(){
 
   const promos=listAllPromos();
   el("supPromotorSelect").innerHTML=`<option value="">Selecione...</option>`+promos.map(p=>`<option value="${p}">${p}</option>`).join("");
+  const map2=loadTeamMap();
   el("supMappingList").innerHTML=promos.length?promos.map(p=>{
-    const cur=map[p]||"";
+    const cur=map2[p]||"";
     const tagCls=cur==="Equipe Parque"?"parque":cur==="Equipe Externa"?"externa":"none";
     const tagLbl=cur||"Sem equipe";
     return`<div class="promo-row">
@@ -1556,6 +1694,184 @@ function renderComparativo(){
 }
 
 /* ═══════════════════════════════════════════════
+   INDIVIDUAL MÊS/MÊS (NOVA ABA)
+═══════════════════════════════════════════════ */
+function computeAllMonths(){
+  const s=new Set();
+  state.rows.forEach(r=>{ if(r._monthKey) s.add(r._monthKey); });
+  state.mom.monthsAll = [...s].sort(); // crescente
+}
+
+function renderMomMonthChips(){
+  const box = el("momMonths");
+  const months = state.mom.monthsAll.slice().reverse(); // mais recentes primeiro
+  box.innerHTML = months.length ? months.map(ym=>{
+    const active = state.mom.selected.has(ym);
+    return `<button class="chip ${active?"active":""}" type="button" data-ym="${ym}">
+      ${monthLabelPt(ym)} <small>${ym}</small>
+    </button>`;
+  }).join("") : `<div class="note" style="margin:0">Nenhum mês encontrado (verifique datas no CSV).</div>`;
+
+  box.querySelectorAll("button[data-ym]").forEach(b=>{
+    b.addEventListener("click", ()=>{
+      const ym=b.dataset.ym;
+      if(state.mom.selected.has(ym)){
+        state.mom.selected.delete(ym);
+      }else{
+        if(state.mom.selected.size>=6){
+          el("momWarn").style.display="block";
+          el("momWarn").textContent="Limite de 6 meses: desmarque um mês para selecionar outro.";
+          setTimeout(()=>{ el("momWarn").style.display="none"; }, 1800);
+          return;
+        }
+        state.mom.selected.add(ym);
+      }
+      renderMomMonthChips();
+      renderMomTable();
+    });
+  });
+}
+
+function getFilteredRowsIgnorePeriod(){
+  // usa o applyFilters atual, mas removendo o filtro de período
+  // (respeita Status, UF e Profissional/Nome)
+  const status  =el("statusSelect").value;
+  const profTipo=norm(el("profTipo").value);
+  const profNome=el("profNome").value;
+  const ufSel   =el("ufSelect").value;
+
+  let f=state.rows.slice();
+  if(status!=="todos")   f=f.filter(r=>r._bucket===status);
+  if(ufSel !=="todos")   f=f.filter(r=>(r[KEY.uf]??"").toString().trim()===ufSel);
+  if(profNome!=="todos") f=f.filter(r=>norm(r[profTipo]??"")=== norm(profNome));
+  return f;
+}
+
+function renderMomTable(){
+  const selected = [...state.mom.selected].sort(); // cronológico
+  const meta = [
+    `Meses: ${selected.length?selected.map(monthLabelPt).join(" • "):"—"}`,
+    `Status: ${el("statusSelect").value}`,
+    `Prof.: ${el("profTipo").value} / ${el("profNome").value}`,
+    `UF: ${el("ufSelect").value}`,
+  ].join(" • ");
+  el("momMeta").textContent = meta;
+
+  if(selected.length===0){
+    el("momTable").innerHTML = `<div class="note warn">Selecione até 6 meses acima para montar o comparativo.</div>`;
+    return;
+  }
+
+  const base = getFilteredRowsIgnorePeriod();
+  const tipoKey = norm(el("profTipo").value);
+
+  // profissionais existentes no recorte (base) dentro dos meses selecionados
+  const professionals = new Set();
+  base.forEach(r=>{
+    if(!r._monthKey) return;
+    if(!state.mom.selected.has(r._monthKey)) return;
+    const who = (r[tipoKey]??"").toString().trim();
+    if(who) professionals.add(who);
+  });
+  const profList = [...professionals].sort((a,b)=>a.localeCompare(b,"pt-BR",{sensitivity:"base"}));
+
+  if(!profList.length){
+    el("momTable").innerHTML = `<div class="note">Nenhum profissional encontrado nos meses selecionados com os filtros atuais.</div>`;
+    return;
+  }
+
+  // pré-agregar: (mes, profissional) -> stats
+  const cell = new Map(); // key = ym||name
+  const rowsByMonth = new Map(selected.map(m=>[m,[]]));
+  base.forEach(r=>{
+    if(!r._monthKey) return;
+    if(!rowsByMonth.has(r._monthKey)) return;
+    rowsByMonth.get(r._monthKey).push(r);
+  });
+
+  selected.forEach(ym=>{
+    const rowsM = rowsByMonth.get(ym) || [];
+    const byProf = new Map();
+    rowsM.forEach(r=>{
+      const who=(r[tipoKey]??"").toString().trim();
+      if(!who) return;
+      if(!byProf.has(who)) byProf.set(who,[]);
+      byProf.get(who).push(r);
+    });
+    profList.forEach(p=>{
+      const s = statsFor(byProf.get(p) || []);
+      cell.set(`${ym}||${p}`, s);
+    });
+  });
+
+  // métricas "mesmas informações do quadro resumo"
+  const metrics = [
+    { key:"casais",               label:"Casais",                               fmt:(s)=>String(s.casais|0), align:"right" },
+    { key:"mediaCasaisPeriodo",   label:"Média de Casais/dia",                  fmt:(s)=>fmtNumBR(s.mediaCasaisPeriodo,1,1), align:"right" },
+    { key:"vendas",               label:"Cotas (vendas totais)",                fmt:(s)=>String(s.vendas|0), align:"right" },
+    { key:"cotasCanceladas",      label:"Cotas canceladas",                     fmt:(s)=>String(s.cotasCanceladas|0), align:"right" },
+    { key:"pctCancelamentosVendas",label:"% Cancelamentos (Canceladas ÷ Vendas)",fmt:(s)=>fmtPctBR(s.pctCancelamentosVendas), align:"center",
+      pill:(s)=>`<span class="mm-pill ${canPill(s.pctCancelamentosVendas)}">${fmtPctBR(s.pctCancelamentosVendas)}</span>`
+    },
+    { key:"vgvTotal",             label:"VGV total (Σ col G)",                  fmt:(s)=>fmtMoney(s.vgvTotal), align:"right" },
+    { key:"eficiencia",           label:"Eficiência",                           fmt:(s)=>fmtPctBR(s.eficiencia), align:"center",
+      pill:(s)=>`<span class="mm-pill ${effPill(s.eficiencia)}">${fmtPctBR(s.eficiencia)}</span>`
+    },
+    { key:"rendaMed",             label:"Renda média",                          fmt:(s)=>fmtMoney(s.rendaMed), align:"right" },
+    { key:"ticketMedio",          label:"Ticket médio (cota)",                  fmt:(s)=>fmtMoney(s.ticketMedio), align:"right" },
+    { key:"noTour",               label:"NoTour",                               fmt:(s)=>String(s.noTour|0), align:"right" },
+  ];
+
+  // head: 1 coluna métrica + (meses * profissionais)
+  const colCount = selected.length * profList.length;
+
+  const thead1 = `
+    <tr>
+      <th class="metric">Métrica</th>
+      ${selected.map(ym=>`
+        <th class="mm-month" colspan="${profList.length}">
+          ${monthLabelPt(ym)} <span>${ym}</span>
+        </th>
+      `).join("")}
+    </tr>
+  `;
+
+  const thead2 = `
+    <tr>
+      <th class="metric mm-subhead">—</th>
+      ${selected.map(ym=> profList.map(p=>`<th class="mm-prof">${p}</th>`).join("")).join("")}
+    </tr>
+  `;
+
+  const tbody = metrics.map(m=>{
+    return `
+      <tr>
+        <td class="metric">${m.label}</td>
+        ${selected.map(ym=> profList.map(p=>{
+          const s = cell.get(`${ym}||${p}`) || statsFor([]);
+          const val = m.pill ? m.pill(s) : m.fmt(s);
+          const cls = m.align==="center" ? "mm-cell center" : "mm-cell";
+          return `<td class="${cls}">${val}</td>`;
+        }).join("")).join("")}
+      </tr>
+    `;
+  }).join("");
+
+  el("momTable").innerHTML = `
+    <div class="mm-table-wrap">
+      <table class="mm">
+        <thead>${thead1}${thead2}</thead>
+        <tbody>${tbody}</tbody>
+      </table>
+    </div>
+    <div class="note" style="margin-top:10px">
+      <strong>Dica:</strong> Se ficar muito largo, reduza o número de meses selecionados ou filtre um único profissional no filtro global de Nome.
+      <br>Colunas = ${selected.length} mês(es) × ${profList.length} profissional(is) = <strong>${colCount}</strong>.
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════
    SELECTS
 ═══════════════════════════════════════════════ */
 function updateProfFilters(tipoId,nomeId){
@@ -1613,11 +1929,6 @@ function newChallengeTemplate(){
   };
 }
 
-function getNamesForChallengeTipo(ch){
-  const tipo = ch?.profTipo || norm("promotor de marketing");
-  return listNamesByTipo(tipo);
-}
-
 function ensureTeamsCount(ch, n){
   const nn = Math.max(2, Math.min(6, Number(n)||2));
   ch.teams = Array.isArray(ch.teams)?ch.teams:[];
@@ -1642,8 +1953,6 @@ function renderChallengeTeamsEditor(){
 
   const teamsCount = Number(el("chTeamsCount").value)||2;
 
-  // se estiver criando novo (ainda não salvo), renderiza com base nos inputs (sem storage)
-  // mas para simplificar: quando não existe no storage, usamos um objeto temporário.
   const tmp = ch ? structuredClone(ch) : newChallengeTemplate();
   tmp.profTipo = tipo;
   ensureTeamsCount(tmp, teamsCount);
@@ -1652,7 +1961,6 @@ function renderChallengeTeamsEditor(){
   tmp.teams.forEach(t=>t.members.forEach(m=>used.add(norm(m))));
 
   el("chTeamsEditor").innerHTML = tmp.teams.map((t,idx)=>{
-    const teamId = `t${idx}`;
     return `
       <div class="team-box" data-team-index="${idx}">
         <div class="hdr">
@@ -1684,8 +1992,6 @@ function renderChallengeTeamsEditor(){
     `;
   }).join("");
 
-  // listeners (inputs/checkboxes) -> atualiza objeto no storage (se existir) ou um draft em memória via dataset
-  // Implementação: gravar direto no storage quando currentChallengeId existe; caso contrário, só atualiza UI e salvar na hora.
   el("chTeamsEditor").querySelectorAll("input[data-team-name]").forEach(inp=>{
     inp.addEventListener("input", ()=>{
       if(!currentChallengeId) return;
@@ -1706,17 +2012,14 @@ function renderChallengeTeamsEditor(){
       const tIdx = Number(cb.dataset.teamMember);
       const member = decodeURIComponent(cb.dataset.member);
 
-      // atualiza no storage se editando existente; senão ignora (vai ser lido ao salvar)
       if(currentChallengeId){
         const arr=loadChallenges();
         const ch=arr.find(x=>x.id===currentChallengeId);
         if(!ch) return;
         ensureTeamsCount(ch, Number(el("chTeamsCount").value)||2);
 
-        // remove de todas as equipes (garante exclusividade)
         ch.teams.forEach(t=>t.members = (t.members||[]).filter(x=>norm(x)!==norm(member)));
 
-        // adiciona se checked
         if(cb.checked){
           ch.teams[tIdx].members.push(member);
         }
@@ -1724,7 +2027,6 @@ function renderChallengeTeamsEditor(){
         saveChallenges(arr);
       }
 
-      // re-render para aplicar disable/contadores
       renderDesafios(false);
     });
   });
@@ -1740,28 +2042,23 @@ function readChallengeFromForm(){
 
   const names = listNamesByTipo(profTipo);
 
-  // montar times lendo editor atual (inputs/checkboxes)
   const teams = [];
   for(let i=0;i<teamsCount;i++){
     teams.push({ name:`Equipe ${i+1}`, members:[] });
   }
-  // nomes
   document.querySelectorAll("#chTeamsEditor input[data-team-name]").forEach(inp=>{
     const idx=Number(inp.dataset.teamName);
     if(Number.isFinite(idx) && teams[idx]) teams[idx].name = (inp.value||`Equipe ${idx+1}`).trim() || `Equipe ${idx+1}`;
   });
-  // membros
   document.querySelectorAll("#chTeamsEditor input[type='checkbox'][data-team-member]").forEach(cb=>{
     if(!cb.checked) return;
     const tIdx=Number(cb.dataset.teamMember);
     const member=decodeURIComponent(cb.dataset.member);
     if(!teams[tIdx]) return;
-    // valida membro existir na lista do tipo (evita lixo)
     if(!names.some(n=>norm(n)===norm(member))) return;
     teams[tIdx].members.push(member);
   });
 
-  // garantir exclusividade (caso alguma checagem tenha escapado)
   const seen=new Set();
   teams.forEach(t=>{
     t.members = t.members.filter(m=>{
@@ -1820,16 +2117,13 @@ function challengeMetricValue(ch, rowsForTeam){
   switch(ch.metric){
     case "casais": return { val: s.casais, fmt: v=>String(v|0) };
     case "vgv": return { val: s.vgvTotal, fmt: fmtMoney };
-    case "casais_atendidos":
-      // aqui interpretamos como "linhas totais" (inclui NoTour)
-      return { val: s.totalLinhas, fmt: v=>String(v|0) };
+    case "casais_atendidos": return { val: s.totalLinhas, fmt: v=>String(v|0) };
     case "eficiencia": return { val: s.eficiencia, fmt: fmtPctBR };
     default: return { val: s.casais, fmt: v=>String(v|0) };
   }
 }
 
 function applyFiltersForChallengeBase(rows){
-  // desafio: IGNORA período global; respeita status e UF globais
   const status  =el("statusSelect").value;
   const ufSel   =el("ufSelect").value;
   let f=rows.slice();
@@ -1844,7 +2138,6 @@ function renderChallengeResults(ch){
   const base = applyFiltersForChallengeBase(state.rows);
   const inPeriod = filterByRange(base, ch.start, ch.end);
 
-  // agrupar por time, filtrando por profissional do tipo escolhido
   const tipoKey = norm(ch.profTipo||norm("promotor de marketing"));
   const teams = Array.isArray(ch.teams)?ch.teams:[];
   const results = teams.map(t=>{
@@ -1868,7 +2161,6 @@ function renderChallengeResults(ch){
     };
   });
 
-  // ordenar por valor (desc), desempate por nome
   const sorted = results.slice().sort((a,b)=>{
     const av = (typeof a.valor==="number")?a.valor:0;
     const bv = (typeof b.valor==="number")?b.valor:0;
@@ -1930,11 +2222,9 @@ function renderChallengeResults(ch){
     </div>
   `;
 
-  // sort (simples) para tabela de desafios
   el("chResults").querySelectorAll("thead th.sortable").forEach(th=>{
     th.addEventListener("click", ()=>{
       setSort("ch-results-table", th.dataset.sort);
-      // aplicar sortState manualmente
       const st = sortState["ch-results-table"] || {key:"valor",dir:"desc"};
       const again = results.slice().sort((a,b)=>{
         const key = st.key;
@@ -1949,7 +2239,6 @@ function renderChallengeResults(ch){
         return dir==="asc" ? baseCmp : -baseCmp;
       });
 
-      // re-render só o tbody rapidamente
       const tbody = el("chResults").querySelector("tbody");
       tbody.innerHTML = again.map((r,i)=>{
         const pos=i+1;
@@ -1975,7 +2264,6 @@ function renderChallengeResults(ch){
 }
 
 function renderDesafios(recalcTeamsEditor=true){
-  // lista
   const arr = loadChallenges().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
   el("chList").innerHTML = arr.length ? arr.map(ch=>{
     const active = (ch.id===currentChallengeId);
@@ -2011,7 +2299,6 @@ function renderDesafios(recalcTeamsEditor=true){
       const ch=loadChallenges().find(x=>x.id===id);
       if(!ch) return;
       currentChallengeId = id;
-      // mantém form como está (se não estava editando), mas mostra apuração
       renderChallengeResults(ch);
       renderDesafios(false);
     });
@@ -2024,10 +2311,8 @@ function renderDesafios(recalcTeamsEditor=true){
     });
   });
 
-  // editor de equipes
   if(recalcTeamsEditor) renderChallengeTeamsEditor();
 
-  // apuração do selecionado
   const current = currentChallengeId ? loadChallenges().find(x=>x.id===currentChallengeId) : null;
   renderChallengeResults(current);
 }
@@ -2050,7 +2335,10 @@ function updateAll(){
   renderEquipes();
   renderSupervisores();
   renderComparativo();
-  renderDesafios(false); // desafios respeitam status/UF globais na apuração
+  renderDesafios(false);
+
+  // atualiza aba mês/mês (ela tem seleção própria, não zera automaticamente)
+  renderMomTable();
 }
 
 /* ═══════════════════════════════════════════════
@@ -2113,7 +2401,6 @@ function setup(){
       const ch=arr.find(x=>x.id===currentChallengeId);
       if(ch){
         ch.profTipo = norm(el("chProfTipo").value);
-        // ao trocar tipo, limpa membros (para evitar membros inexistentes)
         ch.teams.forEach(t=>t.members=[]);
         ch.updatedAt = Date.now();
         saveChallenges(arr);
@@ -2153,7 +2440,6 @@ function setup(){
       showChMsg("Informe o período (início e fim) do desafio.", "warn"); return;
     }
 
-    // valida: não permitir equipe vazia? (vou permitir, mas avisar)
     const emptyTeams = form.teams.filter(t=>(t.members||[]).length===0).length;
     if(emptyTeams>0){
       if(!confirm("Existem equipes sem membros. Deseja salvar assim mesmo?")) return;
@@ -2180,7 +2466,6 @@ function setup(){
     ch.metric = form.metric;
     ch.profTipo = form.profTipo;
     ensureTeamsCount(ch, form.teamsCount);
-    // aplica nomes e membros
     ch.teams.forEach((t,i)=>{
       t.name = (form.teams[i]?.name || `Equipe ${i+1}`).trim() || `Equipe ${i+1}`;
       t.members = (form.teams[i]?.members || []).slice();
@@ -2199,6 +2484,20 @@ function setup(){
     renderDesafios();
   });
 
+  /* individual mês/mês */
+  el("btnMomLimpar").addEventListener("click", ()=>{
+    state.mom.selected.clear();
+    renderMomMonthChips();
+    renderMomTable();
+  });
+  el("btnMomUltimos6").addEventListener("click", ()=>{
+    state.mom.selected.clear();
+    const last = state.mom.monthsAll.slice().reverse().slice(0,6);
+    last.forEach(m=>state.mom.selected.add(m));
+    renderMomMonthChips();
+    renderMomTable();
+  });
+
   /* tabs */
   document.querySelectorAll(".tab").forEach(t=>{
     t.addEventListener("click",()=>{
@@ -2210,8 +2509,12 @@ function setup(){
         setTimeout(()=>{ try{charts.curva?.resize?.();charts.semana?.resize?.();charts.cancelamento?.resize?.();}catch(e){} },80);
       }
       if(t.dataset.tab==="desafios"){
-        // garante render atual no abrir
         renderDesafios(true);
+      }
+      if(t.dataset.tab==="individual-mom"){
+        // garante chips e tabela renderizados ao abrir
+        renderMomMonthChips();
+        renderMomTable();
       }
     });
   });
@@ -2230,10 +2533,16 @@ async function init(){
     const text=await resp.text();
     state.rows=buildObjects(parseDelimited(text,";"));
 
+    computeAllMonths();
     updateProfFilters("profTipo","profNome");
     updateProfFilters("profTipoSingle","profNomeSingle");
     updateUFFilter();
     renderTeamMappingUI();
+
+    // default seleção mês/mês: últimos 3 meses (se existir)
+    state.mom.selected.clear();
+    state.mom.monthsAll.slice().reverse().slice(0,3).forEach(m=>state.mom.selected.add(m));
+    renderMomMonthChips();
 
     const e=new Date(),sX=new Date(e); sX.setDate(sX.getDate()-29);
     const eY=new Date(sX); eY.setDate(eY.getDate()-1);
@@ -2241,8 +2550,7 @@ async function init(){
     el("cmpXStart").value=toISO(sX); el("cmpXEnd").value=toISO(e);
     el("cmpYStart").value=toISO(sY); el("cmpYEnd").value=toISO(eY);
 
-    // init desafios
-    resetChallengeForm(); // prepara editor
+    resetChallengeForm();
     renderDesafios(true);
 
     updateAll();
